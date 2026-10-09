@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <title>SGPI OFF-001 browser smoke</title>
+    <link rel="stylesheet" href="../vendor/fonts/fonts.css" data-sgpi-offline-asset="Fontes locais">
+    <link rel="stylesheet" href="../vendor/fontawesome/css/all.min.css" data-sgpi-offline-asset="Font Awesome">
+</head>
+<body>
+    <pre id="result">executando</pre>
+    <i id="offline-icon" class="fa-solid fa-circle-check"></i>
+    <span id="montserrat" style="font-family:Montserrat">Montserrat</span>
+    <span id="firacode" style="font-family:'Fira Code'">Fira Code</span>
+    <canvas id="chart" width="320" height="180"></canvas>
+    <script src="../vendor/sheetjs/xlsx.full.min.js" data-sgpi-offline-asset="SheetJS" data-sgpi-global="XLSX"></script>
+    <script src="../vendor/chartjs/chart.umd.min.js" data-sgpi-offline-asset="Chart.js" data-sgpi-global="Chart"></script>
+    <script src="../js/offline-assets.js"></script>
+    <script>
+    window.addEventListener('load', function () {
+        'use strict';
+        var checks = [];
+        function check(nome, valor) { checks.push([nome, Boolean(valor)]); }
+        Promise.all([
+            document.fonts.load('16px Montserrat'),
+            document.fonts.load('16px "Fira Code"')
+        ]).then(function (fontes) {
+            check('SheetJS 0.20.2 carregado localmente', window.XLSX && window.XLSX.version === '0.20.2');
+            check('Chart.js 4.5.1 carregado localmente', window.Chart && window.Chart.version === '4.5.1');
+            check('Montserrat local disponível', fontes[0].length > 0);
+            check('Fira Code local disponível', fontes[1].length > 0);
+            check('Font Awesome aplica a fonte local', getComputedStyle(document.getElementById('offline-icon')).fontFamily.indexOf('Font Awesome') >= 0);
+
+            var workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet([['ID', 'Valor'], ['FM-0001', 1]]), 'Teste');
+            var bytes = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            check('SheetJS gera XLSX sem rede', bytes && bytes.byteLength > 1000);
+            var reaberto = XLSX.read(bytes, { type: 'array' });
+            var linhas = XLSX.utils.sheet_to_json(reaberto.Sheets.Teste, { header: 1 });
+            check('SheetJS reabre o XLSX gerado', linhas[1][0] === 'FM-0001' && linhas[1][1] === 1);
+
+            var chart = new Chart(document.getElementById('chart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: ['A'], datasets: [{ label: 'Teste', data: [1] }] },
+                options: { animation: false }
+            });
+            check('Chart.js renderiza canvas sem rede', chart && chart.canvas === document.getElementById('chart'));
+            chart.destroy();
+
+            var estado = window.SGPIOfflineAssets.verificar();
+            check('diagnóstico confirma pacote íntegro', estado.ok && estado.verificados.length === 4);
+            check('nenhum recurso HTTP/HTTPS foi solicitado', performance.getEntriesByType('resource').every(function (item) {
+                return !/^https?:/i.test(item.name);
+            }));
+
+            var simulado = document.createElement('script');
+            simulado.setAttribute('data-sgpi-offline-asset', 'Dependência simulada');
+            simulado.setAttribute('data-sgpi-global', 'DependenciaInexistente');
+            document.body.appendChild(simulado);
+            check('diagnóstico exibe falha de instalação', !window.SGPIOfflineAssets.verificar().ok && document.getElementById('sgpi-offline-assets-alert'));
+            simulado.remove();
+            check('alerta desaparece após restauração', window.SGPIOfflineAssets.verificar().ok && !document.getElementById('sgpi-offline-assets-alert'));
+
+            var falhas = checks.filter(function (item) { return !item[1]; });
+            document.getElementById('result').textContent = JSON.stringify({
+                ok: falhas.length === 0,
+                aprovados: checks.length - falhas.length,
+                total: checks.length,
+                falhas: falhas.map(function (item) { return item[0]; })
+            }, null, 2);
+            document.title = falhas.length ? 'FALHA' : 'OK';
+        }).catch(function (erro) {
+            document.getElementById('result').textContent = JSON.stringify({ ok: false, falhas: [erro.message || String(erro)] }, null, 2);
+            document.title = 'FALHA';
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<title>SGPI smoke</title>
+<pre id="result">executando</pre>
+<script>window.SGPIA = {};</script>
+<script src="../../shared/js/exchange-contract.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/workflow.js"></script>
+<script src="../js/data-api.js"></script>
+<script>
+(function () {
+    var s = window.SGPIA;
+    s.definirPerfilMemoria('FM');
+    var lancamentos = s.criarLancamentosDemo();
+    s.carregarMemoria({
+        lancamentos: lancamentos,
+        criteriosWorkflow: s.criarCriteriosWorkflowDemo(lancamentos),
+        reportes: s.criarReportesDemo(lancamentos)
+    });
+    var k = s.getKpis();
+    var h = s.getHypercareKpis();
+    var r = s.estado.reportes[0];
+    var secoes = s.getSecoesReporte(r);
+    var painel = s.getPainelSemana(r);
+    var porProjeto = s.getPorProjeto().reduce(function (m, x) { m[x.nome] = x; return m; }, {});
+    var porPilar = s.getPorPilar().reduce(function (m, x) { m[x.nome] = x; return m; }, {});
+    var checks = [
+        ['37 campos do mestre', s.COLUNAS_LANCAMENTOS.length === 37],
+        ['49 critérios', s.CRITERIOS_WORKFLOW.length === 49],
+        ['E1/E2 pertencem ao Supervisor e estão desativadas para o Analista', s.ETAPAS_WORKFLOW.slice(0, 2).every(function (e) { return e.responsavel === 'Supervisor' && e.desativadaNoAnalista === true; })],
+        ['10 demandas', k.total === 10],
+        ['8 concluídas', k.concluidas === 8],
+        ['2 em andamento', k.abertas === 2],
+        ['88 horas', Math.abs(k.horas - 88) < 0.001],
+        ['189,8 h/mês', Math.abs(k.ganhoMensal - 189.8) < 0.001],
+        ['80,0% conclusão', Math.abs(k.taxaConclusao - 0.8) < 0.001],
+        ['9,8 dias lead time', Math.abs(k.leadTimeMedio - 9.75) < 0.001],
+        ['11,0 h por entrega', Math.abs(k.horasMediaEntrega - 11) < 0.001],
+        ['23,7 ganho por entrega', Math.abs(k.ganhoMedioEntrega - 23.725) < 0.001],
+        ['2,2x retorno', Math.abs(k.retorno - (189.8 / 88)) < 0.001],
+        ['87,6% redução média', Math.abs(k.reducaoMedia - 0.8763888889) < 0.001],
+        ['FM-0001 concluído', s.trackerAtividade('FM-0001').pctFluxo === 1],
+        ['FM-0004 em E4', s.trackerAtividade('FM-0004').etapaAtual.indexOf('E4') === 0],
+        ['FM-0009 em E08', s.trackerAtividade('FM-0009').etapaAtual.indexOf('E08') === 0],
+        ['2 em estabilização', h.estabilizacao === 2],
+        ['8 estáveis', h.estaveis === 8],
+        ['5,25 dias Hypercare', Math.abs(h.tempoMedio - 5.25) < 0.001],
+        ['100% no prazo', h.pctNoPrazo === 1],
+        ['prazo médio 7,0 dias', h.prazoMedio === 7],
+        ['Hypercare mais longo 7 dias', h.maisLongo === 7],
+        ['100% de cobertura Hypercare', h.cobertura === 1],
+        ['Lumen 2/1/8/59', porProjeto.Lumen.total === 2 && porProjeto.Lumen.concluidas === 1 && porProjeto.Lumen.horas === 8 && porProjeto.Lumen.ganho === 59],
+        ['V360 2/2/24/14', porProjeto.V360.total === 2 && porProjeto.V360.concluidas === 2 && porProjeto.V360.horas === 24 && porProjeto.V360.ganho === 14],
+        ['Saneamento 2/1/12/56', porProjeto['Saneamento Base Contábil'].total === 2 && porProjeto['Saneamento Base Contábil'].concluidas === 1 && porProjeto['Saneamento Base Contábil'].horas === 12 && porProjeto['Saneamento Base Contábil'].ganho === 56],
+        ['Transformação Digital 7/5/48/135,8', porPilar['Transformação Digital'].total === 7 && porPilar['Transformação Digital'].concluidas === 5 && porPilar['Transformação Digital'].horas === 48 && Math.abs(porPilar['Transformação Digital'].ganho - 135.8) < 0.001],
+        ['2 entregas no período', painel.entregas === 2],
+        ['16 h no período', painel.horas === 16],
+        ['2 pendências', secoes.pendencias.length === 2],
+        ['2 entregas derivadas do log', secoes.entregas.length === 2],
+        ['0 impedimentos', secoes.impedimentos.length === 0],
+        ['0 apoios', secoes.apoios.length === 0],
+        ['ranking correto', s.getRankingGanhos().slice(0, 5).map(function (x) { return x.id; }).join(',') === 'FM-0001,FM-0002,FM-0010,FM-0003,FM-0008']
+    ];
+    var e3 = s.obterCriterioWorkflow('FM-0004', 3);
+    var original = e3.status[4];
+    e3.status[4] = s.STATUS_CRITERIO_PADRAO;
+    checks.push(['gate E3 bloqueia E4', s.statusEtapa(s.obterCriterioWorkflow('FM-0004', 4).status, 'FM-0004', 4) === 'Bloqueado']);
+    e3.status[4] = original;
+    var falhas = checks.filter(function (x) { return !x[1]; });
+    document.getElementById('result').textContent = JSON.stringify({
+        ok: falhas.length === 0,
+        aprovados: checks.length - falhas.length,
+        total: checks.length,
+        falhas: falhas.map(function (x) { return x[0]; }),
+        metricas: k,
+        hypercare: h
+    }, null, 2);
+    document.title = falhas.length ? 'FALHA' : 'OK';
+}());
+</script>
+</html>

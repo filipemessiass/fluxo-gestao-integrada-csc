@@ -1,0 +1,43 @@
+SGPI Analista 3.0
+=================
+
+Como abrir
+----------
+Abra index.html no Microsoft Edge ou Google Chrome. O sistema funciona diretamente
+da pasta, sem instalação e sem servidor. Nesse modo, os dados ficam no armazenamento
+local do navegador. Para uso compartilhado, publique a pasta em um servidor HTTPS.
+As gravações locais críticas são verificadas e revertidas como uma unidade se o
+navegador estiver sem espaço ou bloquear o armazenamento. Se o banner de persistência
+aparecer, mantenha a página aberta e exporte o backup Excel antes de continuar.
+
+Fluxo de uso
+------------
+1. Supervisor: realiza o input inicial da demanda em E1 — Solicitação e E2 — Triagem.
+2. Analista: recebe a demanda no SGPI e conduz E3–E08 com evidência/observação.
+3. Workflow: acompanhe também E1/E2 em modo somente leitura; status, gates, etapa
+   atual e percentual permanecem automáticos.
+4. Acompanhamento Semanal: informe as duas datas e escreva uma vez no log.
+5. Gestora: troque o perfil da tela para Gestora e responda/avalie na seção 8.
+6. Dashboard: leia indicadores, velocímetros, matrizes, Hypercare e ranking no painel unificado.
+7. Carga e Sincronização: exporte o intercâmbio para o supervisor e aplique o retorno somente após conferir a prévia.
+
+Ownership
+---------
+- Amarelo — Analista: entradas operacionais e narrativa semanal.
+- Azul — Automático: cálculos e espelhos; nunca editável.
+- Lilás — Gestora: resposta, avaliação, prioridade e feedback.
+
+Regras centrais
+---------------
+- Lançamentos é a fonte única de verdade.
+- Status, ganhos, redução, lead time e Hypercare são derivados.
+- E3 bloqueia E4; E5 bloqueia E6/E7; E6 aceita Não → N/A.
+- E08 só encerra estável ou com nova demanda vinculada.
+- O período semanal é "De: dd/mm/aa | Até: dd/mm/aa"; nunca Semana NN.
+- Campos sem insumo ficam vazios; zeros derivados são exibidos como travessão.
+- Histórico semanal é append-only.
+
+Validação
+---------
+Abra tests/smoke.html. O título deve aparecer como OK e o resultado deve informar
+36 de 36 verificações aprovadas.

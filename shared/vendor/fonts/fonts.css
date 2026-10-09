@@ -1,0 +1,16 @@
+/* Fontes locais do SGPI — OFF-001. Arquivos distribuídos sob SIL Open Font License 1.1. */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./Montserrat-VariableFont_wght.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 300 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fira Code';
+    src: url('./FiraCode-VariableFont_wght.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+}

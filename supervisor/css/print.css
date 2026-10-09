@@ -1,0 +1,72 @@
+/* SGPI print.css — ajuste A4 do Report Mensal. */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 12mm;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    body {
+        background: #ffffff;
+    }
+
+    .sidebar,
+    .global-toolbar,
+    .no-print,
+    .toast-stack,
+    .modal-overlay,
+    .content::before,
+    .content::after {
+        display: none !important;
+    }
+
+    .app-shell {
+        display: block;
+        margin: 0;
+        min-height: auto;
+    }
+
+    .content {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        min-height: auto;
+        overflow: visible;
+    }
+
+    .content-section {
+        display: none !important;
+    }
+
+    #sec-report {
+        display: block !important;
+        padding-top: 0;
+    }
+
+    .report-page,
+    .panel,
+    .kpi-card,
+    .report-section {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .report-page {
+        border: none;
+        padding: 0;
+    }
+
+    .data-table {
+        min-width: 0;
+        font-size: 8.5pt;
+    }
+
+    .table-scroll {
+        overflow: visible;
+        border: 1px solid #d1d5db;
+    }
+}
