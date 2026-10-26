@@ -466,6 +466,18 @@ const sig = d => JSON.stringify([d.tasks.map(t => t.id + ':' + t.updatedAt).sort
 let data = Object.assign(emptyData(), { savedAt:null, lastDownloadAt:null }, (() => { const d = ls.get(DATA_KEY, null); if (!d) return {}; return { ...normalizeData(d), savedAt:d.savedAt || null, lastDownloadAt:d.lastDownloadAt || null }; })());
 let storageOk = true;
 function saveLocal() { data.savedAt = Date.now(); storageOk = ls.set(DATA_KEY, data); }
+// Base de projetos do Workflow (base-workflow.js, gerado a partir de 03-database-onedrive/base-workflow):
+// os projetos do analista entram no painel mesmo sem a pasta conectada. Só entram os que ainda não existem
+// e não foram excluídos; ao conectar a pasta, seguem a sincronização normal (mesmo id, sem duplicar).
+(function aplicarBaseWorkflow() {
+  const base = !ROLE_SUBST && PRESET && PRESET.mode === 'colaborador' && window.SGPI_BASE_WORKFLOW && window.SGPI_BASE_WORKFLOW[PRESET.id];
+  if (!Array.isArray(base)) return;
+  const ids = new Set(data.tasks.map(t => t.id));
+  const novos = base.map(normTask).filter(t => t && !ids.has(t.id) && !data.deleted[t.id]);
+  if (!novos.length) return;
+  data.tasks.push(...novos);
+  saveLocal();
+})();
 
 // Supervisor
 let team = ls.get(TEAM_KEY, { members:[], scannedAt:null });

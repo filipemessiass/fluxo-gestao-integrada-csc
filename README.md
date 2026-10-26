@@ -365,7 +365,7 @@ Enquanto o analista não sincroniza, a supervisão vê o projeto já com os pró
 
 ---
 
-**Base de projetos por analista.** A matriz de cada analista fica em [`03-database-onedrive/base-workflow/`](03-database-onedrive/base-workflow/). O gerador `gerar-base.js` converte a matriz em projetos no `demandas.json` da pasta do analista e confere cada projeto contra o motor do Workflow antes de gravar. O primeiro perfil montado é `filipe.messias` (10 projetos).
+**Base de projetos por analista.** A matriz de cada analista fica em [`03-database-onedrive/base-workflow/`](03-database-onedrive/base-workflow/). O gerador `gerar-base.js` converte a matriz em projetos no `demandas.json` da pasta do analista e confere cada projeto contra o motor do Workflow antes de gravar. O gerador também monta o pacote `02-usuario/app/base-workflow.js`. Com ele, os projetos aparecem no painel do analista desde o primeiro acesso, mesmo sem a pasta conectada. O primeiro perfil montado é `filipe.messias` (10 projetos).
 
 ## 7. Banco de dados: a pasta do OneDrive
 

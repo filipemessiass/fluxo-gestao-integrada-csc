@@ -1,7 +1,8 @@
 // FLUXO · base-workflow/gerar-base.js — converte a base de projetos de um analista (Matriz de Evolução)
 // em demandas do tipo Projeto, com o campo workflow, dentro do demandas.json da pasta dele.
 //
-// Uso (nesta pasta):  node gerar-base.js filipe.messias.json
+// Uso (nesta pasta):  node gerar-base.js                       (todas as bases)
+//                      node gerar-base.js filipe.messias.json   (só uma pasta; o pacote do painel reúne todas)
 //
 // - Os status das etapas não são digitados: o script grava os critérios de cada etapa e confere,
 //   com o próprio motor do sistema (02-usuario/app/workflow.js), que etapa atual, % do fluxo,
@@ -97,14 +98,13 @@ function conferir(p, d, ts) {
   return erros;
 }
 
-function main() {
-  const arq = process.argv[2];
-  if (!arq) { console.error('Uso: node gerar-base.js <base>.json'); process.exit(1); }
+// Converte e confere uma base; devolve as demandas ou null se algo não bater com o motor
+function prepararBase(arq) {
   const base = JSON.parse(fs.readFileSync(path.resolve(__dirname, arq), 'utf8'));
   // Data de referência da base, ao meio-dia de Brasília (15h UTC)
   const ts = Date.parse(base.data_base + 'T15:00:00Z');
-  if (!base.pasta || !ts || !Array.isArray(base.projetos)) { console.error('A base precisa de "pasta", "data_base" e "projetos".'); process.exit(1); }
-
+  if (!base.pasta || !base.perfil || !ts || !Array.isArray(base.projetos)) { console.error(`${arq}: a base precisa de "perfil", "pasta", "data_base" e "projetos".`); return null; }
+  console.log(`\n${arq} (${base.titular_conjunto})`);
   const novas = base.projetos.map(p => projetoParaDemanda(p, base, ts));
   let falhou = false;
   base.projetos.forEach((p, i) => {
@@ -112,8 +112,11 @@ function main() {
     console.log(`${erros.length ? 'ERRO' : 'OK  '}  ${p.id}  ${p.atividade}${erros.length ? '\n      ' + erros.join('\n      ') : ''}`);
     if (erros.length) falhou = true;
   });
-  if (falhou) { console.error('\nA base não bate com o motor do Workflow. Nada foi gravado.'); process.exit(1); }
+  return falhou ? null : { base, ts, novas };
+}
 
+// Grava os projetos no demandas.json da pasta do analista (mantém as outras demandas)
+function gravarPasta({ base, ts, novas }) {
   const destino = path.join(PASTA_BASE, base.pasta, 'demandas.json');
   const atual = fs.existsSync(destino) ? JSON.parse(fs.readFileSync(destino, 'utf8').replace(/^﻿/, '')) : {};
   const ids = new Set(novas.map(d => d.id));
@@ -126,6 +129,29 @@ function main() {
     convites: atual.convites || [], respostas: atual.respostas || {}, ausencias: atual.ausencias || []
   };
   fs.writeFileSync(destino, JSON.stringify(saida, null, 2) + '\n');
-  console.log(`\n${novas.length} projetos gravados em ${path.relative(RAIZ, destino)} (${tasks.length} demandas no arquivo).`);
+  console.log(`${novas.length} projetos gravados em ${path.relative(RAIZ, destino)} (${tasks.length} demandas no arquivo).`);
+}
+
+// Pacote lido pelo painel (02-usuario/app/base-workflow.js): os projetos de cada perfil, para aparecerem
+// no navegador mesmo antes de conectar a pasta. Sempre reúne todas as bases desta pasta.
+function gravarPacote(preparadas) {
+  const porPerfil = {};
+  preparadas.forEach(({ base, novas }) => { porPerfil[base.perfil] = novas; });
+  const destino = path.join(RAIZ, '02-usuario', 'app', 'base-workflow.js');
+  const js = '// FLUXO · base de projetos do Workflow por perfil.\n'
+    + '// Gerado por 03-database-onedrive/base-workflow/gerar-base.js. Não edite à mão: ajuste a base (.json) e rode o gerador.\n'
+    + 'window.SGPI_BASE_WORKFLOW = ' + JSON.stringify(porPerfil, null, 1) + ';\n';
+  fs.writeFileSync(destino, js);
+  console.log(`\nPacote do painel: ${path.relative(RAIZ, destino)} (${Object.keys(porPerfil).join(', ') || 'nenhum perfil'}).`);
+}
+
+function main() {
+  // Sem argumento: todas as bases da pasta. Com argumento: só aquela base vai para a pasta do OneDrive.
+  const todas = fs.readdirSync(__dirname).filter(f => f.endsWith('.json')).sort();
+  const pedidas = process.argv.slice(2).length ? process.argv.slice(2) : todas;
+  const preparadas = todas.map(prepararBase);
+  if (preparadas.some(p => !p)) { console.error('\nAlguma base não bate com o motor do Workflow. Nada foi gravado.'); process.exit(1); }
+  preparadas.filter((p, i) => pedidas.includes(todas[i])).forEach(gravarPasta);
+  gravarPacote(preparadas);
 }
 main();

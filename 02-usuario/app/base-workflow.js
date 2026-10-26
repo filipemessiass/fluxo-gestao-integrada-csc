@@ -1,0 +1,1997 @@
+// FLUXO · base de projetos do Workflow por perfil.
+// Gerado por 03-database-onedrive/base-workflow/gerar-base.js. Não edite à mão: ajuste a base (.json) e rode o gerador.
+window.SGPI_BASE_WORKFLOW = {
+ "filipe.messias": [
+  {
+   "id": "wf-fm-0001",
+   "codigo": "FM-0001",
+   "responsavel": "Maria Estela",
+   "title": "Auditoria SPED EFD Contribuições",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "Lumen",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1783004400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1783004400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1783090800000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0002",
+   "codigo": "FM-0002",
+   "responsavel": "Erica Arcoverde (Supervisora)",
+   "title": "Processamento de documentos de adiantamentos",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "Saneamento Base Contábil",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1782918000000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1782918000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1783004400000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0003",
+   "codigo": "FM-0003",
+   "responsavel": "Daiane Vicente",
+   "title": "Automação da emissão de DARF (SICALC)",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "Rotina Financeiro",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1782918000000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1782918000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1783004400000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0004",
+   "codigo": "FM-0004",
+   "responsavel": "Lucas de Albuquerque",
+   "title": "Revisão e Consolidação do Modelo CBS",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "media",
+   "category": "Lumen",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1785337200000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1785337200000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1785423600000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "🔄 Em andamento",
+      "⏳ Pendente",
+      "⏳ Pendente",
+      "⏳ Pendente"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0005",
+   "codigo": "FM-0005",
+   "responsavel": "Recebimento Fiscal",
+   "title": "Conciliação de notas TicketLog × V360",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "V360",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1781276400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1781276400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1781362800000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0006",
+   "codigo": "FM-0006",
+   "responsavel": "A confirmar",
+   "title": "Conversor PDF para Excel de notas fiscais",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "Rotina Fiscal/Contábil",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1781708400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1781708400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1781794800000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0007",
+   "codigo": "FM-0007",
+   "responsavel": "A confirmar",
+   "title": "Excel Cleaner ETL para arquivos PIS/COFINS",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "Rotina Fiscal/Contábil",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1780326000000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1780326000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1780412400000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0008",
+   "codigo": "FM-0008",
+   "responsavel": "A confirmar",
+   "title": "Memória de cálculo dos índices V360",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "V360",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1783004400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1783004400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1783090800000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0009",
+   "codigo": "FM-0009",
+   "responsavel": "José Paulo Farias",
+   "title": "Agente de IA para duplicidades de MIGO",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "media",
+   "category": "Saneamento Base Contábil",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1784300400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1784300400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1784386800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "🔄 Em andamento",
+      "⏳ Pendente",
+      "⏳ Pendente"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "🔄 Em Estabilização",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  },
+  {
+   "id": "wf-fm-0010",
+   "codigo": "FM-0010",
+   "responsavel": "Roberto Cavalcante",
+   "title": "Correção e validação das ECF 2025",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "Rotina Fiscal/Contábil",
+   "tipo": "projeto",
+   "due": null,
+   "dueOriginal": null,
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1784732400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "atende": [
+    "todas"
+   ],
+   "completedAt": 1793026800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1784732400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1784818800000
+    },
+    {
+     "s": "concluido",
+     "at": 1793026800000
+    }
+   ],
+   "updatedAt": 1793026800000,
+   "workflow": {
+    "1": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "2": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "3": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "4": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "5": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "6": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "Sim",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "7": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    },
+    "8": {
+     "status": [
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído",
+      "✔ Concluído"
+     ],
+     "prazoHypercare": "",
+     "at": 1793026800000,
+     "by": "Matriz de Evolução por Demanda",
+     "evidencia": "",
+     "observacao": "",
+     "resultadoHomologacao": "",
+     "aplicavel": "",
+     "resultadoHypercare": "✅ Estável — Demanda Encerrada",
+     "inicioHypercare": "",
+     "encerramentoReal": "",
+     "idNovaDemanda": ""
+    }
+   }
+  }
+ ]
+};

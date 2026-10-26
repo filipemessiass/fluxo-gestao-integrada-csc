@@ -5,7 +5,7 @@ Esta pasta guarda a base de projetos de cada analista (Matriz de Evolução por 
 | Arquivo | Conteúdo |
 | --- | --- |
 | `filipe.messias.json` | Base de Filipe Messias: 10 projetos (FM-0001 a FM-0010). É o primeiro perfil montado e serve de modelo para os demais. |
-| `gerar-base.js` | Converte uma base em demandas do tipo **Projeto** e grava em `Processos Integrados/<pasta>/demandas.json`. |
+| `gerar-base.js` | Converte as bases em demandas do tipo **Projeto**. Grava em `Processos Integrados/<pasta>/demandas.json` e no pacote do painel, `02-usuario/app/base-workflow.js`. |
 
 ## Estrutura de uma base
 
@@ -68,10 +68,18 @@ Cada projeto entra com id fixo (`wf-fm-0001`, …). Rodar o gerador de novo atua
 
 ## Como usar
 
-1. Na pasta `base-workflow`, rode `node gerar-base.js filipe.messias.json`.
-2. No painel do analista, conecte a subpasta dele em **Pasta e backup**. Os projetos aparecem no **Workflow (Projetos)**:
+1. Na pasta `base-workflow`, rode `node gerar-base.js`. O gerador:
+   - confere todas as bases;
+   - grava cada uma no `demandas.json` da pasta do analista;
+   - atualiza o pacote `02-usuario/app/base-workflow.js`.
+
+   Com o nome de um arquivo (`node gerar-base.js filipe.messias.json`), só aquela pasta é gravada, mas o pacote continua reunindo todas as bases.
+2. Ao entrar no FLUXO, o analista já vê os projetos no **Workflow (Projetos)**, mesmo sem a pasta conectada:
    - em **Base de projetos**: ID, Projeto, Atividade, Situação e Fluxo;
    - na **Matriz de Evolução por Demanda**: as 8 etapas, o responsável, a etapa atual, os dias e os gates.
+
+   O painel só acrescenta os projetos que ainda não estão no navegador e que o analista não excluiu. Edições feitas no painel não são sobrescritas.
+3. Ao conectar a pasta em **Pasta e backup**, os projetos seguem a sincronização normal. Têm o mesmo id do `demandas.json`, então não duplicam.
 
 ## Próximos perfis
 
