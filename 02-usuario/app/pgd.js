@@ -4513,6 +4513,9 @@ function renderHome() {
       <div class="fx-capa-arte">
         <div class="fx-capa-palco" aria-hidden="true">
           ${FX_CAPA_ARTE}
+          <span class="fx-capa-pulso fx-pulso-lista"></span>
+          <span class="fx-capa-pulso fx-pulso-grafico"></span>
+          <span class="fx-capa-pulso fx-pulso-aprovacao"></span>
           <span class="fx-capa-chip fx-chip-doc"><b>${open.length}</b> ${open.length === 1 ? 'em aberto' : 'em aberto'}</span>
           <span class="fx-capa-chip fx-chip-gear"><b>${wfAbertos}</b> ${wfAbertos === 1 ? 'projeto em fluxo' : 'projetos em fluxo'}</span>
           <span class="fx-capa-chip fx-chip-ok"><b>${doneMonth}</b> ${doneMonth === 1 ? 'concluída no mês' : 'concluídas no mês'}</span>

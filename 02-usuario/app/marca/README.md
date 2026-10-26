@@ -34,7 +34,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | `fluxo-logo-completa.svg` / `fluxo-logo-dark.svg` | Símbolo + FLUXO + descrição institucional | Área institucional do login (versão escura) e materiais |
 | `fluxo-logo-assinatura.svg` / `fluxo-logo-assinatura-dark.svg` | Logo completa + "Segue o FLUXO ✌️" (composição da prancha) | Topo da tela Início |
 | `fluxo-favicon.svg` | Símbolo sobre quadrado branco arredondado (legível em abas claras e escuras) | Favicon de todas as páginas |
-| `fluxo-capa-processos.png` | Ilustração de processos preparada a partir da imagem anexada pelo usuário | Capa do Início, nos temas claro e escuro |
+| `fluxo-capa-processos.png` | Ilustração de processos preparada a partir da imagem anexada pelo usuário, com fundo transparente | Capa do Início, nos temas claro e escuro |
 | `gerar-marca.js` | Gerador de todos os SVGs a partir de uma única geometria | Para ajustar a marca: altere o script e rode `node gerar-marca.js .` nesta pasta |
 
 ## Aplicação nas telas
@@ -57,9 +57,9 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 
 ## Ilustração da capa do Início
 
-A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda:** logo completa como título, saudação, resumo e três cartões de destaque (ícone dourado, título e complemento): "Demandas e projetos em um só lugar" (na supervisão, "Equipe e demandas em um só lugar"), "Workflow E1 a E08 com governança" e "Indicadores no ritmo certo" (na supervisão, "Indicadores da área no ritmo certo"). Depois vem a área tracejada "Comece por aqui". **À direita:** a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês). O estado da pasta fica no rodapé do menu; avisos de ausência continuam aparecendo na capa. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
+A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda:** logo completa como título, saudação, resumo e três cartões de destaque (ícone dourado, título e complemento): "Demandas e projetos em um só lugar" (na supervisão, "Equipe e demandas em um só lugar"), "Workflow E1 a E08 com governança" e "Indicadores no ritmo certo" (na supervisão, "Indicadores da área no ritmo certo"). Depois vem a área tracejada "Comece por aqui", limitada a 680 px e à largura disponível da coluna; seus botões quebram em telas menores. **À direita:** a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês). O estado da pasta fica no rodapé do menu; avisos de ausência continuam aparecendo na capa. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
 
-A imagem da capa foi preparada com a ferramenta de edição de imagem a partir do primeiro anexo do usuário, preservando sua composição: tarefas, painel central, gráfico, engrenagem e aprovação conectados. O arquivo fica em `fluxo-capa-processos.png` e é inserido pelo motor em `../pgd.js` (`FX_CAPA_ARTE`). A área visual cresce até 740 px de largura sem distorção. As três etiquetas sobre a imagem continuam como elementos HTML com valores reais do sistema. A imagem e suas etiquetas são decorativas para leitores de tela; os indicadores acessíveis estão no conteúdo da página.
+A imagem da capa foi preparada com a ferramenta de edição de imagem a partir do primeiro anexo do usuário, preservando sua composição: tarefas, painel central, gráfico, engrenagem e aprovação conectados. O fundo externo foi removido com transparência real; os cartões e o painel dentro da arte continuam opacos. O arquivo fica em `fluxo-capa-processos.png` e é inserido pelo motor em `../pgd.js` (`FX_CAPA_ARTE`). A área visual cresce até 740 px de largura sem distorção. As três etiquetas sobre a imagem continuam como elementos HTML com valores reais do sistema. A imagem e suas etiquetas são decorativas para leitores de tela; os indicadores acessíveis estão no conteúdo da página.
 
 **Efeitos**
 
@@ -71,13 +71,15 @@ A imagem da capa foi preparada com a ferramenta de edição de imagem a partir d
 | Inclinação 3D | A ilustração inclina em perspectiva conforme a posição do mouse |
 | Entrada em cascata | Marca, estados, saudação e ações sobem em sequência. Só na primeira exibição, para não repetir a cada sincronização |
 | Etiquetas flutuantes | Os números da ilustração flutuam suavemente, em ritmos diferentes |
+| Órbita e pulsos | Um anel discreto gira atrás da arte; três pontos dourados pulsam nas conexões |
+| Movimento da arte | A imagem flutua alguns pixels e recebe um halo que respira lentamente |
 | Botão principal | Um reflexo de luz percorre "Nova demanda" de tempos em tempos |
 
 **Boas práticas**
 
 - O estado normal é sempre visível: as animações só aplicam o estado inicial durante a entrada. Se uma animação não rodar, nada fica escondido.
 - Os efeitos que seguem o mouse ficam desligados em telas de toque (`pointer: fine`). Com "reduzir animações" (`prefers-reduced-motion`), os movimentos param e a ilustração aparece completa.
-- No tema escuro, a imagem mantém seu fundo claro em um cartão deliberado para preservar as cores originais e o contraste.
+- A transparência permite que a imagem acompanhe as superfícies dos temas claro e escuro sem um retângulo branco ao redor.
 
 **Responsividade**
 
