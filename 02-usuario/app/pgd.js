@@ -4263,7 +4263,7 @@ function renderNav() {
   $('#brandName').innerHTML = 'FLUXO' + (PRESET && PRESET.teste ? ' <span class="teste-tag">TESTE</span>' : '');
   $('#brandName').title = 'FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · ' + (rq ? 'Solicitações' : cfg.mode === 'gestao' ? 'Gestão financeira' : cfg.mode === 'coordenacao' ? 'Coordenação' : isSup ? (SUBST ? 'Substituição da supervisão' : 'Supervisão') : 'Minhas demandas');
   if (isReader()) $('#brandSub').textContent = `${cfg.name || ''}${cfg.mode === 'coordenacao' && coordCtx ? ' · ' + coordCtx.nome : cfg.mode === 'gestao' ? ' · Área financeira' : ''}`;
-  else $('#brandSub').textContent = rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição${supCtx ? ' · ' + supTitle(supCtx) : ''}` : (PRESET && PRESET.rotulo) || (supCtx ? `${supName()} · ${supTitle(supCtx)}` : 'Supervisão')) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
+  else $('#brandSub').textContent = rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição` : (window.SGPI_PERFIS && window.SGPI_PERFIS.ler() || {}).nome || supName()) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
   document.title = (late ? `(${late}) ` : '') + 'FLUXO · ' + (isSup ? 'Supervisão' : 'Analista');
 }
 // SGPI: o painel abre direto, sem exigir a pasta; o cartão de sincronização no menu leva à tela da pasta.
@@ -4363,7 +4363,7 @@ function renderHome() {
   else if (conn === 'prompt') connPill = `<span class="status-pill warn">${I.alert}Pasta aguardando reativação</span>`;
   else connPill = `<span class="status-pill err">${I.alert}Nenhuma pasta conectada</span>`;
   const pills = [connPill,
-    `<span class="status-pill">${I.refresh}${sync.lastSync ? `${isSup ? 'Lido' : 'Sincronizado'} às ${fmtTime(sync.lastSync)}` : 'Aguardando sincronização'}</span>`,
+    `<span class="status-pill">${I.refresh}${sync.state === 'syncing' ? 'Sincronizando…' : sync.state === 'error' ? 'Erro na sincronização' : conn === 'ok' ? sync.lastSync ? `${isSup ? 'Lido' : 'Sincronizado'} às ${fmtTime(sync.lastSync)}` : 'Conectado · primeira leitura pendente' : 'Sincronização indisponível'}</span>`,
     `<span class="status-pill">${I.clock}${esc(new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' }))}</span>`];
   let lead, actions, cards;
   if (isReader()) {
@@ -4390,8 +4390,8 @@ function renderHome() {
     actions = `${nReq ? `<button class="cta" data-act="go" data-view="solicitacoes">${I.inbox}Ver solicitações (${nReq})</button>` : ''}<button class="${nReq ? 'ghost-btn' : 'cta'}" data-act="assign">${I.plus}Atribuir demanda</button>
       <button class="ghost-btn" data-act="go" data-view="demandas">${I.team}Ver demandas da equipe</button>
       <button class="ghost-btn" data-act="go" data-view="dashboard">${I.dash}Abrir dashboard</button>`;
-    cards = homeCard({ icon:I.alert, num:late, title:'Atrasadas', text:'Demandas da equipe com prazo vencido.', cls:late ? 'alert' : '', act:'go-filter', filter:'atrasado' })
-      + homeCard({ icon:I.bell, num:unread, title:'Notas novas', text:'Andamentos registrados pelos analistas e ainda não lidos.', cls:unread ? 'alert' : '', act:'go-filter', filter:'notas' })
+    cards = homeCard({ icon:I.tasks, num:open.length, title:'Em aberto', text:'Demandas da equipe ainda não concluídas.', act:'go-filter', filter:'abertas' })
+      + homeCard({ icon:I.alert, num:late, title:'Atrasadas', text:'Demandas da equipe com prazo vencido.', cls:late ? 'alert' : '', act:'go-filter', filter:'atrasado' })
       + homeCard({ icon:I.clock, num:soon, title:'Vencem em breve', text:`Prazo nos próximos ${plural(cfg.dueSoonDays, 'dia', 'dias')}.`, cls:soon ? 'warn' : '', act:'go-filter', filter:'perto' })
       + homeCard({ icon:I.flow, num:wfProjetos().filter(p => wfTracker(p.t).atual).length, title:'Workflow (Projetos)', text:'Projetos da equipe nas etapas E1 a E08. Você conduz a triagem E1/E2.', act:'go', view:'workflow' });
   } else {
@@ -4433,7 +4433,7 @@ function renderHome() {
     if (ss.length) extra += `<p class="banner info"><span>${I.away} Você está respondendo por ${ss.map(s => `<b>${esc(s.supervisor)}</b> (até ${fmtDate(ausOf(s.id).fim)})`).join(', ')}. Designe, altere prazos, escreva notas e responda às solicitações na tela Substituição.</span><button class="btn sm primary" data-act="go" data-view="substituicao">Abrir substituição</button></p>`;
   }
   $('#homeArea').innerHTML = `
-    <div class="apresentacao-icon app-logo" aria-hidden="true"><img src="../app/marca/fluxo-app.svg" alt=""></div>
+    <div class="apresentacao-icon app-logo" aria-hidden="true"><img src="../app/marca/fluxo-icon.svg" alt=""></div>
     <div class="status-badges">${pills.join('')}</div>
     <h2>Olá${who ? `, ${esc(who)}` : ''}! 👋</h2>
     <p class="fx-kicker">${isSup ? 'Veja como está o FLUXO da sua equipe.' : 'Veja como está o FLUXO das suas demandas.'}</p>

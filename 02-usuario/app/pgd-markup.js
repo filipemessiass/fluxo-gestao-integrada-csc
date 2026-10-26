@@ -74,7 +74,7 @@ document.body.insertAdjacentHTML('afterbegin', `
   <aside class="sidebar" aria-label="Seções do painel">
     <div class="sidebar-tools">
       <div class="sidebar-brand">
-        <span class="sidebar-brand-icon pgd-mark" title="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="fxg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#243B54"/><stop offset="1" stop-color="#101E30"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#fxg2)"/><path d="M18 50V22a8 8 0 0 1 8-8h15" fill="none" stroke="#E6BC79" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 33h12" fill="none" stroke="#5B92DD" stroke-width="6" stroke-linecap="round"/><circle cx="48" cy="14" r="5.5" fill="#E6BC79"/><circle cx="37.5" cy="33" r="4.5" fill="#5B92DD"/><circle cx="18" cy="50" r="4.5" fill="#101E30" stroke="#E6BC79" stroke-width="3"/></svg></span>
+        <span class="sidebar-brand-icon pgd-mark" title="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos"><img src="../app/marca/fluxo-icon.svg" alt=""></span>
         <span class="sidebar-brand-text"><strong id="brandName">FLUXO</strong><small id="brandSub"></small></span>
       </div>
       <button class="sidebar-collapse" id="sidebarCollapse" type="button" aria-label="Recolher menu lateral" aria-expanded="true" title="Recolher menu lateral">

@@ -226,6 +226,54 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 .feature-card:hover { transform: translateY(-2px); border-color: rgba(var(--fx-accent-rgb), .45); }
 .fx-assinatura { margin-top: 28px; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fx-ink-3); }
 
+/* Aplicação da marca oficial e composição fluida do Início. */
+.sidebar-tools { background: var(--fx-surface-2); border-color: var(--fx-line); box-shadow: none; }
+.sidebar-brand-icon.pgd-mark { background: #101e30; border-radius: 11px; overflow: hidden; }
+.sidebar-brand-icon.pgd-mark img { display: block; width: 36px; height: 36px; object-fit: contain; }
+#brandSub { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.welcome-section { width: 100%; max-width: 1040px; min-height: min(780px, calc(100dvh - 140px)); padding: 8px 14px 30px; }
+.apresentacao-icon.app-logo { width: 110px; height: 110px; padding: 12px; margin-bottom: 18px; border-radius: 24px; background: #101e30; box-shadow: 0 12px 28px rgba(16,30,48,.22); }
+.apresentacao-icon.app-logo img { width: 100%; height: 100%; filter: none; }
+.status-badges { margin-bottom: 20px; }
+.welcome-section h2 { margin-bottom: 8px; }
+.welcome-section > p.fx-kicker { margin: 0 0 10px; }
+.primary-actions { margin: 20px auto 4px; }
+.feature-grid { width: 100%; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+.feature-card { min-height: 170px; padding: 17px; }
+.feature-icon { width: 42px; height: 42px; margin-bottom: 9px; box-shadow: none; }
+.feature-num { font-size: 1.9rem; }
+.fx-assinatura { margin-top: 22px; }
+.welcome-section > .fx-assinatura { margin-top: 24px; }
+.cta { background: #3265af; border: 1px solid #3265af; color: #fff; box-shadow: 0 8px 18px rgba(50,101,175,.22); }
+.cta svg { color: #fff; }
+.cta:hover { background: #254f8f; color: #fff; }
+:root[data-theme="dark"] .cta, :root[data-theme="dark"] .btn.primary { background: #3265af; border-color: #3265af; color: #fff; }
+:root[data-theme="dark"] .cta svg, :root[data-theme="dark"] .btn.primary svg { color: #fff; }
+:root[data-theme="dark"] .cta:hover, :root[data-theme="dark"] .btn.primary:hover { background: #4177c3; border-color: #4177c3; color: #fff; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cta, :root:not([data-theme="light"]) .btn.primary { background: #3265af; border-color: #3265af; color: #fff; }
+  :root:not([data-theme="light"]) .cta svg, :root:not([data-theme="light"]) .btn.primary svg { color: #fff; }
+}
+@media (max-width: 1260px) {
+  .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .welcome-section { min-height: 0; }
+}
+@media (max-width: 760px) {
+  .welcome-section { padding: 4px 0 24px; }
+  .apresentacao-icon.app-logo { width: 88px; height: 88px; border-radius: 20px; margin-bottom: 14px; }
+  .status-badges { gap: 7px; }
+  .status-pill { padding: 8px 10px; font-size: .75rem; }
+  .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .feature-card { min-height: 145px; padding: 13px; }
+  .feature-card p { font-size: .78rem; }
+  .feature-icon { width: 36px; height: 36px; }
+}
+@media (max-width: 480px) {
+  .feature-grid { grid-template-columns: 1fr; }
+  .feature-card { min-height: 0; }
+  .primary-actions > button { flex: 1 1 100%; justify-content: center; }
+}
+
 /* ============ 8. Workflow ============ */
 /* Status sempre com texto e ícone, nunca só com cor */
 .sgpi-wf .tracker-chip::before, .sgpi-wf .stage-status-chip .stage-status-text::before, .sgpi-wf .badge.success::before, .sgpi-wf .badge.warning::before, .sgpi-wf .badge.danger::before { display: inline-block; margin-right: 4px; font: 900 .72em/1 'Font Awesome 6 Free'; }
