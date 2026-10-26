@@ -382,8 +382,8 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 @keyframes fxSurge { from { opacity: 0; transform: scale(.94) translateX(18px); } }
 
 /* ---- Coluna da ilustração ---- */
-.fx-capa-arte { position: relative; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; perspective: 1000px; }
-.fx-capa-palco { position: relative; width: min(100%, 600px); margin: 0 auto; transform: rotateX(var(--fx-rx)) rotateY(var(--fx-ry)); transform-style: preserve-3d; transition: transform .25s ease-out; will-change: transform; }
+.fx-capa-arte { position: relative; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: clamp(8px, 1.4dvh, 18px); perspective: 1000px; }
+.fx-capa-palco { position: relative; width: min(100%, 740px); margin: 0 auto; transform: rotateX(var(--fx-rx)) rotateY(var(--fx-ry)); transform-style: preserve-3d; transition: transform .25s ease-out; will-change: transform; }
 .fx-capa-svg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 22px 34px rgba(16, 30, 48, .20)); }
 /* Etiquetas flutuantes com dados reais (como as etiquetas do mapa nas demais capas) */
 .fx-capa-chip { position: absolute; transform: translate(-50%, -50%) translateZ(40px); display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 14px; border-radius: 999px; background: var(--fx-surface); color: var(--fx-ink-2); font-size: .82rem; font-weight: 600; white-space: nowrap; box-shadow: 0 10px 26px rgba(16, 30, 48, .16); border: 1px solid var(--fx-line); animation: fxChip 5s ease-in-out infinite; }
@@ -443,7 +443,7 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
   .fx-capa-conteudo p { margin-left: auto; margin-right: auto; }
   .fx-capa-conteudo .status-badges { justify-content: center; }
   .fx-capa-aurora { inset: 30% -10% -10% -10%; }
-  .fx-capa-palco { width: min(100%, 460px); }
+  .fx-capa-palco { width: min(100%, 600px); }
 }
 @media (max-width: 560px) {
   .fx-capa { margin-top: -6px; }
@@ -466,7 +466,7 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 .fx-valor b { color: var(--fx-ink); font-size: .86rem; font-weight: 700; white-space: nowrap; }
 
 /* Pipeline do Workflow abaixo da ilustração: projetos por etapa atual, com os gates E3 e E5 destacados */
-.fx-pipe { width: min(100%, 540px); margin: 4px auto 0; padding: 14px 16px 12px; border: 1px solid var(--fx-line); border-radius: 16px; background: rgba(var(--fx-surface-rgb), .74); backdrop-filter: blur(8px); box-shadow: 0 14px 34px -22px rgba(16, 30, 48, .5); }
+.fx-pipe { width: min(100%, 700px); margin: 0 auto; padding: 14px 16px 12px; border: 1px solid var(--fx-line); border-radius: 16px; background: rgba(var(--fx-surface-rgb), .74); backdrop-filter: blur(8px); box-shadow: 0 14px 34px -22px rgba(16, 30, 48, .5); }
 .fx-pipe-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-bottom: 14px; color: var(--fx-ink-3); font-size: .76rem; }
 .fx-pipe-topo strong { display: inline-flex; align-items: center; gap: 7px; color: var(--fx-ink); font-size: .86rem; font-weight: 700; }
 .fx-pipe-topo strong svg { width: 16px; height: 16px; color: #B8862F; }

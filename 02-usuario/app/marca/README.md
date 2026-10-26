@@ -58,7 +58,7 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 
 A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda:** logo completa como título, saudação, resumo e três cartões de destaque (ícone dourado, título e complemento): "Demandas e projetos em um só lugar" (na supervisão, "Equipe e demandas em um só lugar"), "Workflow E1 a E08 com governança" e "Indicadores no ritmo certo" (na supervisão, "Indicadores da área no ritmo certo"). Depois vem a área tracejada "Comece por aqui". **À direita:** a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês) e, abaixo dela, o **Pipeline do Workflow**. Ele mostra E1 a E08 com a quantidade de projetos na etapa atual; as etapas com projetos ficam em azul, com um pulso suave, e os gates E3 e E5 ganham aro dourado. Cada etapa abre a sua tela. O estado da pasta fica no rodapé do menu; avisos de ausência continuam aparecendo na capa. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
 
-A ilustração é um vetor desenhado nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e os efeitos em `../fluxo.css` (seção 11).
+A ilustração é um vetor desenhado nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e os efeitos em `../fluxo.css` (seção 11). A área visual cresce até 740 px de largura, preservando as proporções do vetor; o pipeline cresce até 700 px. Somente a ilustração e suas etiquetas são decorativas para leitores de tela. O pipeline permanece acessível como região com botões de navegação.
 
 **Efeitos**
 
@@ -83,10 +83,10 @@ A ilustração é um vetor desenhado nas cores da marca a partir do ícone de pr
 
 | Largura | Layout |
 | --- | --- |
-| ≥ 1600 px | Duas colunas iguais; altura da capa acompanha a tela (500–720 px) |
+| ≥ 1600 px | Duas colunas iguais; ilustração e pipeline ocupam a largura disponível até seus limites proporcionais, e a capa cresce conforme o conteúdo |
 | 1361–1599 px | Duas colunas (conteúdo 1,1 : ilustração 0,9), botões compactos para caberem numa linha |
 | 1101–1360 px (notebook) | Duas colunas, logo até 420 px |
-| ≤ 1100 px (tablet) | Uma coluna centralizada, com a ilustração e a legenda abaixo do conteúdo (até 460 px) |
+| ≤ 1100 px (tablet) | Uma coluna centralizada, com a ilustração e o pipeline abaixo do conteúdo (ilustração até 600 px) |
 | ≤ 560 px (celular) | Logo até 300 px, etiquetas menores e botões na largura total, para facilitar o toque |
 
 ## Diferenças conhecidas em relação à prancha

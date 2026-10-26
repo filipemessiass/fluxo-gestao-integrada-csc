@@ -4539,14 +4539,14 @@ function renderHome() {
           <div class="primary-actions">${actions}</div>
         </div>
       </div>
-      <div class="fx-capa-arte" aria-hidden="true">
-        <div class="fx-capa-palco">
+      <div class="fx-capa-arte">
+        <div class="fx-capa-palco" aria-hidden="true">
           ${FX_CAPA_ARTE}
           <span class="fx-capa-chip fx-chip-doc"><b>${open.length}</b> ${open.length === 1 ? 'em aberto' : 'em aberto'}</span>
           <span class="fx-capa-chip fx-chip-gear"><b>${wfAbertos}</b> ${wfAbertos === 1 ? 'projeto em fluxo' : 'projetos em fluxo'}</span>
           <span class="fx-capa-chip fx-chip-ok"><b>${doneMonth}</b> ${doneMonth === 1 ? 'concluída no mês' : 'concluídas no mês'}</span>
         </div>
-        <div class="fx-pipe" aria-label="Pipeline do Workflow">
+        <div class="fx-pipe" role="region" aria-label="Pipeline do Workflow">
           <div class="fx-pipe-topo"><strong>${I.flow}Pipeline do Workflow</strong><span>${plural(wfAbertos, 'em andamento', 'em andamento')} · ${plural(wfFeitos, 'concluído', 'concluídos')}</span></div>
           <ol class="fx-pipe-trilha">${pipeline}</ol>
           <div class="fx-pipe-rodape"><span><i class="fx-pipe-marca"></i>Gates de governança em E3 e E5</span><button type="button" class="fx-pipe-link" data-act="go" data-view="workflow">Abrir o tracker →</button></div>
