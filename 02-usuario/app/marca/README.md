@@ -34,6 +34,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | `fluxo-logo-completa.svg` / `fluxo-logo-dark.svg` | Símbolo + FLUXO + descrição institucional | Área institucional do login (versão escura) e materiais |
 | `fluxo-logo-assinatura.svg` / `fluxo-logo-assinatura-dark.svg` | Logo completa + "Segue o FLUXO ✌️" (composição da prancha) | Topo da tela Início |
 | `fluxo-favicon.svg` | Símbolo sobre quadrado branco arredondado (legível em abas claras e escuras) | Favicon de todas as páginas |
+| `fluxo-capa-processos.png` | Ilustração de processos preparada a partir da imagem anexada pelo usuário | Capa do Início, nos temas claro e escuro |
 | `gerar-marca.js` | Gerador de todos os SVGs a partir de uma única geometria | Para ajustar a marca: altere o script e rode `node gerar-marca.js .` nesta pasta |
 
 ## Aplicação nas telas
@@ -43,7 +44,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | Menu lateral expandido | Sem cartão: símbolo + palavra FLUXO + "Processos Integrados · CSC" alinhados, com um filete dourado separando do menu. O botão de recolher é um círculo discreto na borda do menu |
 | Barra do topo direito | Nome do usuário conectado (dinâmico) | Sair |
 | Menu lateral recolhido | Só o símbolo, centralizado; o botão de abrir continua na borda |
-| Início (analista e supervisão) | Capa de largura total. À esquerda: logo completa com descrição e slogan, saudação, resumo, três cartões de destaque e a área "Comece por aqui". À direita: a ilustração animada com etiquetas de números reais. Os cartões de indicador vêm abaixo |
+| Início (analista e supervisão) | Capa de largura total. À esquerda: logo completa com descrição e slogan, saudação, resumo, três cartões de destaque e a área "Comece por aqui". À direita: a imagem de processos com etiquetas de números reais. Os cartões de indicador vêm abaixo |
 | Login: área institucional | Logo completa (versão escura) no topo esquerdo; "Segue o FLUXO ✌️" com FLUXO em dourado animado. Efeitos: rede com pulsos dourados, nós pulsando, aurora e luz que segue o cursor |
 | Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO". Cartão de vidro com borda viva (dourado ↔ azul) e reflexo no botão Entrar. Abaixo: "FLUXO · Sua gestão no ritmo certo." e "Elaborado: Processos Integrados". Com "reduzir animações", os movimentos param |
 | Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
@@ -58,7 +59,7 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 
 A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda:** logo completa como título, saudação, resumo e três cartões de destaque (ícone dourado, título e complemento): "Demandas e projetos em um só lugar" (na supervisão, "Equipe e demandas em um só lugar"), "Workflow E1 a E08 com governança" e "Indicadores no ritmo certo" (na supervisão, "Indicadores da área no ritmo certo"). Depois vem a área tracejada "Comece por aqui". **À direita:** a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês). O estado da pasta fica no rodapé do menu; avisos de ausência continuam aparecendo na capa. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
 
-A ilustração é um vetor desenhado nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e os efeitos em `../fluxo.css` (seção 11). A área visual cresce até 740 px de largura, preservando as proporções do vetor. A ilustração e suas etiquetas são decorativas para leitores de tela.
+A imagem da capa foi preparada com a ferramenta de edição de imagem a partir do primeiro anexo do usuário, preservando sua composição: tarefas, painel central, gráfico, engrenagem e aprovação conectados. O arquivo fica em `fluxo-capa-processos.png` e é inserido pelo motor em `../pgd.js` (`FX_CAPA_ARTE`). A área visual cresce até 740 px de largura sem distorção. As três etiquetas sobre a imagem continuam como elementos HTML com valores reais do sistema. A imagem e suas etiquetas são decorativas para leitores de tela; os indicadores acessíveis estão no conteúdo da página.
 
 **Efeitos**
 
@@ -70,14 +71,13 @@ A ilustração é um vetor desenhado nas cores da marca a partir do ícone de pr
 | Inclinação 3D | A ilustração inclina em perspectiva conforme a posição do mouse |
 | Entrada em cascata | Marca, estados, saudação e ações sobem em sequência. Só na primeira exibição, para não repetir a cada sincronização |
 | Etiquetas flutuantes | Os números da ilustração flutuam suavemente, em ritmos diferentes |
-| Ilustração viva | Engrenagens girando em sentidos opostos (mais rápidas com o mouse), pulsos dourados nas conexões, documento flutuando, hexágono pulsando, check se desenhando, halo e órbitas |
 | Botão principal | Um reflexo de luz percorre "Nova demanda" de tempos em tempos |
 
 **Boas práticas**
 
 - O estado normal é sempre visível: as animações só aplicam o estado inicial durante a entrada. Se uma animação não rodar, nada fica escondido.
 - Os efeitos que seguem o mouse ficam desligados em telas de toque (`pointer: fine`). Com "reduzir animações" (`prefers-reduced-motion`), os movimentos param e a ilustração aparece completa.
-- Os traços e o vidro da capa acompanham o tema: azul-marinho no claro, quase branco no escuro.
+- No tema escuro, a imagem mantém seu fundo claro em um cartão deliberado para preservar as cores originais e o contraste.
 
 **Responsividade**
 

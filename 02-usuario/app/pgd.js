@@ -4267,30 +4267,8 @@ function navItems() {
 // Marca oficial FLUXO (ativos em ../app/marca; o CSS exibe a versão do tema ativo)
 const FX_PALAVRA = '<img class="fx-wordmark fx-claro" src="../app/marca/fluxo-wordmark.svg" alt="FLUXO"><img class="fx-wordmark fx-escuro" src="../app/marca/fluxo-wordmark-dark.svg" alt="FLUXO">';
 const FX_MARCA_INICIO = '<div class="fx-home-marca"><img class="fx-claro" src="../app/marca/fluxo-logo-assinatura.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"><img class="fx-escuro" src="../app/marca/fluxo-logo-assinatura-dark.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"></div>';
-// Capa do Início: ilustração do fluxo (documento → engrenagens → aprovação), animada por CSS (classes fx-capa-*)
-function fxEngrenagem(cx, cy, cls) {
-  const dentes = Array.from({ length:8 }, (_, i) => `<rect x="${cx - 7}" y="${cy - 47}" width="14" height="16" rx="3" transform="rotate(${i * 45} ${cx} ${cy})"/>`).join('');
-  return `<g class="fx-capa-gear ${cls}"><g class="fx-capa-dentes">${dentes}</g><circle cx="${cx}" cy="${cy}" r="33" class="fx-capa-aro"/><path d="M${cx + 9} ${cy - 9}a13 13 0 1 0 4 10" class="fx-capa-seta"/><circle cx="${cx}" cy="${cy}" r="4" class="fx-capa-eixo"/></g>`;
-}
-const FX_CAPA_ARTE = `<svg class="fx-capa-svg" viewBox="0 0 420 400" role="img" aria-label="Fluxo de demandas: solicitação, processamento e aprovação">
-  <defs>
-    <radialGradient id="fxCapaBrilho" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#E6BC79" stop-opacity=".30"/><stop offset=".55" stop-color="#3974C6" stop-opacity=".12"/><stop offset="1" stop-color="#3974C6" stop-opacity="0"/></radialGradient>
-    <linearGradient id="fxCapaOuro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B8862F"/><stop offset=".5" stop-color="#F7DA8C"/><stop offset="1" stop-color="#C6913A"/></linearGradient>
-  </defs>
-  <circle cx="215" cy="200" r="190" fill="url(#fxCapaBrilho)" class="fx-capa-halo"/>
-  <circle cx="215" cy="200" r="168" class="fx-capa-orbita"/>
-  <circle cx="215" cy="200" r="132" class="fx-capa-orbita fx-capa-orbita-2"/>
-  <g class="fx-capa-linhas"><path d="M128 200H196M196 200V122M196 200V278M243 105H296Q312 105 312 121V146M243 295H296Q312 295 312 279V254"/></g>
-  <g class="fx-capa-fluxo">
-    <path d="M128 200H196V122"/><path d="M128 200H196V278" class="fx-atraso-1"/>
-    <path d="M243 105H296Q312 105 312 121V146" class="fx-atraso-2"/><path d="M243 295H296Q312 295 312 279V254" class="fx-atraso-3"/>
-  </g>
-  <g class="fx-capa-doc"><rect x="44" y="164" width="84" height="72" rx="16"/><path d="M66 190H106M66 210H94"/></g>
-  ${fxEngrenagem(196, 110, 'fx-gear-a')}
-  ${fxEngrenagem(196, 290, 'fx-gear-b')}
-  <g class="fx-capa-hex"><path d="M312 146L360 173V227L312 254L264 227V173Z"/><path d="M291 201L306 216L334 186" class="fx-capa-check"/></g>
-  <circle cx="128" cy="200" r="5" class="fx-capa-no"/><circle cx="312" cy="146" r="5" class="fx-capa-no"/><circle cx="312" cy="254" r="5" class="fx-capa-no"/>
-</svg>`;
+// Capa do Início: imagem preparada a partir da ilustração fornecida pelo usuário.
+const FX_CAPA_ARTE = '<img class="fx-capa-imagem" src="../app/marca/fluxo-capa-processos.png" alt="" width="1536" height="1024" decoding="async">';
 // Entrada em cascata só na primeira exibição da capa (a tela é redesenhada a cada sincronização)
 let fxCapaJaAnimada = false;
 const fxCapaEntrada = () => { if (fxCapaJaAnimada) return ''; fxCapaJaAnimada = true; return ' fx-entrada'; };

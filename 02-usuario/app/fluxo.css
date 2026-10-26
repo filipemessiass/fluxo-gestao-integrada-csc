@@ -332,12 +332,10 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 /* A capa ocupa o painel inteiro, sem cartão: duas metades responsivas, como as capas das demais ferramentas da área. */
 .welcome-section:has(.fx-capa) { max-width: none; min-height: 0; padding: 0; justify-content: flex-start; }
 .fx-capa {
-  --fx-capa-traco: #0B2852; --fx-capa-fundo: #FFFFFF; --fx-mx: 70%; --fx-my: 40%; --fx-rx: 0deg; --fx-ry: 0deg;
+  --fx-mx: 70%; --fx-my: 40%; --fx-rx: 0deg; --fx-ry: 0deg;
   position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 48px); align-items: center;
   width: 100%; min-height: clamp(500px, calc(100dvh - 200px), 720px); margin: -6px 0 22px; padding: clamp(8px, 1.5vw, 18px) 0; text-align: left;
 }
-:root[data-theme="dark"] .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; } }
 /* Luz que acompanha o cursor */
 .fx-capa::after {
   content: ''; position: absolute; inset: -20px; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .35s ease; border-radius: 24px;
@@ -384,45 +382,19 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 /* ---- Coluna da ilustração ---- */
 .fx-capa-arte { position: relative; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: clamp(8px, 1.4dvh, 18px); perspective: 1000px; }
 .fx-capa-palco { position: relative; width: min(100%, 740px); margin: 0 auto; transform: rotateX(var(--fx-rx)) rotateY(var(--fx-ry)); transform-style: preserve-3d; transition: transform .25s ease-out; will-change: transform; }
-.fx-capa-svg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 22px 34px rgba(16, 30, 48, .20)); }
+.fx-capa-imagem { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; border-radius: 20px; background: #fff; box-shadow: 0 18px 44px rgba(16, 30, 48, .10); }
+:root[data-theme="dark"] .fx-capa-imagem { border: 1px solid rgba(230, 188, 121, .2); box-shadow: 0 20px 48px rgba(0, 0, 0, .28); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fx-capa-imagem { border: 1px solid rgba(230, 188, 121, .2); box-shadow: 0 20px 48px rgba(0, 0, 0, .28); } }
 /* Etiquetas flutuantes com dados reais (como as etiquetas do mapa nas demais capas) */
 .fx-capa-chip { position: absolute; transform: translate(-50%, -50%) translateZ(40px); display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 14px; border-radius: 999px; background: var(--fx-surface); color: var(--fx-ink-2); font-size: .82rem; font-weight: 600; white-space: nowrap; box-shadow: 0 10px 26px rgba(16, 30, 48, .16); border: 1px solid var(--fx-line); animation: fxChip 5s ease-in-out infinite; }
 .fx-capa-chip b { font-family: var(--fx-font-num); font-size: 1rem; font-weight: 800; color: var(--fx-ink); }
-.fx-chip-doc { left: 19%; top: 30%; }
-.fx-chip-gear { left: 64%; top: 6%; animation-delay: -1.6s; }
-.fx-chip-ok { left: 79%; top: 82%; animation-delay: -3.2s; }
+.fx-chip-doc { left: 19%; top: 12%; }
+.fx-chip-gear { left: 72%; top: 10%; animation-delay: -1.6s; }
+.fx-chip-ok { left: 79%; top: 88%; animation-delay: -3.2s; }
 .fx-chip-ok b { color: var(--fx-success); }
 @keyframes fxChip { 0%, 100% { margin-top: 0; } 50% { margin-top: -6px; } }
 /* Legenda no rodapé da ilustração */
 
-/* Traços da ilustração (seguem o tema) */
-.fx-capa-linhas path, .fx-capa-doc rect, .fx-capa-doc path, .fx-capa-aro, .fx-capa-seta, .fx-capa-hex path:first-child { fill: none; stroke: var(--fx-capa-traco); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
-.fx-capa-doc rect, .fx-capa-aro, .fx-capa-hex path:first-child { fill: var(--fx-capa-fundo); }
-.fx-capa-dentes rect { fill: var(--fx-capa-traco); }
-.fx-capa-eixo { fill: #E6BC79; }
-.fx-capa-check { fill: none; stroke: url(#fxCapaOuro); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 64; stroke-dashoffset: 0; animation: fxCheck 1.1s .6s var(--fx-ease) backwards; }
-.fx-capa-no { fill: #E6BC79; stroke: var(--fx-capa-fundo); stroke-width: 3; }
-.fx-capa-orbita { fill: none; stroke: rgba(230, 188, 121, .35); stroke-width: 1.5; stroke-dasharray: 3 9; transform-origin: 215px 200px; animation: fxGira 60s linear infinite; }
-.fx-capa-orbita-2 { stroke: rgba(57, 116, 198, .30); animation-duration: 40s; animation-direction: reverse; }
-
-/* Efeitos: engrenagens girando, dados fluindo, documento flutuando e aprovação pulsando */
-.fx-capa-gear { transform-box: fill-box; transform-origin: center; }
-.fx-gear-a { animation: fxGira 9s linear infinite; }
-.fx-gear-b { animation: fxGira 9s linear infinite reverse; }
-.fx-capa-fluxo path { fill: none; stroke: url(#fxCapaOuro); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 14 220; animation: fxFluxo 2.8s linear infinite; }
-.fx-capa-fluxo .fx-atraso-1 { animation-delay: .7s; }
-.fx-capa-fluxo .fx-atraso-2 { animation-delay: 1.4s; }
-.fx-capa-fluxo .fx-atraso-3 { animation-delay: 2.1s; }
-.fx-capa-doc { animation: fxFlutua 4.5s ease-in-out infinite; }
-.fx-capa-hex { transform-box: fill-box; transform-origin: center; animation: fxPulso 3.2s ease-in-out infinite; }
-.fx-capa-halo { transform-origin: 215px 200px; animation: fxRespira 6s ease-in-out infinite; }
-.fx-capa.fx-ativa .fx-gear-a, .fx-capa.fx-ativa .fx-gear-b { animation-duration: 4.5s; }
-@keyframes fxGira { to { transform: rotate(360deg); } }
-@keyframes fxFluxo { from { stroke-dashoffset: 234; } to { stroke-dashoffset: 0; } }
-@keyframes fxFlutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-@keyframes fxPulso { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(230, 188, 121, 0)); } 50% { transform: scale(1.04); filter: drop-shadow(0 0 14px rgba(230, 188, 121, .55)); } }
-@keyframes fxRespira { 0%, 100% { opacity: .75; transform: scale(.97); } 50% { opacity: 1; transform: scale(1.03); } }
-@keyframes fxCheck { from { stroke-dashoffset: 64; } }
 
 /* ---- Responsividade ---- */
 @media (max-width: 1599px) {
@@ -450,10 +422,11 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
   .fx-capa-conteudo .fx-home-marca { width: min(300px, 100%); }
   .fx-capa-acoes { padding: 18px 14px; }
   .fx-capa-chip { font-size: .7rem; padding: 6px 9px; }
-  .fx-chip-gear { left: 60%; }
+  .fx-chip-doc { left: 18%; top: 12%; }
+  .fx-chip-gear { left: 72%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fx-capa-fluxo, .fx-capa-aurora, .fx-capa-conteudo .primary-actions .cta::after { display: none; }
+  .fx-capa-aurora, .fx-capa-conteudo .primary-actions .cta::after { display: none; }
   .fx-capa-palco { transform: none; }
 }
 
