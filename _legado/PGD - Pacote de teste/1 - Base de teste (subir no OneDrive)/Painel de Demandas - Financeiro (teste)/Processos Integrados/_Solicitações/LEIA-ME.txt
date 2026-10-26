@@ -1,0 +1,8 @@
+﻿SOLICITAÇÕES A PROCESSOS INTEGRADOS
+
+Coordenações e supervisões pedem demandas a Processos Integrados por aqui, com título e descrição.
+Cada solicitante grava só o próprio arquivo (ex.: sup-emerson.json, coord-cf.json).
+A supervisão de Processos Integrados designa a equipe, define o prazo e responde em _respostas.json,
+com o andamento de cada solicitação.
+
+Compartilhar com: coordenadores e supervisores (pode editar) - apenas esta subpasta.

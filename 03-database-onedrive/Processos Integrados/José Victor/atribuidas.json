@@ -1,0 +1,27 @@
+{
+  "app": "painel-demandas-equipe",
+  "tipo": "atribuidas",
+  "versao": 2,
+  "supervisor": "Juliana",
+  "atualizadoEm": "2026-10-23T14:12:08.720636",
+  "tasks": [
+    {
+      "id": "b27effff-8187-4d52-b41f-bf79b730eece",
+      "title": "Conciliação MIGO x MIRO da conta transitória",
+      "notes": "Conciliar a conta transitória de estoque (MF) e reportar os itens em aberto.",
+      "priority": "alta",
+      "category": "Conciliação",
+      "tipo": "recorrente",
+      "periodicidade": "mensal",
+      "due": "2026-05-10",
+      "createdAt": 1777377600000,
+      "assignedBy": "Juliana",
+      "assignedAt": 1777377600000,
+      "atende": [
+        "coord:cf"
+      ],
+      "updatedAt": 1777377600000
+    }
+  ],
+  "acoes": []
+}

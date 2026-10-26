@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SGPI · Supervisão</title>
+    <link rel="stylesheet" href="../app/pgd.css">
+    <link rel="stylesheet" href="../app/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../app/workflow.css">
+</head>
+<body>
+    <noscript>Ative o JavaScript no navegador para usar o SGPI.</noscript>
+    <script src="../../01-login/perfis.js"></script>
+    <script>
+        // Perfil vem do login; sem sessão (ou perfil de outro papel) volta para o login.
+        (function () {
+            var perfil = window.SGPI_PERFIS.ler();
+            if (!perfil || perfil.papel !== 'supervisor') { location.replace('../../01-login/index.html'); return; }
+            window.PAINEL_PRESET = window.SGPI_PERFIS.preset(perfil);
+            window.SGPI_LOGIN_URL = '../../01-login/index.html';
+        })();
+    </script>
+    <script src="../app/pgd-markup.js"></script>
+    <script src="../app/workflow.js"></script>
+    <script src="../app/pgd.js"></script>
+</body>
+</html>

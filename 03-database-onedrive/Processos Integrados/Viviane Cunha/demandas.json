@@ -1,0 +1,989 @@
+{
+  "app": "painel-demandas-equipe",
+  "version": 3,
+  "colaborador": "Viviane Cunha",
+  "atualizadoEm": "2026-10-23T14:12:08.720636",
+  "updatedAt": 1792775528720,
+  "totalTasks": 27,
+  "tasks": [
+    {
+      "id": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "title": "Fechamento das entregas fiscais do mês",
+      "notes": "",
+      "status": "concluido",
+      "priority": "alta",
+      "category": "Fiscal",
+      "tipo": "recorrente",
+      "due": "2026-05-08",
+      "dueOriginal": "2026-05-08",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1777204800000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1778266800000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1777204800000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1778076000000
+        },
+        {
+          "s": "concluido",
+          "at": 1778266800000
+        }
+      ],
+      "periodicidade": "mensal",
+      "serieId": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "diaBase": 8,
+      "periodo": "2026-05",
+      "updatedAt": 1778266800000
+    },
+    {
+      "id": "5f40c908-5148-4e87-bd68-b5b467c0a129",
+      "title": "Fechamento das entregas fiscais do mês",
+      "notes": "",
+      "status": "concluido",
+      "priority": "alta",
+      "category": "Fiscal",
+      "tipo": "recorrente",
+      "due": "2026-06-08",
+      "dueOriginal": "2026-06-08",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1779883200000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1781118000000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1779883200000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1780927200000
+        },
+        {
+          "s": "concluido",
+          "at": 1781118000000
+        }
+      ],
+      "periodicidade": "mensal",
+      "serieId": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "diaBase": 8,
+      "periodo": "2026-06",
+      "updatedAt": 1781118000000
+    },
+    {
+      "id": "ae5d6497-7973-4da6-bab3-98e40c5e7257",
+      "title": "Fechamento das entregas fiscais do mês",
+      "notes": "",
+      "status": "concluido",
+      "priority": "alta",
+      "category": "Fiscal",
+      "tipo": "recorrente",
+      "due": "2026-07-08",
+      "dueOriginal": "2026-07-08",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1782475200000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1783450800000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1782475200000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1783260000000
+        },
+        {
+          "s": "concluido",
+          "at": 1783450800000
+        }
+      ],
+      "periodicidade": "mensal",
+      "serieId": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "diaBase": 8,
+      "periodo": "2026-07",
+      "updatedAt": 1783450800000
+    },
+    {
+      "id": "8696edb8-1f12-4dbd-9d11-960cace9a968",
+      "title": "Fechamento das entregas fiscais do mês",
+      "notes": "",
+      "status": "concluido",
+      "priority": "alta",
+      "category": "Fiscal",
+      "tipo": "recorrente",
+      "due": "2026-08-08",
+      "dueOriginal": "2026-08-08",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1785153600000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1786042800000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1785153600000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1785852000000
+        },
+        {
+          "s": "concluido",
+          "at": 1786042800000
+        }
+      ],
+      "periodicidade": "mensal",
+      "serieId": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "diaBase": 8,
+      "periodo": "2026-08",
+      "updatedAt": 1786042800000
+    },
+    {
+      "id": "58aee4de-6134-4ff3-9b61-bb5f41f6d74c",
+      "title": "Fechamento das entregas fiscais do mês",
+      "notes": "",
+      "status": "concluido",
+      "priority": "alta",
+      "category": "Fiscal",
+      "tipo": "recorrente",
+      "due": "2026-09-08",
+      "dueOriginal": "2026-09-08",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1787832000000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1789153200000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1787832000000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1788962400000
+        },
+        {
+          "s": "concluido",
+          "at": 1789153200000
+        }
+      ],
+      "periodicidade": "mensal",
+      "serieId": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "diaBase": 8,
+      "periodo": "2026-09",
+      "updatedAt": 1789153200000
+    },
+    {
+      "id": "fc2cb34d-6660-4c02-b2b6-18647e7eee18",
+      "title": "Fechamento das entregas fiscais do mês",
+      "notes": "",
+      "status": "concluido",
+      "priority": "alta",
+      "category": "Fiscal",
+      "tipo": "recorrente",
+      "due": "2026-10-08",
+      "dueOriginal": "2026-10-08",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1790424000000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1791572400000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1790424000000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1791381600000
+        },
+        {
+          "s": "concluido",
+          "at": 1791572400000
+        }
+      ],
+      "periodicidade": "mensal",
+      "serieId": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "diaBase": 8,
+      "periodo": "2026-10",
+      "updatedAt": 1791572400000
+    },
+    {
+      "id": "5c2aa500-ea00-4b8b-a0e2-f55066fdd22d",
+      "title": "Fechamento das entregas fiscais do mês",
+      "notes": "",
+      "status": "nao_iniciado",
+      "priority": "alta",
+      "category": "Fiscal",
+      "tipo": "recorrente",
+      "due": "2026-11-08",
+      "dueOriginal": "2026-11-08",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1792756800000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1792756800000
+        }
+      ],
+      "periodicidade": "mensal",
+      "serieId": "7d03e62d-34c8-4ff1-a93a-c6ec7d24fe68",
+      "diaBase": 8,
+      "periodo": "2026-11",
+      "updatedAt": 1792756800000
+    },
+    {
+      "id": "638bb76d-5d11-4886-afb9-fc185d26b5b9",
+      "title": "Atualizar base de fornecedores críticos",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Fiscal",
+      "tipo": "sob_demanda",
+      "due": "2026-05-22",
+      "dueOriginal": "2026-05-22",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1778500800000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "coord:ft"
+      ],
+      "completedAt": 1779303600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1778500800000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1779112800000
+        },
+        {
+          "s": "concluido",
+          "at": 1779303600000
+        }
+      ],
+      "updatedAt": 1779303600000
+    },
+    {
+      "id": "cd17efbd-a049-4314-95bd-3f01bb1bbdba",
+      "title": "Revisar matriz de riscos de Tesouraria",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Fiscal",
+      "tipo": "sob_demanda",
+      "due": "2026-05-06",
+      "dueOriginal": "2026-05-06",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1777636800000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1778180400000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1777636800000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1777989600000
+        },
+        {
+          "s": "concluido",
+          "at": 1778180400000
+        }
+      ],
+      "updatedAt": 1778180400000
+    },
+    {
+      "id": "765e3eef-f302-4c61-8bc4-3bc635d63123",
+      "title": "Revisar matriz de riscos de Tesouraria",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Automação",
+      "tipo": "sob_demanda",
+      "due": "2026-05-25",
+      "dueOriginal": "2026-05-25",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1778760000000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1779735600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1778760000000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1779544800000
+        },
+        {
+          "s": "concluido",
+          "at": 1779735600000
+        }
+      ],
+      "updatedAt": 1779735600000
+    },
+    {
+      "id": "a49a75c7-ba45-4464-b394-cc2a1e2088a5",
+      "title": "Treinar equipe no novo modelo de POP",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Documentação",
+      "tipo": "sob_demanda",
+      "due": "2026-06-18",
+      "dueOriginal": "2026-06-18",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1780660800000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1781463600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1780660800000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1781272800000
+        },
+        {
+          "s": "concluido",
+          "at": 1781463600000
+        }
+      ],
+      "updatedAt": 1781463600000
+    },
+    {
+      "id": "5efc611a-e5bc-4768-b3c4-67870542c2af",
+      "title": "Treinar equipe no novo modelo de POP",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Auditoria",
+      "tipo": "sob_demanda",
+      "due": "2026-06-07",
+      "dueOriginal": "2026-06-07",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1779710400000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1780599600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1779710400000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1780408800000
+        },
+        {
+          "s": "concluido",
+          "at": 1780599600000
+        }
+      ],
+      "updatedAt": 1780599600000
+    },
+    {
+      "id": "70601749-8489-4646-b163-69a99ee19c8b",
+      "title": "Consolidar entregas fiscais da competência",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Auditoria",
+      "tipo": "sob_demanda",
+      "due": "2026-06-09",
+      "dueOriginal": "2026-06-09",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1779969600000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1781031600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1779969600000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1780840800000
+        },
+        {
+          "s": "concluido",
+          "at": 1781031600000
+        }
+      ],
+      "updatedAt": 1781031600000
+    },
+    {
+      "id": "e6970af1-2ec5-4153-ab05-2d94971e7a2f",
+      "title": "Treinar equipe no novo modelo de POP",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Documentação",
+      "tipo": "sob_demanda",
+      "due": "2026-07-20",
+      "dueOriginal": "2026-07-20",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1784030400000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1784487600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1784030400000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1784296800000
+        },
+        {
+          "s": "concluido",
+          "at": 1784487600000
+        }
+      ],
+      "updatedAt": 1784487600000
+    },
+    {
+      "id": "bb026dfe-3dac-4490-9b36-a188f45092de",
+      "title": "Organizar evidências para a auditoria",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Documentação",
+      "tipo": "sob_demanda",
+      "due": "2026-07-15",
+      "dueOriginal": "2026-07-15",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1783512000000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1783796400000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1783512000000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1783605600000
+        },
+        {
+          "s": "concluido",
+          "at": 1783796400000
+        }
+      ],
+      "updatedAt": 1783796400000
+    },
+    {
+      "id": "f5fe79e0-9b7a-48bd-930f-d425720ba107",
+      "title": "Revisar matriz de riscos de Tesouraria",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Auditoria",
+      "tipo": "sob_demanda",
+      "due": "2026-07-19",
+      "dueOriginal": "2026-07-19",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1784030400000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1784919600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1784030400000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1784728800000
+        },
+        {
+          "s": "concluido",
+          "at": 1784919600000
+        }
+      ],
+      "updatedAt": 1784919600000
+    },
+    {
+      "id": "4156d308-9826-4607-94b4-83e7fe643ff5",
+      "title": "Revisar matriz de riscos de Tesouraria",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Pagamentos",
+      "tipo": "sob_demanda",
+      "due": "2026-08-05",
+      "dueOriginal": "2026-08-05",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1785240000000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1786215600000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1785240000000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1786024800000
+        },
+        {
+          "s": "concluido",
+          "at": 1786215600000
+        }
+      ],
+      "updatedAt": 1786215600000
+    },
+    {
+      "id": "72341d1e-b4ae-49bf-bfc7-1697aeb78b0e",
+      "title": "Conferir apuração de retenções",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Fiscal",
+      "tipo": "sob_demanda",
+      "due": "2026-08-06",
+      "dueOriginal": "2026-08-06",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1784894400000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1786129200000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1784894400000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1785938400000
+        },
+        {
+          "s": "concluido",
+          "at": 1786129200000
+        }
+      ],
+      "updatedAt": 1786129200000
+    },
+    {
+      "id": "abb1542d-2889-450c-a895-7bc2f3abab6c",
+      "title": "Treinar equipe no novo modelo de POP",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Documentação",
+      "tipo": "sob_demanda",
+      "due": "2026-08-21",
+      "dueOriginal": "2026-08-21",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1786708800000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1787252400000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1786708800000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1787061600000
+        },
+        {
+          "s": "concluido",
+          "at": 1787252400000
+        }
+      ],
+      "updatedAt": 1787252400000
+    },
+    {
+      "id": "a0d04cb1-b2c7-48dd-8975-e9edf5ab6081",
+      "title": "Responder chamado da área de Compras",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Auditoria",
+      "tipo": "sob_demanda",
+      "due": "2026-09-10",
+      "dueOriginal": "2026-09-10",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1787918400000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "completedAt": 1789066800000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1787918400000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1788876000000
+        },
+        {
+          "s": "concluido",
+          "at": 1789066800000
+        }
+      ],
+      "updatedAt": 1789066800000
+    },
+    {
+      "id": "022e354c-55e5-4ecb-8af0-44b658d41de1",
+      "title": "Revisar parecer sobre a Reforma Tributária",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Documentação",
+      "tipo": "sob_demanda",
+      "due": "2026-09-24",
+      "dueOriginal": "2026-09-24",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1789387200000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "lucas"
+      ],
+      "completedAt": 1790276400000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1789387200000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1790085600000
+        },
+        {
+          "s": "concluido",
+          "at": 1790276400000
+        }
+      ],
+      "updatedAt": 1790276400000
+    },
+    {
+      "id": "729bdea2-e13c-448e-84fa-798360e1320c",
+      "title": "Atualizar base de fornecedores críticos",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Pagamentos",
+      "tipo": "sob_demanda",
+      "due": "2026-09-11",
+      "dueOriginal": "2026-09-11",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1788609600000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "coord:ft"
+      ],
+      "completedAt": 1789066800000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1788609600000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1788876000000
+        },
+        {
+          "s": "concluido",
+          "at": 1789066800000
+        }
+      ],
+      "updatedAt": 1789066800000
+    },
+    {
+      "id": "560ce6cf-a2a4-4bd5-8896-b4397f268b4b",
+      "title": "Consolidar entregas fiscais da competência",
+      "notes": "",
+      "status": "em_andamento",
+      "priority": "media",
+      "category": "Pagamentos",
+      "tipo": "sob_demanda",
+      "due": "2026-10-22",
+      "dueOriginal": "2026-10-22",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1791979200000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1791979200000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1792159200000
+        }
+      ],
+      "updatedAt": 1792159200000
+    },
+    {
+      "id": "283c7bca-58c2-4be0-90c2-dffc957c9411",
+      "title": "Consolidar entregas fiscais da competência",
+      "notes": "",
+      "status": "concluido",
+      "priority": "media",
+      "category": "Auditoria",
+      "tipo": "sob_demanda",
+      "due": "2026-10-11",
+      "dueOriginal": "2026-10-11",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1791201600000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "completedAt": 1791486000000,
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1791201600000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1791295200000
+        },
+        {
+          "s": "concluido",
+          "at": 1791486000000
+        }
+      ],
+      "updatedAt": 1791486000000
+    },
+    {
+      "id": "c19ac443-aad2-4cd3-bab4-87055ed53125",
+      "title": "Workshop integrado Finanças e Capex/Opex",
+      "notes": "",
+      "status": "em_andamento",
+      "priority": "media",
+      "category": "Workshop",
+      "tipo": "projeto",
+      "due": "2026-10-30",
+      "dueOriginal": "2026-10-30",
+      "histPrazo": [],
+      "log": [
+        {
+          "id": "779e5bfc-b0c4-4c07-a198-3833c1d29684",
+          "text": "Pauta enviada para a liderança aprovar.",
+          "at": 1791050400000,
+          "by": "Viviane Cunha"
+        },
+        {
+          "id": "940d45fd-6933-43ff-9efe-70b16751ef13",
+          "text": "Liderança aprovou a pauta; confirmando a sala e os convidados.",
+          "at": 1792681928720,
+          "by": "Viviane Cunha"
+        },
+        {
+          "id": "cba52b46-40f6-4222-956d-d38c1c84f73f",
+          "text": "Convites enviados para 14 pessoas.",
+          "at": 1792768328720,
+          "by": "Viviane Cunha"
+        }
+      ],
+      "createdAt": 1788350400000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "todas"
+      ],
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1788350400000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1788703200000
+        }
+      ],
+      "updatedAt": 1792768328720
+    },
+    {
+      "id": "36fd40ab-1b5b-4615-a042-b0d671ca0b27",
+      "title": "Documentar regra de multas e juros",
+      "notes": "",
+      "status": "em_andamento",
+      "priority": "baixa",
+      "category": "Documentação",
+      "tipo": "sob_demanda",
+      "due": "2026-10-22",
+      "dueOriginal": "2026-10-18",
+      "histPrazo": [
+        {
+          "de": "2026-10-18",
+          "para": "2026-10-22",
+          "at": 1792256400000,
+          "por": "Viviane Cunha",
+          "sup": false
+        }
+      ],
+      "log": [],
+      "createdAt": 1791460800000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "coord:ft"
+      ],
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1791460800000
+        },
+        {
+          "s": "em_andamento",
+          "at": 1791900000000
+        }
+      ],
+      "updatedAt": 1792256400000
+    },
+    {
+      "id": "8d937dad-b8fa-4304-a76e-8e6e7625afc7",
+      "title": "Treinar equipe no novo modelo de POP",
+      "notes": "",
+      "status": "nao_iniciado",
+      "priority": "media",
+      "category": "Capacitação",
+      "tipo": "outros",
+      "due": null,
+      "dueOriginal": null,
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1791720000000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [],
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1791720000000
+        }
+      ],
+      "updatedAt": 1791720000000
+    }
+  ],
+  "deleted": {},
+  "recebidas": [],
+  "excluidas": [
+    {
+      "id": "aaef2314-d441-41dd-bd87-e2e36a3c6ca9",
+      "title": "Conferir planilha antiga de retenções",
+      "notes": "",
+      "status": "nao_iniciado",
+      "priority": "media",
+      "category": "Fiscal",
+      "tipo": "sob_demanda",
+      "due": "2026-10-06",
+      "dueOriginal": "2026-10-06",
+      "histPrazo": [],
+      "log": [],
+      "createdAt": 1790856000000,
+      "assignedBy": null,
+      "assignedAt": null,
+      "atende": [
+        "emerson"
+      ],
+      "histStatus": [
+        {
+          "s": "nao_iniciado",
+          "at": 1790856000000
+        }
+      ],
+      "updatedAt": 1790856000000,
+      "deletedAt": 1791378000000,
+      "motivo": "Excluída pelo analista",
+      "porSup": false
+    }
+  ],
+  "seriesEncerradas": []
+}

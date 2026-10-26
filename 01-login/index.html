@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SGPI · Login</title>
+    <link rel="stylesheet" href="../02-usuario/app/pgd.css">
+    <style>
+        body { min-height: 100vh; display: flex; flex-direction: column; background: var(--paper); }
+        .login-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 28px; background: var(--surface); border-bottom: 1px solid var(--line); }
+        .login-brand { display: flex; align-items: center; gap: 12px; }
+        .login-brand svg { width: 40px; height: 40px; }
+        .login-brand strong { display: block; font-size: 1.15rem; font-weight: 900; letter-spacing: .04em; }
+        .login-brand span { font-size: .8rem; color: var(--ink-3); }
+        .login-status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: .8rem; color: var(--ink-2); }
+        .login-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--st-con); box-shadow: 0 0 6px var(--st-con); }
+        .login-main { flex: 1; width: min(980px, 100%); margin: 0 auto; padding: 32px 18px; display: grid; gap: 22px; align-content: start; }
+        .login-hero { padding: 30px 32px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(135deg, var(--surface), rgba(var(--accent-rgb), .08)); }
+        .login-hero .eyebrow { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+        .login-hero .eyebrow svg { width: 14px; height: 14px; }
+        .login-hero h1 { margin: 8px 0; font-size: clamp(1.5rem, 3.4vw, 2.2rem); font-weight: 800; line-height: 1.15; }
+        .login-hero p { margin: 0; color: var(--ink-2); max-width: 70ch; line-height: 1.6; }
+        .login-card { padding: 26px 28px; }
+        .login-card h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; font-size: 1.2rem; }
+        .login-card h2 svg { width: 22px; height: 22px; color: var(--accent); }
+        .login-card > p { margin: 0 0 18px; color: var(--ink-2); }
+        .login-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 14px; align-items: end; }
+        .login-form .field { margin: 0; }
+        .login-form .btn { height: 44px; padding: 0 22px; }
+        .login-alert { display: none; margin-top: 14px; padding: 11px 14px; border-radius: 10px; font-weight: 600; }
+        .login-alert.err { display: block; background: var(--st-atr-soft); color: var(--st-atr); }
+        .login-alert.ok { display: block; background: var(--st-con-soft); color: var(--st-con); }
+        .login-foot { padding: 16px 18px 24px; text-align: center; font-size: .8rem; color: var(--ink-3); }
+        .login-pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .login-pills span { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+        @media (max-width: 760px) { .login-form { grid-template-columns: 1fr; } .login-hero, .login-card { padding: 22px; } }
+    </style>
+</head>
+<body>
+    <header class="login-top">
+        <div class="login-brand">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#405CFF"/><stop offset="1" stop-color="#0012C8"/></linearGradient></defs><rect width="64" height="64" rx="14.4" fill="url(#lg)"/><path d="M16 34l11.5 11.5L48.6 21.8" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>SGPI</strong><span>Processos Integrados · Centro de Serviços Compartilhados</span></div>
+        </div>
+        <span class="login-status" id="loginStatus"><i></i>Banco: pasta OneDrive (conexão no painel)</span>
+    </header>
+
+    <main class="login-main">
+        <section class="login-hero">
+            <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Portal de acesso</span>
+            <h1>SGPI (Sistema Gerencial de Processos Integrados)</h1>
+            <p>Gestão de demandas da equipe e Workflow (Projetos) com as etapas E1 a E08. A supervisão e os analistas compartilham os dados pela pasta Processos Integrados no OneDrive.</p>
+        </section>
+
+        <section class="panel login-card">
+            <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>Autenticação de acesso</h2>
+            <p>Informe seu usuário e sua senha para entrar no seu painel.</p>
+            <form class="login-form" id="loginForm" autocomplete="on">
+                <div class="field"><label for="loginUsuario">Usuário</label><input id="loginUsuario" placeholder="Ex.: filipe.messias" required autofocus autocomplete="username"></div>
+                <div class="field"><label for="loginSenha">Senha</label><input id="loginSenha" type="password" placeholder="Digite sua senha" required autocomplete="current-password"></div>
+                <button class="btn primary" type="submit">Acessar</button>
+            </form>
+            <div class="login-alert" id="loginAlert" role="status"></div>
+        </section>
+    </main>
+
+    <footer class="login-foot">
+        <strong>SGPI</strong> · Departamento de Processos Integrados (CSC)
+        <div class="login-pills"><span>Banco em pasta OneDrive</span><span>Funciona sem servidor</span><span>Edge ou Chrome</span></div>
+    </footer>
+
+    <script src="perfis.js"></script>
+    <script>
+        (function () {
+            'use strict';
+            var P = window.SGPI_PERFIS;
+            var alerta = document.getElementById('loginAlert');
+
+            function avisar(texto, tipo) {
+                alerta.textContent = texto;
+                alerta.className = 'login-alert ' + tipo;
+            }
+
+            // Direcionamento: supervisão → 02-usuario/supervisor · analista → 02-usuario/analista
+            document.getElementById('loginForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                var usuario = document.getElementById('loginUsuario').value;
+                var perfil = P.autenticar(usuario, document.getElementById('loginSenha').value);
+                if (!perfil) { avisar('Usuário ou senha inválidos. Verifique os dados digitados.', 'err'); return; }
+                P.entrar(perfil);
+                avisar('Acesso liberado. Abrindo o painel de ' + perfil.nome + '...', 'ok');
+                setTimeout(function () {
+                    location.href = '../02-usuario/' + (perfil.papel === 'supervisor' ? 'supervisor' : 'analista') + '/index.html';
+                }, 300);
+            });
+
+            if (!('showDirectoryPicker' in window)) {
+                document.getElementById('loginStatus').innerHTML = '<i style="background:var(--st-atr);box-shadow:none"></i>Use Edge ou Chrome para sincronizar com o OneDrive';
+            }
+        })();
+    </script>
+</body>
+</html>

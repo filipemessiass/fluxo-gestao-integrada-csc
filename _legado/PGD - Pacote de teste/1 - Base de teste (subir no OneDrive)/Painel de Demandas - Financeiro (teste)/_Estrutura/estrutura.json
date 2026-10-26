@@ -1,0 +1,235 @@
+{
+  "app": "painel-demandas-equipe",
+  "tipo": "estrutura",
+  "versao": 1,
+  "atualizadoEm": "2026-10-23",
+  "raiz": "Painel de Demandas - Financeiro",
+  "solicitacoesProcessosIntegrados": "Painel de Demandas - Financeiro/Processos Integrados/_Solicitações",
+  "gerencia": {
+    "id": "gerencia",
+    "nome": "Gerência Financeira",
+    "responsavel": "Rone Peterson",
+    "pasta": "_Gerência Financeira",
+    "caminho": "Painel de Demandas - Financeiro/_Gerência Financeira",
+    "ve": [
+      "cf",
+      "ft",
+      "pi"
+    ]
+  },
+  "coordenacoes": [
+    {
+      "id": "cf",
+      "nome": "Coordenação Contábil Fiscal",
+      "responsavel": "Philippe A. De Sá",
+      "pasta": "Coordenação Contábil Fiscal",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Contábil Fiscal",
+      "caminhoDados": "Painel de Demandas - Financeiro/Coordenação Contábil Fiscal/_Coordenação",
+      "supervisoes": [
+        "emerson",
+        "lucas",
+        "magnum",
+        "diogo",
+        "pi"
+      ],
+      "podeAtribuirAnalistas": false,
+      "podeSolicitarSupervisao": true
+    },
+    {
+      "id": "ft",
+      "nome": "Coordenação de Finanças e Tesouraria",
+      "responsavel": "Angela G. Ritchie",
+      "pasta": "Coordenação Finanças e Tesouraria",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Finanças e Tesouraria",
+      "caminhoDados": "Painel de Demandas - Financeiro/Coordenação Finanças e Tesouraria/_Coordenação",
+      "supervisoes": [
+        "adriana",
+        "erica",
+        "gabriela",
+        "viviane",
+        "lucia",
+        "pi"
+      ],
+      "podeAtribuirAnalistas": false,
+      "podeSolicitarSupervisao": true
+    }
+  ],
+  "supervisoes": [
+    {
+      "id": "emerson",
+      "supervisor": "Emerson Pontes",
+      "areas": [
+        "Tributos Estaduais"
+      ],
+      "coordenacoes": [
+        "cf"
+      ],
+      "piloto": true,
+      "analistas": [
+        "Aline Tavares",
+        "Amanda Cristina",
+        "Amélia Rafaela",
+        "Diogo Henrique",
+        "Flavius Roberto",
+        "Isaac Kesseler",
+        "Kellner Leal",
+        "Marcelle Maria",
+        "Rafael Ricardo",
+        "Rodrigo Bezerra"
+      ],
+      "notasAnalistas": {
+        "Kellner Leal": "Também participa da supervisão Lucas Albuquerque como ponto focal da Reforma Tributária."
+      },
+      "nome": "Tributos Estaduais",
+      "pasta": "Supervisão Emerson Pontes",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Contábil Fiscal/Supervisão Emerson Pontes"
+    },
+    {
+      "id": "lucas",
+      "supervisor": "Lucas Albuquerque",
+      "areas": [
+        "Regularização e Contratos",
+        "Faturamento Fiscal",
+        "Reforma Tributária"
+      ],
+      "coordenacoes": [
+        "cf"
+      ],
+      "piloto": true,
+      "estruturaEspecial": "reforma-tributaria",
+      "analistas": [
+        "Larissa Leal",
+        "Bruno Santos",
+        "Lilian de Cassia",
+        "Kellner Leal"
+      ],
+      "equipeEmLevantamento": true,
+      "pontosFocais": {
+        "Reforma Tributária": [
+          "Kellner Leal"
+        ]
+      },
+      "notasAnalistas": {
+        "Kellner Leal": "Ponto focal da Reforma Tributária. Também faz parte da supervisão Emerson Pontes (Tributos Estaduais)."
+      },
+      "obs": "Terá uma aba dedicada à Reforma Tributária, com informações levadas também aos painéis da coordenação Contábil Fiscal e da gerência.",
+      "nome": "Regularização e Contratos / Faturamento Fiscal / Reforma Tributária",
+      "pasta": "Supervisão Lucas Albuquerque",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Contábil Fiscal/Supervisão Lucas Albuquerque"
+    },
+    {
+      "id": "magnum",
+      "supervisor": "Magnum Tabosa",
+      "areas": [],
+      "coordenacoes": [
+        "cf"
+      ],
+      "nome": "Supervisão Magnum Tabosa",
+      "pasta": "Supervisão Magnum Tabosa",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Contábil Fiscal/Supervisão Magnum Tabosa"
+    },
+    {
+      "id": "diogo",
+      "supervisor": "Diogo Calado",
+      "areas": [],
+      "coordenacoes": [
+        "cf"
+      ],
+      "nome": "Supervisão Diogo Calado",
+      "pasta": "Supervisão Diogo Calado",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Contábil Fiscal/Supervisão Diogo Calado"
+    },
+    {
+      "id": "adriana",
+      "supervisor": "Adriana Maria",
+      "areas": [],
+      "coordenacoes": [
+        "ft"
+      ],
+      "nome": "Supervisão Adriana Maria",
+      "pasta": "Supervisão Adriana Maria",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Finanças e Tesouraria/Supervisão Adriana Maria"
+    },
+    {
+      "id": "erica",
+      "supervisor": "Erica Arcoverde",
+      "areas": [],
+      "coordenacoes": [
+        "ft"
+      ],
+      "nome": "Supervisão Erica Arcoverde",
+      "pasta": "Supervisão Erica Arcoverde",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Finanças e Tesouraria/Supervisão Erica Arcoverde"
+    },
+    {
+      "id": "gabriela",
+      "supervisor": "Gabriela Cavalcante",
+      "areas": [],
+      "coordenacoes": [
+        "ft"
+      ],
+      "nome": "Supervisão Gabriela Cavalcante",
+      "pasta": "Supervisão Gabriela Cavalcante",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Finanças e Tesouraria/Supervisão Gabriela Cavalcante"
+    },
+    {
+      "id": "viviane",
+      "supervisor": "Viviane Carla",
+      "areas": [
+        "Contas a Receber"
+      ],
+      "coordenacoes": [
+        "ft"
+      ],
+      "piloto": true,
+      "estruturaEspecial": "cobranca",
+      "equipeEmLevantamento": true,
+      "obs": "Terá uma estrutura própria para o processo de cobrança.",
+      "nome": "Contas a Receber",
+      "pasta": "Supervisão Viviane Carla",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Finanças e Tesouraria/Supervisão Viviane Carla"
+    },
+    {
+      "id": "lucia",
+      "supervisor": "Lúcia",
+      "areas": [],
+      "coordenacoes": [
+        "ft"
+      ],
+      "nome": "Supervisão Lúcia",
+      "pasta": "Supervisão Lúcia",
+      "caminho": "Painel de Demandas - Financeiro/Coordenação Finanças e Tesouraria/Supervisão Lúcia"
+    },
+    {
+      "id": "pi",
+      "supervisor": "Juliana Batista",
+      "areas": [
+        "Processos Integrados"
+      ],
+      "coordenacoes": [
+        "cf",
+        "ft"
+      ],
+      "transversal": true,
+      "piloto": true,
+      "analistas": [
+        "José Victor",
+        "Viviane Cunha",
+        "Filipe Messias",
+        "Juliana Santos"
+      ],
+      "obs": "Célula transversal: atende as duas coordenações e aparece no painel das duas. Cada demanda indica a supervisão atendida.",
+      "nome": "Processos Integrados",
+      "pasta": "Processos Integrados",
+      "caminho": "Painel de Demandas - Financeiro/Processos Integrados"
+    }
+  ],
+  "regras": [
+    "Gerência (Rone Peterson) vê todas as coordenações e supervisões.",
+    "Cada coordenação vê apenas as supervisões abaixo dela. Processos Integrados aparece nas duas.",
+    "Coordenações não atribuem demandas aos analistas: enviam solicitações à supervisão.",
+    "Coordenações e supervisões solicitam demandas a Processos Integrados em Processos Integrados/_Solicitações (título e descrição). A supervisão de Processos Integrados designa a equipe e define o prazo.",
+    "Supervisões atribuem demandas aos próprios analistas. Cada analista grava só na própria subpasta.",
+    "Pastas que começam com _ guardam dados do painel e não são lidas como analistas."
+  ]
+}

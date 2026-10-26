@@ -1,599 +1,592 @@
-# SGPI — Sistema de Gerenciamento de Processos Integrados
+# SGPI — Sistema Gerencial de Processos Integrados
 
-> [!TIP]
-> **Documentação Técnica e Manual Operacional Atualizados**: Para o guia completo de arquitetura, banco SQL, permissões RBAC, fluxo de baixa de demandas e deploy na AWS, consulte [docs/DOCUMENTACAO_COMPLETA_SISTEMA.md](docs/DOCUMENTACAO_COMPLETA_SISTEMA.md).
+Esta é a documentação de estudo do projeto. Ela explica o que o sistema faz, como as pastas estão organizadas, como o login direciona cada pessoa, como os painéis funcionam, como o Workflow (Projetos) controla as etapas E1 a E08 e como a pasta do OneDrive faz o papel de banco de dados.
 
-## Documento mestre do projeto
+## Sumário
 
-### Versão: 3.0 (SQL / RBAC / AWS Ready)
-### Área: CSC / Processos Integrados
-### Status: Sistema Operacional Homologado (100% de Testes Aprovados)
-
----
-
-## 1. Visão geral do projeto
-
-O SGPI (Sistema de Gerenciamento de Processos Integrados) é uma solução de gestão operacional e gerencial desenvolvida para controlar e acompanhar demandas e atividades de processos integrados em um ambiente de trabalho padronizado e visualmente orientado à rotina da área.
-
-Sua proposta central é transformar a gestão manual, dispersa e dependente de planilhas em uma estrutura organizada por etapas, critérios, evidências, indicadores e cadeias de responsabilidade. A plataforma foi pensada para funcionar como uma linha de produção de serviços internos, onde cada demanda percorre etapas de análise, execução, validação, entrega e estabilização, com acompanhamento claro do estado da atividade.
-
-O sistema foi desenhado para operar em duas camadas principais:
-
-- camada operacional: analista executando a atividade e registrando evidências;
-- camada de gestão: supervisão e liderança acompanhando prioridade, andamento, blocos e desempenho.
-
-Essencialmente, o SGPI funciona como uma ferramenta de governança da carteira de demandas, permitindo que a área mantenha controle do ciclo de vida das solicitações, reduzindo perdas, retrabalho e inconsistências no acompanhamento da operação.
+1. [Visão geral](#1-visão-geral)
+2. [Estrutura do projeto](#2-estrutura-do-projeto)
+3. [Fluxo de uso: do login ao painel](#3-fluxo-de-uso-do-login-ao-painel)
+4. [Login e perfis](#4-login-e-perfis)
+5. [Os painéis](#5-os-painéis)
+6. [Workflow (Projetos)](#6-workflow-projetos)
+7. [Banco de dados: a pasta do OneDrive](#7-banco-de-dados-a-pasta-do-onedrive)
+8. [Conexões e sincronização](#8-conexões-e-sincronização)
+9. [Armazenamento no navegador](#9-armazenamento-no-navegador)
+10. [Como executar e testar](#10-como-executar-e-testar)
+11. [Publicação no S3 da AWS](#11-publicação-no-s3-da-aws)
+12. [Manutenção: onde mexer](#12-manutenção-onde-mexer)
+13. [Limitações e segurança](#13-limitações-e-segurança)
+14. [Roteiro de estudo](#14-roteiro-de-estudo)
+15. [Glossário](#15-glossário)
 
 ---
 
-## 2. Objetivo estratégico
+## 1. Visão geral
 
-O objetivo do SGPI é proporcionar uma visão integrada, confiável e operacional do portfólio de demandas da área de Processos Integrados, permitindo que:
+O SGPI é o painel de gestão de demandas da equipe de Processos Integrados. Ele tem dois perfis:
 
-- demandas sejam geridas de forma padronizada;
-- responsabilidades sejam definidas com clareza;
-- etapas de execução e validação sejam controladas por critérios;
-- entregas sejam rastreáveis e auditáveis;
-- indicadores de desempenho e produtividade sejam observados em tempo real;
-- a supervisão tenha visão do estado da operação e das prioridades do departamento;
-- o analista tenha uma base de trabalho estruturada, sem perder o foco operacional.
+- **Supervisão (Juliana Batista):** acompanha as demandas de toda a equipe, atribui demandas aos analistas e conduz a triagem dos projetos (etapas E1 e E2).
+- **Analistas (José Victor, Viviane Cunha, Filipe Messias e Juliana Santos):** cadastram e atualizam as próprias demandas e conduzem a execução dos projetos (etapas E3 a E08).
 
-Em termos de gestão, o projeto busca criar um ambiente de direção por evidência, no qual decisões não dependem de memória, planilha isolada ou comunicação informal.
+O projeto segue o padrão do **PGD (Painel de Gestão de Demandas)** e tem três ideias centrais:
 
----
+| Ideia | O que significa na prática |
+| --- | --- |
+| **Sem servidor** | São páginas HTML, CSS e JavaScript puros. Não há Node, banco SQL nem API. Tudo roda no navegador. |
+| **O OneDrive faz o papel de banco** | Os dados são arquivos JSON numa pasta sincronizada pelo OneDrive. O navegador lê e grava essa pasta, e o OneDrive leva os arquivos para os outros computadores. |
+| **Cada arquivo tem um só dono** | O analista grava só o próprio `demandas.json`. A supervisão grava só o `atribuidas.json` na pasta de cada analista. Duas pessoas nunca escrevem no mesmo arquivo. |
 
-## 3. Contexto de negócio
+Sobre o PGD, o SGPI acrescenta:
 
-A área de Processos Integrados precisa lidar com demandas que variam entre:
-
-- melhorias operacionais;
-- automações;
-- adequações de rotina;
-- projetos de transformação;
-- atividades de suporte e acompanhamento;
-- ações de governação e entrega de valor.
-
-Sem uma ferramenta estruturada, esse conjunto de demandas normalmente fica disperso entre:
-
-- planilhas compartilhadas;
-- e-mails;
-- acompanhamento informal;
-- versões diferentes do mesmo registro;
-- dificuldades de priorização;
-- atraso na consolidação de status;
-- pouca visibilidade de riscos e pendências.
-
-O SGPI foi criado para resolver exatamente isso: unificar a operação em uma base única, com critérios de fluxo e um mecanismo de controle que apoia tanto os analistas quanto a supervisão.
+- o **login com usuário e senha**, que direciona cada pessoa ao painel certo;
+- o módulo **Workflow (Projetos)**, que acompanha as demandas do tipo Projeto pelas etapas E1 a E08, com 49 critérios e dois gates.
 
 ---
 
-## 4. Ideia de controle gerencial
+## 2. Estrutura do projeto
 
-A proposta do sistema não é apenas registrar demandas. A principal ideia é criar um modelo de gestão em linha com a lógica industrial de uma esteira de produção de serviço.
-
-Cada demanda entra como um item de trabalho e percorre uma sequência lógica:
-
-1. entrada da demanda;
-2. triagem e classificação;
-3. levantamento e definição do escopo;
-4. execução;
-5. validação;
-6. ajustes;
-7. entrega;
-8. estabilização e acompanhamento pós-entrega.
-
-Essa organização dá ao ambiente gerencial uma estrutura semelhante a uma linha de produção:
-
-- trabalho entra no sistema;
-- passa por etapas com critérios e gates;
-- sofre acompanhamento e validação;
-- é entregue com evidência;
-- e segue para estabilização ou nova evolução.
-
-A supervisão atua como o centro de comando da operação, enquanto o analista atua no ponto de execução. Assim, o sistema torna possível:
-
-- controlar o volume de trabalho em curso;
-- classificar prioridades;
-- identificar gargalos;
-- medir tempo de entrega;
-- verificar o grau de maturidade da demanda;
-- decidir quando liberar, bloquear ou acelerar uma entrega.
-
----
-
-## 5. Estrutura organizacional do sistema
-
-### 5.1 Papel do analista
-
-O analista é o responsável direto pela operação da demanda no campo. Seu papel é transformar a solicitação em solução, mantendo o registro e a evidência do que foi feito.
-
-Entre as responsabilidades principais estão:
-
-- receber a demanda já tratada pela supervisão;
-- conduzir a etapa de execução e execução técnica;
-- registrar critérios e evidências em cada etapa;
-- manter a base de lançamentos consistente;
-- acompanhar bloqueios, riscos e pendências;
-- preparar a demanda para validação e entrega;
-- documentar resultados, ganhos e observações relevantes.
-
-O analista não apenas executa; ele também é o guardião da informação operacional. Sem a qualidade do registro, a gestão perde visibilidade e a governança deixa de ser confiável.
-
-### 5.2 Papel da supervisão
-
-A supervisão é o ponto de comando e de priorização da operação. Ela organiza a fila de demandas, valida a entrada da demanda, estabelece o direcionamento da equipe e acompanha o estado das atividades em relação às prioridades do setor.
-
-Sua função inclui:
-
-- receber e classificar demandas;
-- orientar a priorização e a urgência;
-- acompanhar a carteira em andamento;
-- verificar se os itens seguem o fluxo adequado;
-- atuar como elo entre operação e gestão;
-- garantir que a demanda esteja alinhada ao objetivo do departamento.
-
-A supervisão não precisa executar todas as atividades, mas precisa ter visão total do processo para decidir o que deve ir para frente, o que precisa de atenção e o que exige replanejamento.
-
-### 5.3 Relação entre analista e supervisão
-
-A modelagem do SGPI reforça uma divisão inteligente de responsabilidades:
-
-- analista aplica a execução e a documentação;
-- supervisão organiza a operação e prioriza a entrega;
-- gestão e liderança observam os resultados e tomam decisões com base em indicadores.
-
-Essa dinâmica reproduz uma abordagem moderna de gestão de serviços: execução distribuída e governança centralizada.
-
----
-
-## 6. Modelo funcional do SGPI
-
-O sistema é organizado em blocos funcionais, cada um com uma função específica no ciclo de gestão.
-
-### 6.1 Base mestre de lançamentos
-
-A base de lançamentos é a espinha dorsal do SGPI. É nela que as demandas são registradas e tratadas como itens de trabalho com dados estruturados.
-
-Os registros contemplam:
-
-- identificação da demanda;
-- data de início e conclusão;
-- projeto e tema;
-- pilar do trabalho;
-- área envolvida e departamento;
-- atividade e descrição;
-- empresa e parceiros;
-- status e evolução;
-- horas, tempo antes e depois;
-- ganhos, redução e indicadores associados;
-- observações e pendências.
-
-Essa base serve como a fonte operacional de verdade para o restante do sistema.
-
-### 6.2 Workflow por etapas
-
-Cada demanda avança por estágios definidos que representam a maturidade do item na cadeia de entrega. O projeto define o fluxo conforme etapas E1 a E8.
-
-As etapas são:
-
-- E1 — Solicitação
-- E2 — Triagem
-- E3 — Levantamento
-- E4 — Execução
-- E5 — Validação
-- E6 — Ajustes
-- E7 — Entrega
-- E8 — Estabilização / Hypercare
-
-A lógica do fluxo foi pensada para refletir a realidade de gestão de demandas em ambiente de serviços internos.
-
-### 6.3 Critérios por etapa
-
-Cada etapa contém critérios específicos. Esses critérios representam evidências, requisitos mínimos ou marcos que precisam ser cumpridos antes de a demanda avançar.
-
-Isso oferece uma governança clara e imita uma linha de produção com inspeção e validação em pontos críticos. Um item não anda automaticamente apenas porque foi registrado; ele precisa cumprir critérios de maturidade por etapa.
-
-### 6.4 Gates de governança
-
-Os gates são pontos de aprovação e validação. O sistema organiza regras para impedir que uma etapa posterior avance sem a etapa anterior estar adequada.
-
-Exemplos de governança:
-
-- E3 e E5 funcionam como gates estratégicos;
-- E3 precisa ser validado antes de avançar para E4;
-- E5 precisa estar concluído antes de seguir para E6 e E7;
-- E8 exige estabilidade, fechamento ou abertura de nova demanda.
-
-Esse mecanismo busca evitar uma operação caótica, onde itens avançam sem revisão, confirmação ou respaldo documental.
-
----
-
-## 7. Fluxo operacional em formato de esteira de produção
-
-### 7.1 Visão geral da esteira
-
-A lógica do projeto pode ser representada assim:
+As pastas seguem a ordem de uso do sistema (1. login → 2. painel do usuário → 3. banco). A raiz pode ser enviada para um bucket S3 como está.
 
 ```text
-Entrada da demanda
-        ↓
-Triagem e classificação
-        ↓
-Levantamento do escopo
-        ↓
-Execução do trabalho
-        ↓
-Validação / homologação
-        ↓
-Ajustes e refinamentos
-        ↓
-Entrega e liberação
-        ↓
-Hypercare / estabilização
-        ↓
-Encerramento ou evolução da demanda
+SGPI/
+├── index.html                      redireciona para 01-login
+├── README.md                       esta documentação
+│
+├── 01-login/                       1. LOGIN E DIRECIONAMENTO
+│   ├── index.html                  tela de usuário e senha
+│   └── perfis.js                   perfis, credenciais, sessão e preset de cada painel
+│
+├── 02-usuario/                     2. PAINEL DO USUÁRIO
+│   ├── analista/index.html         entrada do analista (confere a sessão e monta o preset)
+│   ├── supervisor/index.html       entrada da supervisão
+│   └── app/                        motor comum aos dois painéis
+│       ├── pgd.css                 tema visual do PGD (claro/escuro, layout, componentes)
+│       ├── workflow.css            estilo original da seção Workflow (escopo .sgpi-wf)
+│       ├── pgd-markup.js           marcação: menu, telas e diálogos
+│       ├── workflow.js             motor do Workflow: etapas, critérios, gates, status
+│       ├── pgd.js                  motor: dados, pasta, sincronização, telas e Workflow
+│       └── vendor/fontawesome/     ícones usados na seção Workflow
+│
+├── 03-database-onedrive/           3. BANCO EM PASTA DO ONEDRIVE
+│   ├── README.md                   formato dos arquivos do banco
+│   ├── Processos Integrados/       modelo da pasta a subir no OneDrive (com dados de teste)
+│   └── docs/
+│       ├── Engenharia reversa — Painel de Demandas da Equipe (OneDrive).md
+│       └── pgd/                    material do pacote de teste do PGD
+│           ├── LEIA-ME - comece por aqui.txt
+│           ├── Roteiro de teste.txt
+│           └── estrutura.json      organograma da área financeira
+│
+└── _legado/                        versões anteriores; não é usado pelo sistema
 ```
 
-### 7.2 Controle de cada etapa
+### O que cada arquivo faz
 
-A esteira não é apenas visual; ela é funcional. Ela gera:
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `01-login/perfis.js` | Lista de perfis (id, nome, papel, subpasta, apelidos de login, senha); `autenticar()` confere usuário e senha; `entrar()`/`ler()`/`sair()` cuidam da sessão; `preset()` gera a configuração do painel de cada perfil. |
+| `01-login/index.html` | Formulário de login. Com usuário e senha corretos, grava a sessão e redireciona para o painel do papel da pessoa. |
+| `02-usuario/*/index.html` | Lê a sessão. Sem sessão, ou com sessão de outro papel, volta ao login. Com sessão válida, define `window.PAINEL_PRESET` e carrega o motor. |
+| `02-usuario/app/pgd-markup.js` | Insere no `<body>` a marcação do painel: menu lateral, uma `<section class="view">` por tela (incluindo `view-workflow` e `view-wf-e1` a `view-wf-e8`) e os `<dialog>` (demanda, atribuição…). |
+| `02-usuario/app/workflow.js` | Define `window.SGPI_WORKFLOW`: as 8 etapas com os critérios e o motor de status do SGPI original (status da etapa, encadeamento, gate, etapa atual, situação). Não acessa tela nem arquivo. |
+| `02-usuario/app/workflow.css` | O estilo das telas do Workflow do SGPI original, extraído do CSS antigo e limitado ao escopo `.sgpi-wf` para não interferir no resto do painel. No fim do arquivo fica o estilo do grupo "Workflow" no menu lateral. |
+| `02-usuario/app/pgd.js` | O motor do PGD, que é um único bloco `(() => { … })()`. Os blocos estão marcados com comentários `/* ===== … ===== */`. O módulo Workflow está no bloco "Workflow (Projetos)". |
+| `02-usuario/app/vendor/fontawesome/` | Font Awesome Free (ícones do Workflow original), com a licença. |
+| `03-database-onedrive/Processos Integrados/` | Modelo da pasta com uma subpasta por analista, já com os dados de teste do PGD. |
 
-- controle de avanço;
-- visibilidade do status;
-- avaliação de bloqueios;
-- gestão de pendências;
-- leitura de desempenho da carteira;
-- decisões de prioridade com base em evidências reais.
+### O que há na pasta `_legado`
 
-A analogia com produção é útil porque mostra que o SGPI é um sistema de “fabricação de serviço”: o valor não é apenas a entrega final, mas a disciplina do processo de produção até ela.
+| Conteúdo | Origem |
+| --- | --- |
+| `admin/`, `backend/`, `frontend/`, `database/`, `docs/`, `shared/`, `analista/`, `supervisor/`, `index.html`, `README.md` | Versão 3.0 anterior (SQL, React, portal admin), substituída por este projeto |
+| `PGD - Pacote de teste/` | Pacote do PGD já remanejado: a base de Processos Integrados virou `03-database-onedrive/Processos Integrados`; os painéis HTML viraram o motor em `02-usuario/app`; os guias e o organograma foram para `03-database-onedrive/docs/pgd`. As coordenações e a gestão são de outras áreas e ficaram só no legado. |
 
----
-
-## 8. Regras de operação e governança
-
-O sistema reforça algumas regras centrais que tornam a operação mais confiável:
-
-- o lançamento é a base única de verdade;
-- o status geral é derivado e não arbitrário;
-- ganhos e reduções são calculados a partir da diferença de tempo antes/depois;
-- evidência e observação são fundamentais para estabilizar o processo;
-- o workflow não é fonte de dados; ele deriva da base mestre;
-- campos sem informação devem permanecer vazios ou com indicadores derivados apropriados;
-- o histórico semanal é acumulado e não substituído;
-- status e bloqueios são indicadores de governança e controle.
-
-Essas regras fazem com que o sistema funcione como mecanismo de disciplina operacional, não como uma simples lista de tarefas.
+Tudo em `_legado` pode ser apagado quando você quiser. Os arquivos que estavam no git continuam também no commit `af190a8`.
 
 ---
 
-## 9. Funcionalidades do SGPI
+## 3. Fluxo de uso: do login ao painel
 
-### 9.1 Cadastro e manutenção de demandas
+```text
+ index.html ──► 01-login/index.html
+                    │  usuário + senha  (perfis.js → autenticar)
+                    │  grava a sessão   (localStorage "sgpi:sessao")
+                    ▼
+        ┌───────────┴────────────┐
+   papel supervisor         papel analista
+        ▼                        ▼
+ 02-usuario/supervisor/   02-usuario/analista/
+        │                        │
+        └──── index.html lê a sessão e define PAINEL_PRESET
+                    │
+                    ▼
+     pgd-markup.js → workflow.js → pgd.js
+     (o painel abre direto; os dados ficam no navegador)
+                    │
+                    ▼   quando a pessoa quiser sincronizar
+     Pasta e backup (analista) / Pastas e ajustes (supervisão)
+     → conecta a pasta do OneDrive
+```
 
-O sistema permite registrar e manter demandas com dados estruturados. Isso inclui dados de atividade, impacto, projeto, pilar, tempo, pessoa envolvida, status, observações e pendências.
-
-### 9.2 Acompanhamento do workflow
-
-O SGPI calcula automaticamente o estado de cada item no fluxo e aponta em qual etapa a demanda está, bem como o percentual de avanço. Isso melhora a gestão por oferecer um rastreio claro e contínuo.
-
-### 9.3 Critérios e evidências por etapa
-
-Cada etapa coleta critérios e evidências. Isso cria uma base documental para cada ação e reduz dependência de memória ou comunicação oral.
-
-### 9.4 Dashboard executivo
-
-A camada gerencial oferece visão agregada da operação com KPIs e indicadores, incluindo:
-
-- demanda em andamento;
-- demandas concluídas;
-- etapa atual do fluxo;
-- bloqueios;
-- ganho agregado;
-- redução de esforço;
-- lead time;
-- distribuição por projeto, pilar e departamento;
-- health status da operação;
-- rankings de desempenho.
-
-### 9.5 Acompanhamento semanal
-
-O acompanhamento semanal é um ritual de acompanhamento e alinhamento para ouvir o que está em execução, o que foi concluído, o que está bloqueado e o que precisa de suporte. Essa ação reforça a governança semanal e ajuda a evitar que a operação vire reativo.
-
-### 9.6 Carga e sincronização com Excel
-
-Excel atua como canal de entrada e saída. Isso permite que a organização mantenha familiaridade com a planilha, mas com o ganho extra de controle digital.
-
-A sincronização atua em três direções:
-
-- importar dados da planilha para o sistema;
-- comparar diferenças antes de aplicar;
-- exportar o estado da operação para um arquivo reimportável.
-
-Essa abordagem é muito útil em ambientes em que a base de dados corporativa ainda não está totalmente digitalizada.
+1. **Entrada.** O `index.html` da raiz redireciona para `01-login/`.
+2. **Login.** A pessoa digita usuário e senha. O `perfis.js` confere e grava a sessão.
+3. **Direcionamento.** A supervisão vai para `02-usuario/supervisor/` e os analistas vão para `02-usuario/analista/`.
+4. **Painel.** A página confere a sessão e monta o `PAINEL_PRESET`, com modo, nome e pasta esperada. Em seguida carrega o motor. O painel sempre abre na seção **Início**, sem exigir a pasta. Até conectar, tudo fica guardado no navegador.
+5. **Sincronização.** Quando quiser, a pessoa conecta a pasta do OneDrive pelo menu. A partir daí o painel lê e grava os arquivos da pasta (seção 8).
+6. **Saída.** O botão **Sair (trocar perfil)** no menu lateral apaga a sessão e volta ao login. Os dados locais e os da pasta continuam.
 
 ---
 
-## 10. Experiência de uso e usabilidade
+## 4. Login e perfis
 
-O SGPI foi desenhado para ser simples de operar, mesmo em um ambiente de gestão complexa. Sua usabilidade está fortemente conectada a duas premissas:
+### Credenciais
 
-1. o usuário precisa operar rapidamente sem treinamento pesado;
-2. a gestão precisa ver status e prioridade sem quebrar o ritmo da operação.
+A senha inicial de todos os perfis é `1234`, como no login anterior. O campo Usuário aceita o id ou qualquer apelido e não diferencia maiúsculas de minúsculas.
 
-### 10.1 Benefícios de usabilidade
+| Pessoa | Papel | Usuário (id) | Apelidos aceitos | Subpasta no OneDrive |
+| --- | --- | --- | --- | --- |
+| Juliana Batista | Supervisão | `juliana.batista` | `supervisora`, `supervisao`, `jb` | (conecta a pasta `Processos Integrados`) |
+| José Victor | Analista | `jose.victor` | `jv` | `José Victor` |
+| Viviane Cunha | Analista | `viviane.cunha` | `viviane.lima`, `vc`, `vl` | `Viviane Cunha` |
+| Filipe Messias | Analista | `filipe.messias` | `flipe.messias`, `fm` | `Filipe Messias` |
+| Juliana Santos | Analista | `juliana.santos` | `js` | `Juliana Santos` |
 
-- navegação orientada por fluxos e seções;
-- foco em tarefas de rotina e acompanhamento;
-- leitura de dados por perfil;
-- filtros por projeto, pilar, departamento e status;
-- organização por etapa e participação da demanda;
-- indicadores executivos sem necessidade de consulta em múltiplas planilhas.
+### Sessão e preset
 
-### 10.2 Benefício real para o usuário
+- A sessão é a chave `sgpi:sessao` no `localStorage`, com o id do perfil.
+- O `preset(perfil)` gera o `PAINEL_PRESET` que o motor do PGD espera:
+  - supervisão: `{ id, mode:'supervisor', nome:'Juliana', pastaArea:'Processos Integrados', … }`;
+  - analista: `{ id, mode:'colaborador', nome, pasta:'<subpasta>', … }`.
+- O `id` do preset entra nas chaves de armazenamento do motor. Assim, dois perfis no mesmo computador não misturam dados, mesmo usando o mesmo `analista/index.html`.
 
-A interface não exige que o analista pense em “como montar uma planilha de controle”; ela já organiza a lógica do processo. O analista precisa apenas registrar o que acontece no trabalho, e o sistema calcula o restante.
-
-A supervisão ganha uma visão mais clara do quadro geral, sem necessidade de extrair dados manualmente e consolidar informações em outra ferramenta.
-
----
-
-## 11. Benefícios operacionais e de gestão
-
-### 11.1 Ganhos em disciplina operacional
-
-O principal ganho é a padronização do processo. Com regras por etapa e estrutura de evidência, o sistema reduz variação de comportamento entre analistas e supervisors.
-
-### 11.2 Ganhos em rastreabilidade
-
-Toda evolução de uma demanda permanece registrada e controlada. Isso melhora a capacidade de responder “o que aconteceu”, “quem fez”, “quando” e “qual era o estado da demanda”.
-
-### 11.3 Ganhos em prioridade e fluxo
-
-A supervisão passa a ter melhor visão do que está em fila, o que está em risco e o que exige atenção imediata. Isso melhora a capacidade de posicionar recursos e direcionar esforços adequados.
-
-### 11.4 Ganhos em produtividade
-
-O cálculo de tempo antes e depois, ganho e redução de esforço permite avaliar se a demanda está trazendo produtividade e qualidade. Esse é um dos pontos centrais da gestão por valor do SGPI.
-
-### 11.5 Ganhos em previsibilidade
-
-Ao usar gates, critérios e indicadores, o sistema diminui o improviso. A operação se torna mais previsível e a tomada de decisão fica apoiada em dados estruturados.
+> **Importante:** o login é um controle de tela. A senha fica no código (`perfis.js`), legível por quem abrir o arquivo. A proteção real dos dados é a permissão de cada pessoa na pasta do OneDrive (seção 13).
 
 ---
 
-## 12. Indicadores e métricas relevantes
+## 5. Os painéis
 
-Os indicadores previstos e disponibilizados pelo SGPI permitem que a área compreenda a performance do portfólio. Entre as métricas relevantes estão:
+Os dois painéis usam o mesmo motor (`pgd.js`). O `mode` do preset decide o menu e as permissões.
 
-- número de demandas em andamento;
-- taxa de conclusão;
-- lead time médio;
-- ganho total e médio;
-- redução percentual do esforço;
-- distribuição por etapa;
-- bloqueios e gargalos;
-- tempo de estabilização em Hypercare;
-- índice de entrega em prazo;
-- performance por projeto, pilar e departamento.
+### Menu do analista
 
-A documentação do projeto apresenta um cenário homologado com exemplos de resultados, como:
+| Item | Para que serve |
+| --- | --- |
+| **Início** | Boas-vindas com cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
+| **Workflow (Projetos)** (grupo) | O título só abre e fecha a lista, com animação. Dentro ficam **Workflow** (tracker) e **E3 — Levantamento**, **E4 — Execução**, **E5 — Validação**, **E6 — Ajustes**, **E7 — Entrega**, **E08 — Hypercare** (seção 6). A lista começa fechada e já vem aberta quando a tela atual é do Workflow. |
+| **Tarefas** | Lista e quadro das suas demandas: filtros, nova demanda, notas de andamento, anexos, recorrência, relatório em PDF/Excel. |
+| **Validação** | Caixa de convites: demandas que colegas querem compartilhar ou transferir para você. |
+| **Indicadores** | Cartões por situação, itens que pedem atenção, régua de prazos, tabela por assunto e ritmo da semana. |
+| **Ausência** | Registro das suas ausências, com o repasse das demandas que vencem no período. |
+| **Pasta e backup** | Conexão com a sua subpasta do OneDrive e com `_Compartilhadas`, backup em JSON, importação e pontos de restauração. |
 
-- 10 demandas;
-- 8 concluídas;
-- 2 em andamento;
-- 88 horas;
-- 189,8 h/mês;
-- taxa de conclusão de 80,0%;
-- lead time médio de 9,8 dias;
-- retorno de 2,2x;
-- redução média de 87,6%.
+### Menu da supervisão
 
-Esses números demonstram que o sistema não é apenas uma ferramenta de acompanhamento; ele tem capacidade de mensurar valor operacional e impacto organizacional.
+**Início**, o grupo **Workflow (Projetos)** (Workflow, **E1 — Solicitação**, **E2 — Triagem** e E3 a E08), Solicitações, Pedidos a Processos Integrados, telas das coordenações (quando a célula é transversal), Visão da área, Demandas, Dashboard (com exportação para PowerPoint), Ausências e **Pastas e ajustes** (conexão com a pasta `Processos Integrados`).
+
+### Rodapé do menu lateral
+
+- **Cartão de sincronização:** mostra o estado da pasta. Clicar nele leva à tela da pasta, ou reativa a pasta quando ela está aguardando permissão.
+- **Sair (trocar perfil):** volta ao login.
+- **Tema:** claro, escuro ou automático (segue o Windows).
 
 ---
 
-## 13. Como o SGPI funciona como linha de produção de serviço
+## 6. Workflow (Projetos)
 
-A analogia com a produção permite uma leitura muito clara do sistema:
+O Workflow acompanha as demandas do **tipo Projeto** por 8 etapas. A seção mantém a forma do Workflow do SGPI original: um grupo no menu lateral, a tela **Workflow** (tracker) e uma tela por etapa com a grade de critérios. Todas as etapas e colunas aparecem mesmo sem nenhum projeto cadastrado.
 
-### Matéria-prima
-A demanda é a matéria-prima do processo. Ela entra com necessidade, contexto, objetivo e priorização.
+### Tela Workflow (tracker)
 
-### Processamento
-A demanda atravessa etapas de análise, execução, validação e ajustes. Nessa fase, o sistema coleta critérios, evidência e status.
+- **Faixa "Governança Derivada"** com o título "Workflow · Tracker E1 a E08", o selo "⚙️ Motor Automático" e o botão **Novo projeto** (analista) ou **Atribuir projeto** (supervisão). Os dois abrem o cadastro já com o tipo Projeto.
+- **Distribuição por Estágio (Funil):** quantos projetos estão em cada etapa atual, de E1 a E08, mais "✔ Fluxo concluído".
+- **Cartões:** Bloqueios (critérios travados), Gate E3 (levantamento pendente) e Gate E5 (homologação pendente).
+- **Matriz de Evolução por Demanda:** ID, Projeto (assunto), Atividade (título), Responsável, o status de E1 a E08, Etapa atual, % fluxo, Dias, Situação, Bloqueios e Gates. Clicar no status de uma etapa abre a tela dela já filtrada pelo projeto. Para o analista, E1/E2 aparecem como "Sup." e são só leitura.
 
-### Controle de qualidade
-Cada gate funciona como validação de qualidade e governança. O processo não avança sem cumprir as condições mínimas de maturidade.
+### Telas das etapas (E1 a E08)
 
-### Entrega
-A demanda é liberada para uso ou implantação após cumprir requisitos de qualidade e compromisso.
+- **Faixa da etapa:** código e nome, selo "GATE DE GOVERNANÇA" (E3 e E5), número de critérios, atalhos para as outras etapas e o botão **Guia dos Campos**.
+- **Indicadores da etapa:** Concluídas, Em andamento, Bloqueadas / Gates e Avanço Médio.
+- **Guia dos Campos:** explica cada critério e cada campo. Clicar no cabeçalho de uma coluna abre o guia no cartão daquela coluna.
+- **Aviso de gate** (E3 e E5): a etapa seguinte fica bloqueada até a conclusão integral desta.
+- **Localizar demandas:** busca, Assunto, Prioridade (analista) ou Responsável (supervisão), Status da etapa, "Somente demandas nesta etapa" e Limpar filtros.
+- **Grade:** uma linha por projeto. Há um seletor de status por critério, % / Status calculados, Evidência / Referência e Observação (cada uma com botão **Salvar**) e os campos extras de cada etapa:
+  - E5: Resultado da Homologação;
+  - E6: Etapa 06 Aplicável?;
+  - E08: Resultado Hypercare, Início, Prazo (dias), Encerramento Real e ID Nova Demanda.
+- **Paginação** de 5 projetos por página e o aviso "Deslize para visualizar todos os critérios".
 
-### Pós-entrega
-A fase de estabilização e Hypercare assegura que o serviço entregue funcione de fato, com acompanhamento e suporte imediato.
+### Quem faz o quê
 
-### Feedback
-A operação produz indicadores, dados de redução de esforço e evolução da demanda, alimentando novos ciclos de gestão.
+| Etapas | Dono | Quem edita | Onde é gravado |
+| --- | --- | --- | --- |
+| E1 — Solicitação, E2 — Triagem | Supervisão | Só a supervisão | `atribuidas.json` da pasta do analista |
+| E3 — Levantamento até E08 — Hypercare | Analista | Só o analista | `demandas.json` da subpasta do analista |
 
-Essa abordagem é o que dá ao SGPI o caráter “de esteira de produção de serviço” e não apenas de “registro de demandas”.
+Quem não é dono de uma etapa vê os critérios dela, mas não edita.
 
----
+### Regras
 
-## 14. Arquitetura funcional do projeto
+As regras são as do motor do SGPI original (`workflow.js`). O status nunca é digitado: ele é calculado a partir dos critérios.
 
-O sistema é organizado em componentes complementares:
+- **Status do critério:** ⏳ Pendente, 🔄 Em andamento, ✔ Concluído, ⛔ Bloqueado ou N/A.
+- **Status da etapa:**
+  - **Bloqueado**, se algum critério estiver bloqueado;
+  - **Concluído**, se todos os critérios estiverem concluídos (ou N/A);
+  - **Em andamento**, se algum critério estiver concluído ou em andamento;
+  - senão, **Não iniciado**.
+  - A E6 vira **N/A** quando "Etapa 06 Aplicável?" = Não.
+  - A E08 só fica Concluída com o Resultado Hypercare "Estável — Demanda Encerrada", ou "Evolução Identificada" com o ID da nova demanda. Com "Incidente Crítico", fica Bloqueada.
+- **Encadeamento (gates):** cada etapa só pode ser editada quando a anterior estiver concluída (ou N/A).
+  - A E7 depende da E5 e da E6.
+  - Se uma etapa tiver progresso antes de a anterior ser concluída, ela aparece como **Bloqueada**.
+  - Assim, a E3 só abre depois de E1 e E2 concluídas pela supervisão.
+- **Evidência:** uma etapa concluída sem Evidência / Referência fica destacada em vermelho na grade.
+- **% da etapa:** critérios concluídos (ou N/A) divididos pelo total de critérios.
+- **Etapa atual:** a primeira etapa ainda não concluída.
+- **% do fluxo:** etapas concluídas divididas por 8.
+- **Situação:** Concluído, Em Hypercare (E7 concluída e E08 aberta), Bloqueado, Em andamento ou Não iniciado.
+- **Status geral da demanda (Tarefas):**
+  - concluído, quando o fluxo termina;
+  - em andamento, quando alguma etapa de E3 a E08 começou;
+  - senão, não iniciado.
 
-- Capa: visão executiva e inicial;
-- Lançamentos: base operacional;
-- Workflow: visão de movimento e etapa atual;
-- E3–E8: registros de critérios, evidências e observações;
-- Acompanhamento Semanal: acompanhamento de rotina e pendências;
-- Dashboard: visão analítica e executiva;
-- Cadastros: listas e referências organizacionais;
-- Carga e sincronização: relacionamento com Excel;
-- Auditoria: rastreio interno das alterações.
+### Etapas e critérios
 
-Essa arquitetura faz com que cada área do sistema tenha uma função clara e uma dependência lógica bem definida.
+O total é de 49 critérios.
 
----
+#### E1 — Solicitação (Supervisão)
 
-## 15. Arquitetura tecnica
+1. **Necessidade Descrita**: Descrição detalhada do problema, processo atual ou oportunidade de melhoria informada pelo solicitante.
+2. **Origem Registrada**: Identificação da fonte da demanda (área, canal de atendimento, solicitante ou diretoria).
+3. **Identificação Completa**: Cadastro com dados básicos de identificação da demanda e contatos das partes envolvidas.
+4. **Cenário e Resultado Esperado**: Detalhamento do cenário operacional atual e dos resultados/benefícios esperados com a entrega.
+5. **Impacto Informado**: Avaliação prévia dos impactos operacionais, financeiros, de conformidade ou risco.
+6. **Evidências Verificadas**: Conferência inicial dos arquivos, anexos ou especificações enviados pelo solicitante.
+7. **Demanda Registrada**: Criação formal da demanda na base mestre com código de identificação único (ID).
+8. **Recebimento Confirmado**: Confirmação do recebimento da solicitação e abertura oficial do atendimento no sistema.
 
-A solução foi implementada como aplicação local em navegador, sem backend corporativo ou infraestrutura complexa.
+#### E2 — Triagem (Supervisão)
 
-### Tecnologias e base de operação
+1. **Tipo da Demanda Definido**: Classificação do tipo de atividade (Melhoria, Automação, Correção, Projeto, etc.).
+2. **Área Solicitante Confirmada**: Confirmação formal do departamento CSC ou unidade de negócio solicitante.
+3. **Prioridade Definida**: Definição do nível de urgência e priorização de atendimento (Baixa, Média, Alta, Crítica).
+4. **Responsável Atribuído**: Designação do analista ou equipe responsável pela condução e execução da demanda.
+5. **Complexidade Avaliada**: Estimativa técnica do esforço, complexidade e recursos necessários para o desenvolvimento.
+6. **Categoria Definida**: Enquadramento da demanda nas categorias de benefício ou tipos de impedimento.
+7. **Projeto Relacionado Vinculado**: Vínculo da demanda ao projeto estratégico ou pilar de transformação correspondente.
+8. **Controle Atualizado no Tracker**: Sincronização dos dados da triagem no painel do Tracker para acompanhamento.
 
-- HTML e CSS para estrutura e apresentação;
-- JavaScript para regras de negócio e interação;
-- IndexedDB para persistência local;
-- localStorage para configurações e contingência;
-- SheetJS para importação/exportação de arquivos Excel;
-- Chart.js para indicadores e visualização;
-- dependências de runtime versionadas em `shared/vendor`, permitindo operação integral sem internet;
-- estrutura de perfis por analista.
+#### E3 — Levantamento (Analista, gate)
 
-### Vantagens dessa arquitetura
+1. **Requisitos Levantados**: Mapeamento e especificação detalhada de todos os requisitos funcionais, operacionais e de negócio.
+2. **Escopo Definido**: Delimitação clara do escopo do projeto: o que faz parte da entrega e o que fica fora do escopo.
+3. **Riscos e Dependências Mapeados**: Identificação prévia de impedimentos técnicos, dependências sistêmicas, acessos e prazos.
+4. **Critérios de Aceite Definidos**: Estabelecimento das regras objetivas e cenários de testes para homologação final da solução.
+5. **Escopo Validado (GATE)**: Aprovação formal do levantamento e liberação do GATE de governança para iniciar a execução.
 
-- rapidez de implantação;
-- execução sem servidor;
-- uso simples em ambiente local;
-- compatibilidade com operação em desktop ou ambiente corporativo;
-- facilidade de exportar backups em Excel;
-- operação contínua mesmo sem infraestrutura de TI avançada.
+#### E4 — Execução (Analista)
 
-### Limitações da arquitetura
+1. **Execução Planejada**: Elaboração do plano de ação, divisão das fases de desenvolvimento e cronograma de construção.
+2. **Execução Realizada**: Desenvolvimento, automação, construção ou elaboração efetiva da solução/processo.
+3. **Evolução Registrada**: Documentação do avanço diário/semanal, versões intermediárias e histórico de desenvolvimento.
+4. **Progresso Acompanhado**: Acompanhamento do cumprimento de prazos, carga de horas investidas e alinhamento do escopo.
+5. **Qualidade Verificada**: Execução de testes internos de unidade, integridade dos dados e regras de negócio antes do envio.
+6. **Entrega Preparada para Validação**: Consolidação dos pacotes de entrega, arquivos finalizados e manuais prontos para homologação.
+7. **Controle Atualizado no Tracker**: Atualização do status de execução e percentual de progresso no painel do Tracker.
 
-- não é sistema multiusuário compartilhado em tempo real;
-- não substitui um backend corporativo robusto;
-- depende do navegador e do ambiente local do usuário;
-- é mais forte como ferramenta de gestão operacional do que como sistema corporativo universal.
+#### E5 — Validação (Analista, gate)
 
----
+1. **Entrega Submetida**: Envio ou disponibilização oficial da solução para ambiente de homologação do cliente/solicitante.
+2. **Validação do Usuário Realizada**: Testes práticos executados pelos usuários finais nas condições reais de operação.
+3. **Aprovação da Gestão Registrada**: Parecer, aceite formal e autorização emitida pelo gestor responsável da área solicitante.
+4. **Achados e Ajustes Registrados**: Registro minucioso de apontamentos, divergências ou pequenas melhorias identificadas na homologação.
+5. **Homologação Formalizada (GATE)**: Formalização da ata/resultado (Aprovado, Aprovado com ajustes ou Reprovado) e liberação do GATE.
 
-## 16. Fluxo de trabalho do analista e da supervisão
+#### E6 — Ajustes (Analista, condicional)
 
-### Fluxo do analista
+1. **Achados Priorizados**: Análise e priorização dos achados de homologação em correções imediatas ou futuras.
+2. **Ajustes Executados**: Implementação das correções, alterações de código ou refatoração no processo/solução.
+3. **Solução Atualizada**: Geração e publicação da versão atualizada da solução contemplando os ajustes.
+4. **Pendências Tratadas**: Resolução e encerramento de todos os itens apontados na lista de achados da homologação.
+5. **Nova Validação Realizada**: Re-teste e re-checagem com os usuários finais para confirmar a resolução dos achados.
+6. **Ajustes Aprovados**: Aceite final das correções aplicadas e autorização para liberação em ambiente definitivo.
 
-1. recebe a demanda ou a base do supervisor;
-2. valida o escopo e estrutura inicial;
-3. registra ou atualiza os dados no sistema;
-4. acompanha o processo nas etapas E3 a E8;
-5. documenta critérios, evidências e observações;
-6. prepara a demanda para validação e entrega;
-7. acompanha o suporte pós-entrega em Hypercare;
-8. mantém a operação atualizada e a base de dados consistente.
+#### E7 — Entrega (Analista)
 
-### Fluxo da supervisão
+1. **Solução Disponibilizada**: Implantação em produção, publicação de robôs ou disponibilização do processo definitivo para uso.
+2. **Entrega Comunicada**: Notificação oficial de conclusão aos solicitantes, gestores e partes interessadas.
+3. **Projeto Encerrado no Controle**: Finalização do registro da demanda nos controles operacionais e reporte do ganho realizado.
+4. **Evidências Arquivadas**: Armazenamento dos comprovantes, termos de aceite, manuais e arquivos no repositório oficial.
 
-1. recebe ou organiza a demanda;
-2. realiza triagem, priorização e classificação;
-3. acompanha andamento e bloqueios;
-4. interfere nas prioridades do setor;
-5. valida a evolução e ação de cada item;
-6. apoia decisões de gestão com dados e indicadores;
-7. acompanha o portfolio global e a situação de risco.
+#### E08 — Hypercare (Analista)
 
-Esse ciclo faz com que o sistema reflita corretamente a organização da área: analista em campo, supervisão em direção e gestão em contexto estratégico.
+1. **Suporte Inicial Prestado**: Acompanhamento dedicado nos primeiros dias pós-implantação para orientação dos usuários.
+2. **Solução Monitorada**: Acompanhamento diário do funcionamento, volumetria e estabilidade da solução em produção.
+3. **Ocorrências Registradas**: Registro e triagem de eventuais dúvidas, falhas ou comportamentos inesperados no período inicial.
+4. **Correções Emergenciais Concluídas**: Tratamento rápido de eventuais incidentes operacionais ou inconsistências no Hypercare.
+5. **Estabilização Confirmada**: Confirmação de operação regular sem falhas impeditivas por 7 dias corridos de acompanhamento.
+6. **Demanda Encerrada ou Novo Ciclo Aberto**: Encerramento oficial da sustentação ou abertura de novo ID caso haja necessidade de nova evolução.
 
----
+### Ciclo completo de um projeto
 
-## 17. Governança e controle do departamento
+```text
+SUPERVISÃO                                   ANALISTA
+──────────                                   ────────
+Atribuir projeto ─► atribuidas.json "tasks" ─► importa para demandas.json
+Preenche E1 e E2 ─► atribuidas.json "acoes" ─► aplica E1/E2 (id entra em "recebidas")
+                                              E3 liberada → preenche E3 (gate, com evidência)
+                                              E4 → E5 (gate) → E6 → E7 → E08
+lê demandas.json ◄────────────────────────────  grava demandas.json
+vê a etapa atual e o % do fluxo
+```
 
-O SGPI é um sistema de controle gerencial porque seu desenho busca:
-
-- padronizar decisões;
-- reduzir ruído informacional;
-- identificar gargalos de forma antecipada;
-- assegurar que cada etapa da demanda siga critérios definidos;
-- colocar a supervisão no papel de direção da operação;
-- dar à gestão visibilidade sobre portfólio e desempenho.
-
-Em vez de tratar demandas como itens isolados, o sistema as posiciona no contexto do conjunto da operação. Isso é fundamental para quem precisa decidir prioridade, recurso e atenção.
-
----
-
-## 18. Riscos e cuidados do SGPI
-
-Apesar dos ganhos, o sistema exige disciplina para funcionar bem. Riscos comuns incluem:
-
-- registrar demanda sem critério de triagem;
-- abrir demais itens sem priorização;
-- não registrar evidências corretamente;
-- deixar etapas bloqueadas sem ação;
-- manter dados em planilhas paralelas sem sincronização;
-- não atualizar o acompanhamento semanal.
-
-Por isso, a governança do sistema depende de disciplina de uso. A tecnologia facilita, mas a qualidade da operação continua sendo resultado do comportamento da equipe e do rigor da supervisão.
-
----
-
-## 19. Valor entregue ao negócio
-
-O SGPI entrega valor em quatro frentes:
-
-### 19.1 Operacional
-Organiza o trabalho da área e reduz a perda de controle sobre demandas.
-
-### 19.2 Gerencial
-Oferece visão do estado da operação e suporte à tomada de decisão.
-
-### 19.3 Governança
-Cria critérios, gates e rastreabilidade, ajustando o controle de execução ao setor.
-
-### 19.4 Estratégico
-Consolida dados para entender produtividade, ganho e capacidade de entrega.
-
----
-
-## 20. Conclusão
-
-O SGPI é um sistema de gestão de demandas e portfólio de processos integrados, com foco no controle operacional e no alinhamento gerencial da área. Ele foi construído para organizar o trabalho em etapas, controlar critérios e evidências, dar visibilidade ao supervisor e possibilitar que a gestão tome decisões com apoio de indicadores.
-
-Seu diferencial está em combinar:
-
-- disciplina de processo;
-- estrutura visual de rastreio;
-- governança por gates;
-- a lógica de uma esteira de produção de serviço;
-- acompanhamento de produtividade e impacto;
-- integração com a lógica de Excel e portfólio da área.
-
-Em essência, o SGPI transforma a rotina de demandas em um sistema de direção e execução, em que o analista produz o valor e a supervisão orienta a operação e define a prioridade do departamento.
-
-Essa combinação é o que faz do SGPI uma ferramenta útil, prática e estratégica para a gestão de processos integrados.
+Enquanto o analista não sincroniza, a supervisão vê o projeto já com os próprios ajustes, marcado com a etiqueta "ajuste a sincronizar". Se o projeto ainda não foi recebido, aparece a etiqueta "Aguardando o analista receber".
 
 ---
 
-## 21. Resumo executivo
+## 7. Banco de dados: a pasta do OneDrive
 
-- Projeto: SGPI
-- Objetivo: controlar demandas do departamento de Processos Integrados
-- Usuários principais: analista, supervisão e gestão
-- Mecanismo principal: fluxo de etapas E1 a E8
-- Base de verdade: lançamentos e critérios do workflow
-- Modalidade: aplicação local em navegador
-- Persistência: IndexedDB e Excel
-- Valor: padronização, produtividade, controle e governança
+O "banco" é a pasta `Processos Integrados`, sincronizada pelo OneDrive. O modelo está em `03-database-onedrive/Processos Integrados/` e o detalhe dos formatos em [03-database-onedrive/README.md](03-database-onedrive/README.md).
+
+```text
+Processos Integrados/                ← a supervisão conecta esta
+├── José Victor/                     ← o analista conecta esta
+│   ├── demandas.json                gravado SÓ pelo painel do analista
+│   ├── atribuidas.json              gravado SÓ pelo painel da supervisão
+│   ├── supervisao.json              identificação da célula (id, nome, supervisor)
+│   └── backups/demandas-AAAA-MM-DD.json   cópia do dia
+├── Viviane Cunha/ · Filipe Messias/ · Juliana Santos/
+├── _Supervisao/                     config.json, leituras.json e fechamentos mensais da supervisão
+├── _Solicitações/                   pedidos das coordenações e respostas da supervisão
+└── _Compartilhadas/                 demandas compartilhadas entre analistas (criada pelo uso)
+```
+
+Pastas que começam com `_`, `.` ou `~` não são lidas como analistas.
+
+### `demandas.json`: o arquivo do analista
+
+```json
+{
+  "app": "painel-demandas-equipe", "version": 3, "colaborador": "José Victor",
+  "atualizadoEm": "2026-10-26T14:12:00.000Z", "updatedAt": 1792591920000,
+  "tasks": [
+    {
+      "id": "…", "title": "Mapear fluxo de conciliação", "tipo": "projeto",
+      "status": "em_andamento", "priority": "media", "due": "2026-11-30",
+      "category": "Conciliação", "notes": "…", "log": [ { "text": "…", "at": 0, "by": "…" } ],
+      "assignedBy": "Juliana", "assignedAt": 0, "createdAt": 0, "updatedAt": 0,
+      "workflow": {
+        "1": { "status": ["✔ Concluído", "✔ Concluído", "…8 itens"], "evidencia": "E-mail da área", "observacao": "", "at": 0, "by": "Juliana" },
+        "3": { "status": ["✔ Concluído", "🔄 Em andamento", "⏳ Pendente", "⏳ Pendente", "⏳ Pendente"], "evidencia": "Ata de validação", "observacao": "", "at": 0, "by": "José Victor" },
+        "5": { "status": ["…"], "resultadoHomologacao": "Aprovado" },
+        "6": { "status": ["…"], "aplicavel": "Não" },
+        "8": { "status": ["…"], "resultadoHypercare": "✅ Estável — Demanda Encerrada", "inicioHypercare": "2026-11-02", "prazoHypercare": 7, "encerramentoReal": "", "idNovaDemanda": "" }
+      }
+    }
+  ],
+  "deleted": { "<id>": 1792500000000 },
+  "recebidas": ["<id de demanda ou ação já recebida>"],
+  "excluidas": [], "seriesEncerradas": []
+}
+```
+
+| Campo | Função |
+| --- | --- |
+| `tasks[].status` | `nao_iniciado`, `em_andamento` ou `concluido`. "Atrasado" não é gravado: é calculado na tela a partir do prazo. |
+| `tasks[].tipo` | `recorrente`, `sob_demanda`, `projeto` ou `outros`. O tipo `projeto` entra no Workflow. |
+| `tasks[].workflow` | Um registro por etapa: `status` (lista com um status por critério), `evidencia`, `observacao`, os campos extras da etapa (E5, E6, E08), `at` (quando) e `by` (quem). |
+| `tasks[].updatedAt` | Decide qual versão vence quando duas cópias são mescladas. |
+| `deleted` | "Lápides": registram as exclusões para que uma demanda apagada não volte por outra cópia. Valem por 120 dias. |
+| `recebidas` | Ids de demandas e ações da supervisão já aplicadas, para nada ser aplicado duas vezes. |
+
+### `atribuidas.json`: a caixa de entrada da supervisão
+
+```json
+{
+  "app": "painel-demandas-equipe", "tipo": "atribuidas", "versao": 2, "supervisor": "Juliana",
+  "tasks": [ { "id": "…", "title": "…", "tipo": "projeto", "assignedBy": "Juliana", "workflow": { … } } ],
+  "acoes": [
+    { "id": "…", "tipo": "workflow", "taskId": "…", "etapa": 2, "dados": { "status": ["…8 itens"], "evidencia": "…", "observacao": "…" }, "em": 0, "por": "Juliana" },
+    { "id": "…", "tipo": "editar",   "taskId": "…", "campos": { "due": "2026-12-01" }, "em": 0, "por": "Juliana" }
+  ]
+}
+```
+
+- **`tasks`** são as demandas novas. O painel do analista as copia para o `demandas.json` dele e registra o id em `recebidas`.
+- **`acoes`** são as mudanças em demandas que o analista já recebeu. Os tipos do PGD são `editar`, `nota`, `cancelar`, `transferir` e outros. O SGPI acrescenta o tipo **`workflow`**, que traz E1 ou E2; o analista ignora ações `workflow` de outras etapas.
+- O analista primeiro importa as demandas novas e depois aplica as ações. Por isso uma ação de E1/E2 enviada logo depois da atribuição também chega.
+- Itens já recebidos e muito antigos são limpos na próxima gravação da supervisão.
 
 ---
 
-## 22. Referências internas do projeto
+## 8. Conexões e sincronização
 
-Documentação relevante disponível no repositório:
+### Como o navegador acessa o OneDrive
 
-- docs/CONTRATO-INTERCAMBIO-V1.md
-- docs/EXC-002-ANALISTA-PARA-SUPERVISOR.md
-- docs/EXC-003-SUPERVISOR-PARA-ANALISTA.md
-- docs/DAT-001-INTEGRIDADE-REFERENCIAL.md
-- docs/STO-001-PERSISTENCIA-LOCAL-CONFIAVEL.md
-- docs/SUP-001-GESTAO-DEMANDAS-SUPERVISOR.md
-- docs/OFF-001-OPERACAO-LOCAL-OFFLINE.md
-- analista/LEIA-ME.txt
-- analista/docs/00-documento-mestre.md
-- analista/docs/01-manual-usuario.md
-- analista/docs/02-documentacao-tecnica.md
-- analista/docs/03-dicionario-dados.md
-- analista/docs/05-matriz-raci.md
-- analista/docs/06-matriz-testes.md
-- analista/docs/11-checklist-homologacao.md
+O painel **não conversa com o OneDrive**. Não há login da Microsoft, Microsoft Graph nem chamada de rede.
 
-Esse conjunto de documentos complementa a visão geral do SGPI e detalha os pontos técnicos, de uso e de governança do sistema.
+1. O cliente do OneDrive, instalado no Windows, mantém a pasta `Processos Integrados` sincronizada no disco de cada pessoa.
+2. O painel usa a **File System Access API** do Edge e do Chrome (`showDirectoryPicker`) para ler e gravar essa pasta local.
+3. O OneDrive envia o arquivo gravado para a nuvem e baixa nos outros computadores.
+
+```text
+ PC do analista                         nuvem                         PC da supervisão
+ painel ──grava──► demandas.json ──► OneDrive ──► demandas.json ──lê──► painel
+ painel ◄──lê──── atribuidas.json ◄── OneDrive ◄── atribuidas.json ◄─grava── painel
+```
+
+### Estados da conexão
+
+| Estado | Significado | O que aparece |
+| --- | --- | --- |
+| `off` | Nenhuma pasta conectada | Cartão "Nenhuma pasta conectada". O painel funciona e guarda tudo no navegador. Não aparece aviso pedindo a pasta. |
+| `prompt` | A pasta já foi escolhida, mas o navegador pede a permissão de novo (acontece ao reabrir) | Aviso "Reativar pasta". Um clique em qualquer lugar da tela confirma. |
+| `ok` | Leitura e gravação liberadas | "Sincronizado às HH:MM". |
+
+A referência à pasta (o "handle") fica salva no IndexedDB. Por isso, ao reabrir o painel, basta reativar, sem escolher a pasta de novo.
+
+### Ciclo do analista
+
+```text
+alteração ─► salva no localStorage (na hora)
+          ─► grava demandas.json 700 ms depois
+             (relê o arquivo antes: se outro PC dele gravou, mescla primeiro)
+          ─► cópia do dia em backups/
+
+a cada 30 s (e ao voltar para a aba):
+  lê demandas.json   → mescla com o local
+  lê atribuidas.json → importa demandas novas e aplica ações (inclusive E1/E2)
+  se algo mudou      → grava de volta
+```
+
+### Ciclo da supervisão
+
+A cada 30 segundos, o painel da supervisão percorre as subpastas dos analistas. Ele relê só os arquivos que mudaram (pelo `lastModified`) e redesenha a tela. A supervisão grava apenas o `atribuidas.json` de cada analista e a pasta `_Supervisao`.
+
+### Regras de mesclagem
+
+- **Por demanda, vence a cópia com o maior `updatedAt`.** A demanda inteira vence, não campo a campo.
+- **Exclusão vence edição mais antiga.** Uma demanda com lápide igual ou mais nova que a última edição some.
+- **`recebidas` só cresce.** É a união das duas cópias.
+
+### Latência
+
+Uma alteração leva de segundos a minutos para aparecer no outro computador. O tempo é a sincronização do OneDrive mais o próximo ciclo de leitura do painel. Esse ciclo é de 30 segundos por padrão e pode ser ajustado para 15, 60 ou 120 segundos.
+
+---
+
+## 9. Armazenamento no navegador
+
+| Onde | Chave | Conteúdo |
+| --- | --- | --- |
+| localStorage | `sgpi:sessao` | Perfil logado |
+| localStorage | `painelEquipe:<caminho do painel>:<perfil>:config` | Modo, nome, tema, prazos e intervalo de leitura |
+| localStorage | `…:<perfil>:dados` | Cópia local das demandas do analista |
+| localStorage | `…:<perfil>:equipe` | Cache da última leitura da equipe (supervisão) |
+| localStorage | `…:<perfil>:pontos` | Até 20 pontos de restauração |
+| localStorage | `…:<perfil>:ui` | Tela atual, filtros e preferências |
+| IndexedDB | `…:<perfil>:pasta` | Referência da pasta conectada |
+
+Os dados locais ficam só neste navegador e neste computador. O backup em JSON (em Pasta e backup) serve para levar os dados para outro lugar.
+
+---
+
+## 10. Como executar e testar
+
+### Localmente
+
+1. Copie `03-database-onedrive/Processos Integrados` para uma pasta sincronizada do OneDrive. Para um teste rápido, serve qualquer pasta do computador.
+2. Abra `index.html` (ou `01-login/index.html`) no **Edge** ou no **Chrome**.
+3. Entre com `supervisora` / `1234`.
+   - Em **Pastas e ajustes**, conecte a pasta `Processos Integrados`.
+   - Em **Workflow (Projetos)**, veja os projetos da equipe e preencha E1 e E2.
+4. Em outra janela, saia e entre com `jv` / `1234`.
+   - Em **Pasta e backup**, conecte `Processos Integrados/José Victor`.
+   - O projeto chega com E1/E2 preenchidas, e a E3 fica liberada.
+
+### Roteiro sugerido
+
+| Passo | Quem | O que conferir |
+| --- | --- | --- |
+| 1 | Analista | Abrir o Workflow sem projetos: o funil e a matriz mostram todas as etapas. Em E3, a grade mostra os 5 critérios, os filtros e o Guia dos Campos. |
+| 2 | Analista | Novo projeto: o cadastro já vem com o tipo Projeto e o projeto aparece na E1. |
+| 3 | Supervisão | Atribuir projeto a um analista: aparece "Aguardando o analista receber". |
+| 4 | Supervisão | Em E1 e E2, marcar os critérios na grade: aparece "Ajuste a sincronizar". |
+| 5 | Analista | Sincronizar: o projeto chega com E1/E2, e a E3 abre. |
+| 6 | Analista | Concluir os critérios da E3: a célula de evidência fica vermelha até ser preenchida e salva, e a E4 é liberada. |
+| 7 | Analista | Tentar a E6 antes da E5: aparece travada. |
+| 8 | Supervisão | Atualizar: o projeto aparece na E4 e o ajuste pendente some. |
+
+O roteiro de teste completo do PGD (dia a dia e modo ausência) está em `03-database-onedrive/docs/pgd/Roteiro de teste.txt`.
+
+---
+
+## 11. Publicação no S3 da AWS
+
+A estrutura já é a de um site estático.
+
+1. Crie um bucket e envie a raiz do projeto (`index.html`, `01-login/` e `02-usuario/`). As pastas `03-database-onedrive/` e `_legado/` não precisam ir para o bucket.
+2. Configure `index.html` como documento de índice.
+3. **Publique por trás do CloudFront com HTTPS.** A File System Access API só funciona em contexto seguro (HTTPS), e o endpoint de site do S3 é só HTTP.
+4. Os dados continuam no OneDrive de cada pessoa. O bucket só entrega as páginas.
+
+---
+
+## 12. Manutenção: onde mexer
+
+| Quero… | Onde |
+| --- | --- |
+| Incluir um analista | `01-login/perfis.js` (novo perfil com `pasta`) e uma nova subpasta com o mesmo nome em `Processos Integrados`. |
+| Trocar uma senha ou um apelido | `01-login/perfis.js` (`senha`, `logins`). |
+| Mudar um critério ou uma etapa | `02-usuario/app/workflow.js` (`ETAPAS`). |
+| Mudar uma regra de gate | `workflow.js`, função `bloqueio()`. |
+| Mudar a tela do Workflow | `pgd.js`, bloco "Workflow (Projetos)": `renderWorkflow` (tracker), `renderWfEtapa` (telas das etapas), `wfGravar` (gravação) e `wfMenuHTML` (grupo do menu). O estilo fica em `workflow.css`. |
+| Mudar o menu | `pgd.js`, constante `NAVS`. |
+| Mudar a marcação de uma tela ou diálogo | `02-usuario/app/pgd-markup.js`. |
+| Mudar cores ou layout | `02-usuario/app/pgd.css` (variáveis em `:root`; estilos do Workflow no fim do arquivo). |
+| Novo campo na demanda | `pgd.js`: `normTask` (normalização), diálogo da demanda, exibição e exportação. Toda mudança precisa atualizar `updatedAt`. |
+
+---
+
+## 13. Limitações e segurança
+
+| Ponto | Detalhe |
+| --- | --- |
+| Navegador | Só Edge ou Chrome no computador. Celular, Firefox e Safari abrem o painel, mas não conectam pastas. |
+| Segurança | O login é só de tela: a senha está no `perfis.js`. A segurança real é o compartilhamento da pasta no OneDrive/SharePoint: Juliana com edição na pasta inteira; cada analista só na própria subpasta e em `_Compartilhadas`. |
+| Permissão da pasta | O navegador pode pedir para reativar a pasta a cada abertura. As versões recentes oferecem "Permitir em todas as visitas". |
+| Edição simultânea | Se a mesma demanda for editada em dois computadores antes da sincronização, vence a edição mais recente da demanda inteira. |
+| Relógio | O `updatedAt` vem do relógio de cada máquina. Mantenha a hora do Windows sincronizada. |
+| Conflito do OneDrive | Se o OneDrive criar uma cópia como `demandas-NOMEDOPC.json`, o painel ignora o arquivo. Recupere pela importação de JSON em Pasta e backup. |
+| Backups | A pasta `backups/` ganha um arquivo por dia de uso e precisa de limpeza periódica. |
+
+---
+
+## 14. Roteiro de estudo
+
+1. **Comece pelo fluxo:** leia `01-login/perfis.js` e `01-login/index.html` e veja como a sessão leva ao painel.
+2. **Entenda o preset:** abra `02-usuario/analista/index.html` e veja como o `PAINEL_PRESET` é montado.
+3. **Estude o modelo do Workflow:** `02-usuario/app/workflow.js` é curto e não depende de tela. Leia `statusEtapa`, `tracker` e `bloqueio`.
+4. **Leia o motor por blocos:** em `pgd.js`, siga os comentários `/* ===== … ===== */`:
+   - primeiro Constantes e Estado;
+   - depois Pasta: conexão;
+   - em seguida Colaborador: leitura e gravação (`pull`, `push`, `processActions`) e Supervisor (`scanTeam`, `writeAssigned`);
+   - por fim Workflow (Projetos) e Navegação.
+5. **Veja os dados ao vivo:** com o painel aberto, pressione `F12` → **Application**. Observe o Local Storage e o IndexedDB enquanto usa a tela. Depois abra os JSON na pasta.
+6. **Aprofunde a arquitetura:** leia `03-database-onedrive/docs/Engenharia reversa — Painel de Demandas da Equipe (OneDrive).md`.
+
+---
+
+## 15. Glossário
+
+| Termo | Significado |
+| --- | --- |
+| **PGD** | Painel de Gestão de Demandas: o painel em HTML que serve de base ao SGPI. |
+| **Preset** | Configuração (`PAINEL_PRESET`) que diz ao motor quem é o usuário e qual pasta ele usa. |
+| **Handle** | Referência a uma pasta do computador, devolvida pela File System Access API e guardada no IndexedDB. |
+| **Caixa de entrada** | O `atribuidas.json`: a supervisão deposita demandas e ações nele, e o analista as recolhe. |
+| **Ação** | Mudança enviada pela supervisão para uma demanda já recebida: `editar`, `nota`, `cancelar`, `workflow`… |
+| **Lápide** | Registro de exclusão (`deleted`) que impede uma demanda apagada de voltar. |
+| **Gate** | Etapa de aprovação (E3 e E5) que trava as etapas seguintes até ser concluída com evidência. |
+| **Polling** | Releitura periódica da pasta (a cada 30 s) para trazer as alterações dos outros. |

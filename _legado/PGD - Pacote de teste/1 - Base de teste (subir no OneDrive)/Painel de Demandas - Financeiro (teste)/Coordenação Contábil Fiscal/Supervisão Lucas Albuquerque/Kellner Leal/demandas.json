@@ -1,0 +1,206 @@
+{
+ "app": "painel-demandas-equipe",
+ "version": 3,
+ "colaborador": "Kellner Leal",
+ "atualizadoEm": "2026-10-23T14:12:08.736876",
+ "updatedAt": 1792753200000,
+ "tasks": [
+  {
+   "id": "851d4e17-e5c8-40f8-b7cc-cfb6c5ad7399",
+   "title": "Revisão de contratos de fornecimento",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-09-06",
+   "dueOriginal": "2026-09-06",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1787745600000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1787745600000,
+   "completedAt": 1788721200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1787745600000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1787839200000
+    },
+    {
+     "s": "concluido",
+     "at": 1788721200000
+    }
+   ],
+   "updatedAt": 1788721200000
+  },
+  {
+   "id": "19f86b5c-e0e7-4484-b56c-7ad9bc56d16b",
+   "title": "Regularização de certidões",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-08-29",
+   "dueOriginal": "2026-08-29",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "087806c7-8ef7-42c0-81cf-b125a7a0e718",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1786384800000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1786190400000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1786190400000,
+   "completedAt": 1788202800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1786190400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1786284000000
+    },
+    {
+     "s": "concluido",
+     "at": 1788202800000
+    }
+   ],
+   "updatedAt": 1788202800000
+  },
+  {
+   "id": "432af287-9c15-4a23-aecd-1ac0a087f0ed",
+   "title": "Faturamento fiscal do mês",
+   "notes": "",
+   "status": "concluido",
+   "priority": "baixa",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-09-18",
+   "dueOriginal": "2026-09-18",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "b9450e7d-5771-4817-a9d6-f3e78525cdbf",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1789063200000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1788868800000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1788868800000,
+   "completedAt": 1790190000000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1788868800000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1788962400000
+    },
+    {
+     "s": "concluido",
+     "at": 1790190000000
+    }
+   ],
+   "updatedAt": 1790190000000
+  },
+  {
+   "id": "49c31d7a-124c-4256-a6b7-4504800eba59",
+   "title": "Plano de implantação da Reforma Tributária",
+   "notes": "",
+   "status": "concluido",
+   "priority": "alta",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-10-04",
+   "dueOriginal": "2026-10-04",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "f7508476-eceb-4200-97d6-5a0800478fb0",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1790618400000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1790424000000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1791140400000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1790424000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1790517600000
+    },
+    {
+     "s": "concluido",
+     "at": 1791140400000
+    }
+   ],
+   "updatedAt": 1791140400000
+  },
+  {
+   "id": "50c9e74d-1dfb-4903-891e-5c296847eba8",
+   "title": "Mapa de impactos da CBS e do IBS",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-08-23",
+   "dueOriginal": "2026-08-23",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "50639803-e442-4e9d-b8ad-76201a9620f6",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1786384800000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1786190400000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1786190400000,
+   "completedAt": 1787252400000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1786190400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1786284000000
+    },
+    {
+     "s": "concluido",
+     "at": 1787252400000
+    }
+   ],
+   "updatedAt": 1787252400000
+  }
+ ],
+ "deleted": {},
+ "recebidas": [
+  "851d4e17-e5c8-40f8-b7cc-cfb6c5ad7399",
+  "19f86b5c-e0e7-4484-b56c-7ad9bc56d16b",
+  "432af287-9c15-4a23-aecd-1ac0a087f0ed",
+  "50c9e74d-1dfb-4903-891e-5c296847eba8"
+ ],
+ "excluidas": [],
+ "seriesEncerradas": []
+}

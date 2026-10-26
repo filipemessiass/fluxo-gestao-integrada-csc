@@ -1,0 +1,248 @@
+{
+ "app": "painel-demandas-equipe",
+ "version": 3,
+ "colaborador": "Bruno Santos",
+ "atualizadoEm": "2026-10-23T14:12:08.736445",
+ "updatedAt": 1792753200000,
+ "tasks": [
+  {
+   "id": "67a82738-fb0a-4fb6-a7d6-fffcfa58f1be",
+   "title": "Revisão de contratos de fornecimento",
+   "notes": "",
+   "status": "concluido",
+   "priority": "alta",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-08-14",
+   "dueOriginal": "2026-08-14",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "2bb48410-bebc-429e-a83a-56792a978c2b",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1785952800000,
+     "by": "Bruno Santos"
+    }
+   ],
+   "createdAt": 1785758400000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1785758400000,
+   "completedAt": 1786906800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1785758400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1785852000000
+    },
+    {
+     "s": "concluido",
+     "at": 1786906800000
+    }
+   ],
+   "updatedAt": 1786906800000
+  },
+  {
+   "id": "7ee8ae36-045a-47f2-93f4-64730c5c4a54",
+   "title": "Regularização de certidões",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-10-04",
+   "dueOriginal": "2026-10-04",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1789560000000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1791313200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1789560000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1789653600000
+    },
+    {
+     "s": "concluido",
+     "at": 1791313200000
+    }
+   ],
+   "updatedAt": 1791313200000
+  },
+  {
+   "id": "4a4aefec-610a-4143-bb6c-ec08e7bf59b2",
+   "title": "Faturamento fiscal do mês",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-11-05",
+   "dueOriginal": "2026-11-05",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1792497600000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1792497600000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1792591200000
+    }
+   ],
+   "updatedAt": 1792591200000
+  },
+  {
+   "id": "874d918c-00b4-42b6-b975-fb09cf931f27",
+   "title": "Plano de implantação da Reforma Tributária",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "media",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-11-06",
+   "dueOriginal": "2026-11-06",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1791892800000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1791892800000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1791986400000
+    }
+   ],
+   "updatedAt": 1791986400000
+  },
+  {
+   "id": "6225fcb9-6aec-4555-81ec-81a1702e3be3",
+   "title": "Mapa de impactos da CBS e do IBS",
+   "notes": "",
+   "status": "concluido",
+   "priority": "alta",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-10-05",
+   "dueOriginal": "2026-10-05",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "f5c0dc95-edef-4e36-91c3-bc65359d01e0",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1790359200000,
+     "by": "Bruno Santos"
+    }
+   ],
+   "createdAt": 1790164800000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1790164800000,
+   "completedAt": 1791226800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1790164800000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1790258400000
+    },
+    {
+     "s": "concluido",
+     "at": 1791226800000
+    }
+   ],
+   "updatedAt": 1791226800000
+  },
+  {
+   "id": "68e7c2ce-fbe4-4be1-96d7-c32c70a87dfd",
+   "title": "Parametrização do split payment",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "alta",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-11-02",
+   "dueOriginal": "2026-11-02",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "4e1992a0-4e31-4f09-a309-8741bf31ca94",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1792519200000,
+     "by": "Bruno Santos"
+    }
+   ],
+   "createdAt": 1792324800000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1792324800000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1792418400000
+    }
+   ],
+   "updatedAt": 1792519200000
+  },
+  {
+   "id": "64fb37c6-c346-43df-a4da-5538120e14ec",
+   "title": "Revisão de contratos de fornecimento (2ª etapa)",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "baixa",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-11-16",
+   "dueOriginal": "2026-11-16",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "82a6de41-3835-4d46-a28b-2b573a549ca5",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1793988000000,
+     "by": "Bruno Santos"
+    }
+   ],
+   "createdAt": 1793793600000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1793793600000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1793887200000
+    }
+   ],
+   "updatedAt": 1793988000000
+  }
+ ],
+ "deleted": {},
+ "recebidas": [
+  "67a82738-fb0a-4fb6-a7d6-fffcfa58f1be",
+  "6225fcb9-6aec-4555-81ec-81a1702e3be3"
+ ],
+ "excluidas": [],
+ "seriesEncerradas": []
+}

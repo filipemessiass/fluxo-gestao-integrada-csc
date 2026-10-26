@@ -1,0 +1,296 @@
+{
+ "app": "painel-demandas-equipe",
+ "version": 3,
+ "colaborador": "Kellner Leal",
+ "atualizadoEm": "2026-10-23T14:12:08.734169",
+ "updatedAt": 1792753200000,
+ "tasks": [
+  {
+   "id": "1cc4f52b-0b49-4ca3-aa02-8efb6e101cb7",
+   "title": "Apuração do ICMS",
+   "notes": "",
+   "status": "concluido",
+   "priority": "alta",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-08-28",
+   "dueOriginal": "2026-08-28",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1786536000000,
+   "assignedBy": "Emerson Pontes",
+   "assignedAt": 1786536000000,
+   "completedAt": 1787943600000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1786536000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1786629600000
+    },
+    {
+     "s": "concluido",
+     "at": 1787943600000
+    }
+   ],
+   "updatedAt": 1787943600000
+  },
+  {
+   "id": "58ad260f-a5d7-4419-9725-64d8bc1abf2c",
+   "title": "Conferência da GIA",
+   "notes": "",
+   "status": "concluido",
+   "priority": "alta",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-10-10",
+   "dueOriginal": "2026-10-10",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "d88910be-c318-43f7-97c0-8c1f04159bf6",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1789927200000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1789732800000,
+   "assignedBy": "Emerson Pontes",
+   "assignedAt": 1789732800000,
+   "completedAt": 1791658800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1789732800000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1789826400000
+    },
+    {
+     "s": "concluido",
+     "at": 1791658800000
+    }
+   ],
+   "updatedAt": 1791658800000
+  },
+  {
+   "id": "3aa66c17-1fcc-444f-8edf-d7c9cb445c8c",
+   "title": "Ajuste do DIFAL",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "alta",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-11-12",
+   "dueOriginal": "2026-11-12",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "cf2ac5f9-9520-42b9-93c9-125505f2015a",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1793124000000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1792929600000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1792929600000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1793023200000
+    }
+   ],
+   "updatedAt": 1793124000000
+  },
+  {
+   "id": "5c0168bc-b91a-45a8-9446-b50f127c2c85",
+   "title": "Revisão do ICMS-ST de combustíveis",
+   "notes": "",
+   "status": "concluido",
+   "priority": "alta",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-09-04",
+   "dueOriginal": "2026-09-04",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "a43bb45d-3536-4afb-87f9-907e48dd1a68",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1786644000000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1786449600000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1788548400000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1786449600000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1786543200000
+    },
+    {
+     "s": "concluido",
+     "at": 1788548400000
+    }
+   ],
+   "updatedAt": 1788548400000
+  },
+  {
+   "id": "f8db08cf-1b33-4f5b-ad10-0cc7da6a186d",
+   "title": "Atendimento à fiscalização estadual",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "media",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-11-14",
+   "dueOriginal": "2026-11-14",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1792584000000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1792584000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1792677600000
+    }
+   ],
+   "updatedAt": 1792677600000
+  },
+  {
+   "id": "2ede3e97-c27e-4207-9606-0307fe3dfe40",
+   "title": "Conciliação de créditos de ICMS",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-10-14",
+   "dueOriginal": "2026-10-14",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "0d40073f-ff0e-41c5-a699-f8929d98374e",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1790532000000,
+     "by": "Kellner Leal"
+    }
+   ],
+   "createdAt": 1790337600000,
+   "assignedBy": "Emerson Pontes",
+   "assignedAt": 1790337600000,
+   "completedAt": 1791918000000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1790337600000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1790431200000
+    },
+    {
+     "s": "concluido",
+     "at": 1791918000000
+    }
+   ],
+   "updatedAt": 1791918000000
+  },
+  {
+   "id": "b6ed57f8-b9fe-42a9-8532-96380352079f",
+   "title": "Parecer sobre benefício fiscal",
+   "notes": "",
+   "status": "nao_iniciado",
+   "priority": "baixa",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-10-29",
+   "dueOriginal": "2026-10-29",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1791979200000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1791979200000
+    }
+   ],
+   "updatedAt": 1791979200000
+  },
+  {
+   "id": "a19456b1-238d-4f25-9c8c-7efd5179bcfe",
+   "title": "Apuração do ICMS (2ª etapa)",
+   "notes": "",
+   "status": "nao_iniciado",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-11-11",
+   "dueOriginal": "2026-11-11",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1793102400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1793102400000
+    }
+   ],
+   "updatedAt": 1793102400000
+  },
+  {
+   "id": "3f4958b9-3a5b-4aa2-a014-902bbd2f2048",
+   "title": "Conferência da GIA (2ª etapa)",
+   "notes": "",
+   "status": "nao_iniciado",
+   "priority": "baixa",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-11-10",
+   "dueOriginal": "2026-11-10",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1793620800000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1793620800000
+    }
+   ],
+   "updatedAt": 1793620800000
+  }
+ ],
+ "deleted": {},
+ "recebidas": [
+  "1cc4f52b-0b49-4ca3-aa02-8efb6e101cb7",
+  "58ad260f-a5d7-4419-9725-64d8bc1abf2c",
+  "2ede3e97-c27e-4207-9606-0307fe3dfe40"
+ ],
+ "excluidas": [],
+ "seriesEncerradas": []
+}

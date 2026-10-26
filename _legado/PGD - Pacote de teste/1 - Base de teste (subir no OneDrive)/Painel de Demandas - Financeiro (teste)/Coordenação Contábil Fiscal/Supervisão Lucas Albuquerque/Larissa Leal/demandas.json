@@ -1,0 +1,222 @@
+{
+ "app": "painel-demandas-equipe",
+ "version": 3,
+ "colaborador": "Larissa Leal",
+ "atualizadoEm": "2026-10-23T14:12:08.735074",
+ "updatedAt": 1792753200000,
+ "tasks": [
+  {
+   "id": "15031cfc-b578-4fb6-abb9-9db2daf157e3",
+   "title": "Revisão de contratos de fornecimento",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-09-05",
+   "dueOriginal": "2026-09-05",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "58555e4e-a073-47ee-9654-a43ccb22411a",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1788112800000,
+     "by": "Larissa Leal"
+    }
+   ],
+   "createdAt": 1787918400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1788634800000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1787918400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1788012000000
+    },
+    {
+     "s": "concluido",
+     "at": 1788634800000
+    }
+   ],
+   "updatedAt": 1788634800000
+  },
+  {
+   "id": "8efe4a49-e819-473d-90ef-b2a8b050cec2",
+   "title": "Regularização de certidões",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-09-11",
+   "dueOriginal": "2026-09-11",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1786968000000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1786968000000,
+   "completedAt": 1789153200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1786968000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1787061600000
+    },
+    {
+     "s": "concluido",
+     "at": 1789153200000
+    }
+   ],
+   "updatedAt": 1789153200000
+  },
+  {
+   "id": "db1a38f8-90ca-4777-9ff5-edfcb2a57335",
+   "title": "Faturamento fiscal do mês",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-10-06",
+   "dueOriginal": "2026-10-06",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1789214400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1791313200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1789214400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1789308000000
+    },
+    {
+     "s": "concluido",
+     "at": 1791313200000
+    }
+   ],
+   "updatedAt": 1791313200000
+  },
+  {
+   "id": "aa40865e-0ec1-47c0-8c74-13cb89bd4a72",
+   "title": "Plano de implantação da Reforma Tributária",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-10-16",
+   "dueOriginal": "2026-10-16",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1791115200000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1792350000000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1791115200000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1791208800000
+    },
+    {
+     "s": "concluido",
+     "at": 1792350000000
+    }
+   ],
+   "updatedAt": 1792350000000
+  },
+  {
+   "id": "dde92ad9-38c4-41a6-8e5c-3cc5ece21cc9",
+   "title": "Mapa de impactos da CBS e do IBS",
+   "notes": "",
+   "status": "nao_iniciado",
+   "priority": "baixa",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-10-25",
+   "dueOriginal": "2026-10-25",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1792238400000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1792238400000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1792238400000
+    }
+   ],
+   "updatedAt": 1792238400000
+  },
+  {
+   "id": "bd1b7550-2558-49d1-bac2-f292d2a5f83d",
+   "title": "Parametrização do split payment",
+   "notes": "",
+   "status": "nao_iniciado",
+   "priority": "baixa",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-10-27",
+   "dueOriginal": "2026-10-27",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1792152000000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1792152000000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1792152000000
+    }
+   ],
+   "updatedAt": 1792152000000
+  },
+  {
+   "id": "b6d53db0-99d0-440b-a13a-3ce641914c09",
+   "title": "Revisão de contratos de fornecimento (2ª etapa)",
+   "notes": "",
+   "status": "nao_iniciado",
+   "priority": "media",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-11-17",
+   "dueOriginal": "2026-11-17",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1793966400000,
+   "assignedBy": "Lucas Albuquerque",
+   "assignedAt": 1793966400000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1793966400000
+    }
+   ],
+   "updatedAt": 1793966400000
+  }
+ ],
+ "deleted": {},
+ "recebidas": [
+  "8efe4a49-e819-473d-90ef-b2a8b050cec2",
+  "dde92ad9-38c4-41a6-8e5c-3cc5ece21cc9",
+  "bd1b7550-2558-49d1-bac2-f292d2a5f83d",
+  "b6d53db0-99d0-440b-a13a-3ce641914c09"
+ ],
+ "excluidas": [],
+ "seriesEncerradas": []
+}

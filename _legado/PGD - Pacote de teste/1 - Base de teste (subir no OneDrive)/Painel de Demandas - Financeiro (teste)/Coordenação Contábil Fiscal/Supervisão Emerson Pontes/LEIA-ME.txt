@@ -1,0 +1,22 @@
+﻿SUPERVISÃO EMERSON PONTES - Emerson Pontes
+Áreas: Tributos Estaduais
+Coordenação: Coordenação Contábil Fiscal
+Equipe: Aline Tavares, Amanda Cristina, Amélia Rafaela, Diogo Henrique, Flavius Roberto, Isaac Kesseler, Kellner Leal, Marcelle Maria, Rafael Ricardo, Rodrigo Bezerra
+Situação: piloto
+
+
+Como esta pasta é usada pelo painel:
+  - Uma subpasta por analista, com o nome dele (ex.: "Maria Souza"). Cada analista grava só na própria subpasta.
+  - _Supervisao: notas lidas e fechamentos mensais dos indicadores. Só o painel da supervisão grava.
+  - _Compartilhadas: demandas compartilhadas entre analistas e convites da caixa de validação.
+  - _Solicitações: solicitações da coordenação. Cada solicitante grava o próprio arquivo; a supervisão designa a equipe, define o prazo e responde em _respostas.json.
+
+Compartilhar:
+  - Emerson Pontes: esta pasta inteira (pode editar)
+  - Cada analista: a própria subpasta e _Compartilhadas (pode editar)
+  - Coordenação: pode exibir (vem da pasta da coordenação)
+  - Coordenação: a subpasta _Solicitações (pode editar), para enviar solicitações a esta supervisão
+Modo ausência da supervisão:
+  - O coordenador: as subpastas dos analistas (pode editar), para designar e escrever notas durante a ausência.
+  - O analista que pode substituir a supervisão: esta pasta inteira (pode editar).
+  - O painel só libera essas funções no período de ausência ativado pela supervisão (arquivo _Supervisao/ausencia.json).

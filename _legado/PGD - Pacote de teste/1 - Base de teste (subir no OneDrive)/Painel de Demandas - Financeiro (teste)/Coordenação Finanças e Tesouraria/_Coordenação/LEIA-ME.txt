@@ -1,0 +1,2 @@
+﻿Dados do painel da Coordenação de Finanças e Tesouraria. Quem grava: apenas o painel da coordenação.
+Supervisões desta coordenação podem exibir esta pasta, para receber as solicitações.

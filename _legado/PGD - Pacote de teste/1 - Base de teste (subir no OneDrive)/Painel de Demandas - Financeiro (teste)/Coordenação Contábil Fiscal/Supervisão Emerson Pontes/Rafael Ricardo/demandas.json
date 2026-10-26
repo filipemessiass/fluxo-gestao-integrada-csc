@@ -1,0 +1,331 @@
+{
+ "app": "painel-demandas-equipe",
+ "version": 3,
+ "colaborador": "Rafael Ricardo",
+ "atualizadoEm": "2026-10-23T14:12:08.734613",
+ "updatedAt": 1792753200000,
+ "tasks": [
+  {
+   "id": "bd3f0fd8-5e9e-4fcd-bd1e-4620491d54ce",
+   "title": "Apuração do ICMS",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-09-11",
+   "dueOriginal": "2026-09-11",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1787918400000,
+   "assignedBy": "Emerson Pontes",
+   "assignedAt": 1787918400000,
+   "completedAt": 1789585200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1787918400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1788012000000
+    },
+    {
+     "s": "concluido",
+     "at": 1789585200000
+    }
+   ],
+   "updatedAt": 1789585200000
+  },
+  {
+   "id": "b1051b8b-df77-4aa4-800b-1c4329d30507",
+   "title": "Conferência da GIA",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-09-24",
+   "dueOriginal": "2026-09-24",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "5a6568b2-e96a-4614-8fc3-4627e7764b98",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1789581600000,
+     "by": "Rafael Ricardo"
+    }
+   ],
+   "createdAt": 1789387200000,
+   "assignedBy": "Emerson Pontes",
+   "assignedAt": 1789387200000,
+   "completedAt": 1790190000000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1789387200000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1789480800000
+    },
+    {
+     "s": "concluido",
+     "at": 1790190000000
+    }
+   ],
+   "updatedAt": 1790190000000
+  },
+  {
+   "id": "6c77538b-48e0-4ea9-896c-5bdd2876bd12",
+   "title": "Ajuste do DIFAL",
+   "notes": "",
+   "status": "concluido",
+   "priority": "alta",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-09-04",
+   "dueOriginal": "2026-09-04",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1786536000000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1788721200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1786536000000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1786629600000
+    },
+    {
+     "s": "concluido",
+     "at": 1788721200000
+    }
+   ],
+   "updatedAt": 1788721200000
+  },
+  {
+   "id": "8f60216e-597f-4b93-aa92-a9d8c263990e",
+   "title": "Revisão do ICMS-ST de combustíveis",
+   "notes": "",
+   "status": "concluido",
+   "priority": "baixa",
+   "category": "",
+   "tipo": "projeto",
+   "due": "2026-10-09",
+   "dueOriginal": "2026-10-09",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "a5c49730-c6d2-4ad5-9029-cb937d8ce7ac",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1790100000000,
+     "by": "Rafael Ricardo"
+    }
+   ],
+   "createdAt": 1789905600000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1792004400000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1789905600000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1789999200000
+    },
+    {
+     "s": "concluido",
+     "at": 1792004400000
+    }
+   ],
+   "updatedAt": 1792004400000
+  },
+  {
+   "id": "a50b55a7-fe1c-4c9c-a6bd-b16e754f6fd0",
+   "title": "Atendimento à fiscalização estadual",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "media",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-11-17",
+   "dueOriginal": "2026-11-17",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1793707200000,
+   "assignedBy": "Emerson Pontes",
+   "assignedAt": 1793707200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1793707200000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1793800800000
+    }
+   ],
+   "updatedAt": 1793800800000
+  },
+  {
+   "id": "0098cb50-6776-4cac-93d8-4fd6cf9a9790",
+   "title": "Conciliação de créditos de ICMS",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-08-20",
+   "dueOriginal": "2026-08-20",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "4c272e87-11e9-4781-a049-1b769fc2b973",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1785693600000,
+     "by": "Rafael Ricardo"
+    }
+   ],
+   "createdAt": 1785499200000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1787252400000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1785499200000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1785592800000
+    },
+    {
+     "s": "concluido",
+     "at": 1787252400000
+    }
+   ],
+   "updatedAt": 1787252400000
+  },
+  {
+   "id": "7a153e61-7152-4c66-893a-79a77e9b8510",
+   "title": "Parecer sobre benefício fiscal",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "sob_demanda",
+   "due": "2026-08-30",
+   "dueOriginal": "2026-08-30",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "990a1a74-cd6f-4c68-bd11-bf6acd5ca41d",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1787248800000,
+     "by": "Rafael Ricardo"
+    }
+   ],
+   "createdAt": 1787054400000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "completedAt": 1787857200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1787054400000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1787148000000
+    },
+    {
+     "s": "concluido",
+     "at": 1787857200000
+    }
+   ],
+   "updatedAt": 1787857200000
+  },
+  {
+   "id": "19df3bcf-cb04-42dc-b922-60c1dd55b75a",
+   "title": "Apuração do ICMS (2ª etapa)",
+   "notes": "",
+   "status": "em_andamento",
+   "priority": "alta",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-10-26",
+   "dueOriginal": "2026-10-26",
+   "histPrazo": [],
+   "log": [
+    {
+     "id": "fcd355b4-dfa5-4309-a074-3d00c3dfd877",
+     "text": "Iniciei o levantamento com a área.",
+     "at": 1791223200000,
+     "by": "Rafael Ricardo"
+    }
+   ],
+   "createdAt": 1791028800000,
+   "assignedBy": null,
+   "assignedAt": null,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1791028800000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1791122400000
+    }
+   ],
+   "updatedAt": 1791223200000
+  },
+  {
+   "id": "829a0af7-d2b5-442c-9ddf-63cf7d6c2e14",
+   "title": "Conferência da GIA (2ª etapa)",
+   "notes": "",
+   "status": "concluido",
+   "priority": "media",
+   "category": "",
+   "tipo": "recorrente",
+   "due": "2026-08-10",
+   "dueOriginal": "2026-08-10",
+   "histPrazo": [],
+   "log": [],
+   "createdAt": 1785412800000,
+   "assignedBy": "Emerson Pontes",
+   "assignedAt": 1785412800000,
+   "completedAt": 1786561200000,
+   "histStatus": [
+    {
+     "s": "nao_iniciado",
+     "at": 1785412800000
+    },
+    {
+     "s": "em_andamento",
+     "at": 1785506400000
+    },
+    {
+     "s": "concluido",
+     "at": 1786561200000
+    }
+   ],
+   "updatedAt": 1786561200000
+  }
+ ],
+ "deleted": {},
+ "recebidas": [
+  "bd3f0fd8-5e9e-4fcd-bd1e-4620491d54ce",
+  "b1051b8b-df77-4aa4-800b-1c4329d30507",
+  "a50b55a7-fe1c-4c9c-a6bd-b16e754f6fd0",
+  "829a0af7-d2b5-442c-9ddf-63cf7d6c2e14"
+ ],
+ "excluidas": [],
+ "seriesEncerradas": []
+}

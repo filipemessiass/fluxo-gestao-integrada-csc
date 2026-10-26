@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPI (Sistema Gerencial Processos Integrados)</title>
+
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/print.css">
+    <link rel="stylesheet" href="../shared/vendor/fonts/fonts.css" data-sgpi-offline-asset="Fontes locais">
+    <link rel="stylesheet" href="../shared/vendor/fontawesome/css/all.min.css" data-sgpi-offline-asset="Font Awesome">
+</head>
+<body>
+    <noscript>
+        <div class="noscript">Ative o JavaScript para usar o SGPI (Sistema Gerencial Processos Integrados).</div>
+    </noscript>
+
+    <div id="splash" class="splash" role="status" aria-live="polite">
+        <div class="splash-card">
+            <span class="spinner"></span>
+            <strong>Abrindo seu banco local...</strong>
+            <small>Preparando seus lançamentos, workflow, acompanhamento e preferências.</small>
+        </div>
+    </div>
+
+    <div id="fallbackBanner" class="fallback-banner hidden">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Banco local indisponível neste navegador. Exporte sua planilha antes de fechar.</span>
+        <button id="storageDiagnosticButton" class="storage-diagnostic-btn" type="button">Diagnosticar</button>
+    </div>
+
+    <div id="syncBanner" class="sync-banner hidden">
+        <i class="fa-solid fa-file-excel"></i>
+        <span>Alterações não salvas na planilha</span>
+    </div>
+
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Menu principal">
+            <div class="sidebar-tools">
+                <div class="sidebar-brand">
+                    <div class="sidebar-brand-icon" title="SGPI · Sistema Gerencial de Processos Integrados"><i class="fa-solid fa-diagram-project"></i></div>
+                    <div class="sidebar-brand-text">
+                        <strong>SGPI</strong>
+                    </div>
+                </div>
+                <button id="sidebarCollapse" class="sidebar-collapse" type="button" aria-label="Recolher barra lateral" title="Recolher barra lateral">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+            </div>
+
+
+            <nav>
+                <ul>
+                    <li class="nav-group nav-group-workflow open" id="group-workflow">
+                        <button type="button" class="nav-group-title" id="btn-toggle-workflow" aria-expanded="true" title="Expandir/recolher etapas do Workflow">
+                            <i class="fa-solid fa-bars-staggered nav-group-main-icon"></i>
+                            <span>Workflow</span>
+                            <i class="fa-solid fa-chevron-down nav-group-arrow"></i>
+                        </button>
+                        <ul class="nav-sub-menu" id="submenu-workflow">
+                            <li><a href="#sec-workflow" id="nav-workflow" data-nav="workflow"><i class="fa-solid fa-diagram-project"></i><span>Workflow</span></a></li>
+                            <li><a href="#sec-e3" id="nav-e3" data-nav="e3"><i class="fa-solid fa-triangle-exclamation"></i><span>E3 — Levantamento</span></a></li>
+                            <li><a href="#sec-e4" id="nav-e4" data-nav="e4"><i class="fa-solid fa-gears"></i><span>E4 — Execução</span></a></li>
+                            <li><a href="#sec-e5" id="nav-e5" data-nav="e5"><i class="fa-solid fa-clipboard-check"></i><span>E5 — Validação</span></a></li>
+                            <li><a href="#sec-e6" id="nav-e6" data-nav="e6"><i class="fa-solid fa-screwdriver-wrench"></i><span>E6 — Ajustes</span></a></li>
+                            <li><a href="#sec-e7" id="nav-e7" data-nav="e7"><i class="fa-solid fa-rocket"></i><span>E7 — Entrega</span></a></li>
+                            <li><a href="#sec-e8" id="nav-e8" data-nav="e8"><i class="fa-solid fa-rotate"></i><span>E08 — Hypercare</span></a></li>
+                        </ul>
+                    </li>
+                    <li style="margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--soft-border);">
+                        <a href="../index.html" onclick="try{localStorage.removeItem('sgpi_auth_user');}catch(e){}" title="Encerrar sessão e voltar ao Login" style="color: #dc2626; font-weight: 700;">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            <span>Sair do Sistema</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="content" tabindex="-1">
+            <section id="sec-capa" class="content-section hidden"></section>
+            <section id="sec-dashboard" class="content-section hidden"></section>
+            <section id="sec-lancamentos" class="content-section hidden"></section>
+            <section id="sec-workflow" class="content-section"></section>
+            <section id="sec-e3" class="content-section hidden"></section>
+            <section id="sec-e4" class="content-section hidden"></section>
+            <section id="sec-e5" class="content-section hidden"></section>
+            <section id="sec-e6" class="content-section hidden"></section>
+            <section id="sec-e7" class="content-section hidden"></section>
+            <section id="sec-e8" class="content-section hidden"></section>
+            <section id="sec-acompanhamento" class="content-section hidden"></section>
+            <section id="sec-cadastros" class="content-section hidden"></section>
+            <section id="sec-carga" class="content-section hidden"></section>
+        </main>
+    </div>
+
+    <div id="modalRoot" class="modal-root hidden" aria-hidden="true"></div>
+    <div id="toastRoot" class="toast-root" aria-live="polite" aria-relevant="additions"></div>
+
+    <script src="../shared/vendor/sheetjs/xlsx.full.min.js" data-sgpi-offline-asset="SheetJS" data-sgpi-global="XLSX"></script>
+    <script src="../shared/vendor/chartjs/chart.umd.min.js" data-sgpi-offline-asset="Chart.js" data-sgpi-global="Chart"></script>
+    <script src="../shared/js/offline-assets.js"></script>
+    <script src="../shared/js/exchange-contract.js"></script>
+    <script src="../shared/js/safe-storage.js"></script>
+    <script src="../shared/js/config-cadastros.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/workflow.js"></script>
+    <script src="js/data-api.js"></script>
+    <script src="js/exporter.js"></script>
+    <script src="js/ui-core.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/sections/sec-capa.js"></script>
+    <script src="js/sections/sec-dashboard.js"></script>
+    <script src="js/sections/sec-carga.js"></script>
+    <script src="js/sections/sec-lancamentos.js"></script>
+    <script src="js/sections/sec-workflow.js"></script>
+    <script src="js/sections/sec-etapas.js"></script>
+    <script src="js/sections/sec-reporte.js"></script>
+    <script src="js/sections/sec-cadastros.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
