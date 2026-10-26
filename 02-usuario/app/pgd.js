@@ -4262,6 +4262,31 @@ const FX_CAPA_ARTE = `<svg class="fx-capa-svg" viewBox="0 0 420 400" role="img" 
   <g class="fx-capa-hex"><path d="M312 146L360 173V227L312 254L264 227V173Z"/><path d="M291 201L306 216L334 186" class="fx-capa-check"/></g>
   <circle cx="128" cy="200" r="5" class="fx-capa-no"/><circle cx="312" cy="146" r="5" class="fx-capa-no"/><circle cx="312" cy="254" r="5" class="fx-capa-no"/>
 </svg>`;
+// Entrada em cascata só na primeira exibição da capa (a tela é redesenhada a cada sincronização)
+let fxCapaJaAnimada = false;
+const fxCapaEntrada = () => { if (fxCapaJaAnimada) return ''; fxCapaJaAnimada = true; return ' fx-entrada'; };
+// Luz que segue o cursor e inclinação 3D da ilustração (só com mouse e sem "reduzir animações")
+const fxMovimentoOk = () => matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+let fxCapaQuadro = 0;
+document.addEventListener('pointermove', e => {
+  const capa = e.target.closest && e.target.closest('.fx-capa');
+  if (!capa || !fxMovimentoOk()) return;
+  cancelAnimationFrame(fxCapaQuadro);
+  fxCapaQuadro = requestAnimationFrame(() => {
+    const r = capa.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    capa.style.setProperty('--fx-mx', (x * 100).toFixed(1) + '%');
+    capa.style.setProperty('--fx-my', (y * 100).toFixed(1) + '%');
+    capa.style.setProperty('--fx-ry', ((x - .5) * 14).toFixed(2) + 'deg');
+    capa.style.setProperty('--fx-rx', ((.5 - y) * 10).toFixed(2) + 'deg');
+    capa.classList.add('fx-ativa');
+  });
+}, { passive:true });
+document.addEventListener('pointerout', e => {
+  const capa = e.target.closest && e.target.closest('.fx-capa');
+  if (!capa || (e.relatedTarget && capa.contains(e.relatedTarget))) return;
+  capa.classList.remove('fx-ativa');
+  capa.style.setProperty('--fx-rx', '0deg'); capa.style.setProperty('--fx-ry', '0deg');
+});
 function renderNav() {
   const isSup = isTeam();
   const all = isSup ? teamTasks() : data.tasks;
@@ -4460,8 +4485,8 @@ function renderHome() {
     if (ss.length) extra += `<p class="banner info"><span>${I.away} Você está respondendo por ${ss.map(s => `<b>${esc(s.supervisor)}</b> (até ${fmtDate(ausOf(s.id).fim)})`).join(', ')}. Designe, altere prazos, escreva notas e responda às solicitações na tela Substituição.</span><button class="btn sm primary" data-act="go" data-view="substituicao">Abrir substituição</button></p>`;
   }
   $('#homeArea').innerHTML = `
-    <section class="fx-capa" aria-label="Apresentação">
-      <div class="fx-capa-arte" aria-hidden="true">${FX_CAPA_ARTE}</div>
+    <section class="fx-capa${fxCapaEntrada()}" aria-label="Apresentação">
+      <span class="fx-capa-aurora" aria-hidden="true"></span>
       <div class="fx-capa-conteudo">
         ${FX_MARCA_INICIO}
         <div class="status-badges">${pills.join('')}</div>
@@ -4470,6 +4495,7 @@ function renderHome() {
         <p class="fx-capa-lead">${esc(lead)}</p>
         <div class="primary-actions">${actions}</div>
       </div>
+      <div class="fx-capa-arte" aria-hidden="true"><div class="fx-capa-palco">${FX_CAPA_ARTE}</div></div>
     </section>
     ${extra ? `<div class="home-extra">${extra}</div>` : ''}
     <div class="feature-grid">${cards}</div>

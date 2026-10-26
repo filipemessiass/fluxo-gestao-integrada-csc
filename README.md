@@ -189,7 +189,7 @@ Os dois painéis usam o mesmo motor (`pgd.js`). O `mode` do preset decide o menu
 
 | Item | Para que serve |
 | --- | --- |
-| **Início** | Capa com a ilustração animada do fluxo e a logo FLUXO lado a lado. Em seguida, boas-vindas com cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
+| **Início** | Capa moderna com a logo FLUXO, estados, saudação e ações à esquerda e a ilustração animada do fluxo à direita (borda viva, aurora, luz do cursor e inclinação 3D). Em seguida, boas-vindas com cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
 | **Indicadores** | Cartões por situação, itens que pedem atenção, régua de prazos, tabela por assunto e ritmo da semana. |
 | **Tarefas** | Lista e quadro das suas demandas: filtros, nova demanda, notas de andamento, anexos, recorrência, relatório em PDF/Excel. |
 | **Workflow (Projetos)** (grupo) | O título só abre e fecha a lista, com animação. Dentro ficam **Workflow** (tracker) e **E3 — Levantamento**, **E4 — Execução**, **E5 — Validação**, **E6 — Ajustes**, **E7 — Entrega**, **E08 — Hypercare** (seção 6). A lista começa fechada e já vem aberta quando a tela atual é do Workflow. |

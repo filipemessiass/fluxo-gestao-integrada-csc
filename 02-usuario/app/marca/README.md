@@ -42,7 +42,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | --- | --- |
 | Menu lateral expandido | Símbolo + palavra FLUXO + nome do usuário (dinâmico), no cartão do cabeçalho |
 | Menu lateral recolhido | Só o símbolo |
-| Início (analista e supervisão) | Capa em duas colunas: à esquerda, a ilustração animada do fluxo; à direita, a logo completa com descrição e slogan, seguida dos estados da pasta, da saudação e das ações. Os indicadores vêm abaixo |
+| Início (analista e supervisão) | Capa em duas colunas: à esquerda, a logo completa com descrição e slogan, seguida dos estados da pasta, da saudação e das ações; à direita, a ilustração animada do fluxo. Os indicadores vêm abaixo |
 | Login: área institucional | Logo completa (versão escura) no topo esquerdo |
 | Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO" |
 | Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
@@ -55,17 +55,37 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 
 ## Ilustração da capa do Início
 
-É uma ilustração em vetor, desenhada nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e as animações em `../fluxo.css` (seção 11). As animações são:
+A capa tem duas colunas: **à esquerda**, a marca, os estados da pasta, a saudação e as ações; **à direita**, a ilustração. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
 
-- engrenagens girando em sentidos opostos, mais rápidas ao passar o mouse;
-- pulsos dourados percorrendo as conexões;
-- documento flutuando;
-- hexágono pulsando com brilho dourado e o check se desenhando;
-- halo e órbitas girando ao fundo.
+A ilustração é um vetor desenhado nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e os efeitos em `../fluxo.css` (seção 11).
 
-Os traços acompanham o tema: azul-marinho no claro, quase branco no escuro. Com `prefers-reduced-motion`, os movimentos são desligados.
+**Efeitos**
 
-Abaixo de 1100 px, a capa vira uma coluna, com a ilustração acima da marca.
+| Efeito | Como funciona |
+| --- | --- |
+| Borda viva | Degradê dourado ↔ azul girando em volta da capa |
+| Aurora | Brilhos azul e dourado desfocados se movendo devagar ao fundo |
+| Luz do cursor | Brilho suave que acompanha o mouse sobre a capa |
+| Inclinação 3D | A ilustração inclina em perspectiva conforme a posição do mouse |
+| Entrada em cascata | Marca, estados, saudação e ações sobem em sequência. Só na primeira exibição, para não repetir a cada sincronização |
+| Ilustração viva | Engrenagens girando em sentidos opostos (mais rápidas com o mouse), pulsos dourados nas conexões, documento flutuando, hexágono pulsando, check se desenhando, halo e órbitas |
+| Botão principal | Um reflexo de luz percorre "Nova demanda" de tempos em tempos |
+
+**Boas práticas**
+
+- O estado normal é sempre visível: as animações só aplicam o estado inicial durante a entrada. Se uma animação não rodar, nada fica escondido.
+- Os efeitos que seguem o mouse ficam desligados em telas de toque (`pointer: fine`). Com "reduzir animações" (`prefers-reduced-motion`), os movimentos param e a ilustração aparece completa.
+- Os traços e o vidro da capa acompanham o tema: azul-marinho no claro, quase branco no escuro.
+
+**Responsividade**
+
+| Largura | Layout |
+| --- | --- |
+| ≥ 1600 px | Duas colunas, ilustração até 400 px |
+| 1361–1599 px | Duas colunas (conteúdo 1,3 : ilustração 0,7) |
+| 1101–1360 px (notebook) | Duas colunas compactas, ilustração até 270 px |
+| ≤ 1100 px (tablet) | Uma coluna centralizada, com a ilustração abaixo do conteúdo (até 260 px) |
+| ≤ 480 px (celular) | Ilustração até 200 px e botões na largura total, para facilitar o toque |
 
 ## Diferenças conhecidas em relação à prancha
 
@@ -82,4 +102,4 @@ Geradas no Microsoft Edge (1440 × 900; celular 390 px), com o sistema rodando:
 - `05-menu-recolhido.png`.
 - `06-supervisao-inicio-claro.png`, `07-supervisao-inicio-escuro.png`.
 - `09-workflow-claro.png`, `10-tarefas-escuro.png`, `11-indicadores-claro.png`.
-- `13-inicio-notebook.png`: capa em 1280 px.
+- `13-inicio-notebook.png`, `14-inicio-tablet.png`, `15-inicio-fullhd.png`: capa em 1280 px, 820 px e 1920 px.

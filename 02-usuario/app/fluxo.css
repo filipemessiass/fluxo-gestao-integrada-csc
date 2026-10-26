@@ -336,30 +336,75 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 .fx-home-marca img { width: min(380px, 82vw); height: auto; }
 @media (max-width: 760px) { .fx-home-marca img { width: min(300px, 86vw); } }
 
-/* ============ 11. Capa do Início: ilustração animada + marca ============ */
-.fx-capa { --fx-capa-traco: #0B2852; --fx-capa-fundo: #FFFFFF; display: grid; grid-template-columns: minmax(220px, .72fr) minmax(0, 1.28fr); gap: 26px; align-items: center; width: 100%; margin: 0 0 6px; padding: 26px 30px; border: 1px solid var(--fx-line); border-radius: var(--fx-radius-lg); background: radial-gradient(520px 320px at 12% 50%, rgba(57, 116, 198, .10), transparent 70%), linear-gradient(135deg, var(--fx-surface) 0%, var(--fx-surface-2) 100%); text-align: left; overflow: hidden; }
-:root[data-theme="dark"] .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; } }
-.fx-capa-arte { position: relative; }
-.fx-capa-svg { display: block; width: 100%; max-width: 340px; height: auto; margin: 0 auto; overflow: visible; }
+/* ============ 11. Capa do Início: marca à esquerda, ilustração animada à direita ============ */
+.fx-capa {
+  --fx-capa-traco: #0B2852; --fx-capa-fundo: #FFFFFF; --fx-mx: 70%; --fx-my: 40%; --fx-rx: 0deg; --fx-ry: 0deg;
+  position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(240px, .7fr); gap: 28px; align-items: center;
+  width: 100%; margin: 0 0 8px; padding: 30px 34px; border-radius: 22px; text-align: left; overflow: hidden;
+  background: linear-gradient(135deg, rgba(var(--fx-surface-rgb), .92) 0%, rgba(var(--fx-surface-rgb), .78) 100%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 24px 60px -28px rgba(16, 30, 48, .35);
+  backdrop-filter: blur(6px);
+}
+:root[data-theme="dark"] .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; box-shadow: 0 1px 0 rgba(255, 255, 255, .06) inset, 0 28px 70px -30px rgba(0, 0, 0, .7); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; box-shadow: 0 1px 0 rgba(255, 255, 255, .06) inset, 0 28px 70px -30px rgba(0, 0, 0, .7); } }
+/* Borda com degradê animado (dourado ↔ azul) */
+.fx-capa::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; padding: 1.5px; border-radius: inherit; pointer-events: none;
+  background: conic-gradient(from var(--fx-angulo, 0deg), rgba(230, 188, 121, .9), rgba(57, 116, 198, .55), rgba(230, 188, 121, .15), rgba(57, 116, 198, .55), rgba(230, 188, 121, .9));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: fxBorda 10s linear infinite;
+}
+@property --fx-angulo { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes fxBorda { to { --fx-angulo: 360deg; } }
+/* Luz que acompanha o cursor */
+.fx-capa::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .35s ease;
+  background: radial-gradient(420px circle at var(--fx-mx) var(--fx-my), rgba(230, 188, 121, .16), transparent 60%);
+}
+.fx-capa.fx-ativa::after { opacity: 1; }
+/* Aurora: brilhos azul e dourado se movendo ao fundo */
+.fx-capa-aurora { position: absolute; inset: -30%; z-index: -2; pointer-events: none; filter: blur(48px); opacity: .55;
+  background: radial-gradient(28% 34% at 78% 40%, rgba(57, 116, 198, .45), transparent 70%), radial-gradient(24% 30% at 62% 78%, rgba(230, 188, 121, .38), transparent 70%), radial-gradient(22% 26% at 18% 12%, rgba(57, 116, 198, .22), transparent 70%);
+  animation: fxAurora 18s ease-in-out infinite alternate; }
+@keyframes fxAurora { 0% { transform: translate3d(0, 0, 0) rotate(0deg); } 50% { transform: translate3d(-4%, 3%, 0) rotate(8deg); } 100% { transform: translate3d(3%, -3%, 0) rotate(-6deg); } }
+
+/* Conteúdo (coluna esquerda) */
 .fx-capa-conteudo { min-width: 0; }
 .fx-capa-conteudo .fx-home-marca { margin: 0 0 18px; }
-.fx-capa-conteudo .fx-home-marca img { width: min(370px, 100%); }
-.fx-capa-conteudo .status-pill { padding: 7px 11px; font-size: .78rem; gap: 6px; }
-.fx-capa-conteudo .status-badges { gap: 8px; }
+.fx-capa-conteudo .fx-home-marca img { width: min(390px, 100%); }
+.fx-capa-conteudo .status-badges { justify-content: flex-start; gap: 8px; margin: 0 0 18px; }
+.fx-capa-conteudo .status-pill { padding: 7px 11px; font-size: .78rem; gap: 6px; backdrop-filter: blur(4px); }
+.fx-capa-conteudo h2 { margin: 0 0 6px; text-align: left; font-size: clamp(1.9rem, 3.2vw, 2.6rem); letter-spacing: -.03em; }
+.fx-capa-conteudo p { margin: 0; max-width: 60ch; color: var(--fx-ink-2); font-size: 1.02rem; line-height: 1.65; }
+.fx-capa-conteudo p.fx-kicker { margin: 0 0 6px; color: var(--fx-brand-ink); font-weight: 650; }
+.fx-capa-conteudo .primary-actions { justify-content: flex-start; margin: 22px 0 0; }
+.fx-capa-conteudo .primary-actions .cta { position: relative; overflow: hidden; }
+.fx-capa-conteudo .primary-actions .cta::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .35) 50%, transparent 70%); transform: translateX(-120%); animation: fxBrilhoBotao 5s ease-in-out 1.6s infinite; pointer-events: none; }
+@keyframes fxBrilhoBotao { 0%, 70% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
 .welcome-section { max-width: 1120px; }
-.fx-capa-conteudo .status-badges { justify-content: flex-start; margin: 0 0 18px; }
-.fx-capa-conteudo h2 { margin: 0 0 6px; text-align: left; }
-.fx-capa-conteudo p { margin: 0; color: var(--fx-ink-2); font-size: 1.02rem; line-height: 1.65; }
-.fx-capa-conteudo p.fx-kicker { margin: 0 0 6px; color: var(--fx-brand-ink); font-weight: 600; }
-.fx-capa-conteudo .primary-actions { justify-content: flex-start; margin: 20px 0 0; }
+
+/* Entrada em cascata (apenas na primeira exibição) */
+.fx-entrada .fx-capa-conteudo > * { animation: fxSobe .6s var(--fx-ease) backwards; }
+.fx-entrada .fx-capa-conteudo > :nth-child(2) { animation-delay: .08s; }
+.fx-entrada .fx-capa-conteudo > :nth-child(3) { animation-delay: .16s; }
+.fx-entrada .fx-capa-conteudo > :nth-child(4) { animation-delay: .22s; }
+.fx-entrada .fx-capa-conteudo > :nth-child(5) { animation-delay: .28s; }
+.fx-entrada .fx-capa-conteudo > :nth-child(6) { animation-delay: .34s; }
+.fx-entrada .fx-capa-arte { animation: fxSurge .9s var(--fx-ease) .2s backwards; }
+@keyframes fxSobe { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes fxSurge { from { opacity: 0; transform: scale(.92) translateX(16px); } to { opacity: 1; transform: none; } }
+
+/* Ilustração (coluna direita) com inclinação 3D */
+.fx-capa-arte { position: relative; perspective: 900px; }
+.fx-capa-palco { transform: rotateX(var(--fx-rx)) rotateY(var(--fx-ry)); transform-style: preserve-3d; transition: transform .25s ease-out; will-change: transform; }
+.fx-capa-svg { display: block; width: 100%; max-width: 340px; height: auto; margin: 0 auto; overflow: visible; filter: drop-shadow(0 18px 28px rgba(16, 30, 48, .18)); }
 
 /* Traços da ilustração (seguem o tema) */
 .fx-capa-linhas path, .fx-capa-doc rect, .fx-capa-doc path, .fx-capa-aro, .fx-capa-seta, .fx-capa-hex path:first-child { fill: none; stroke: var(--fx-capa-traco); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
 .fx-capa-doc rect, .fx-capa-aro, .fx-capa-hex path:first-child { fill: var(--fx-capa-fundo); }
 .fx-capa-dentes rect { fill: var(--fx-capa-traco); }
 .fx-capa-eixo { fill: #E6BC79; }
-.fx-capa-check { fill: none; stroke: url(#fxCapaOuro); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 64; stroke-dashoffset: 64; animation: fxCheck 1.1s .5s var(--fx-ease) forwards; }
+.fx-capa-check { fill: none; stroke: url(#fxCapaOuro); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 64; stroke-dashoffset: 0; animation: fxCheck 1.1s .6s var(--fx-ease) backwards; }
 .fx-capa-no { fill: #E6BC79; stroke: var(--fx-capa-fundo); stroke-width: 3; }
 .fx-capa-orbita { fill: none; stroke: rgba(230, 188, 121, .35); stroke-width: 1.5; stroke-dasharray: 3 9; transform-origin: 215px 200px; animation: fxGira 60s linear infinite; }
 .fx-capa-orbita-2 { stroke: rgba(57, 116, 198, .30); animation-duration: 40s; animation-direction: reverse; }
@@ -375,27 +420,39 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 .fx-capa-doc { animation: fxFlutua 4.5s ease-in-out infinite; }
 .fx-capa-hex { transform-box: fill-box; transform-origin: center; animation: fxPulso 3.2s ease-in-out infinite; }
 .fx-capa-halo { transform-origin: 215px 200px; animation: fxRespira 6s ease-in-out infinite; }
-.fx-capa:hover .fx-gear-a, .fx-capa:hover .fx-gear-b { animation-duration: 4.5s; }
+.fx-capa.fx-ativa .fx-gear-a, .fx-capa.fx-ativa .fx-gear-b { animation-duration: 4.5s; }
 @keyframes fxGira { to { transform: rotate(360deg); } }
 @keyframes fxFluxo { from { stroke-dashoffset: 234; } to { stroke-dashoffset: 0; } }
 @keyframes fxFlutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @keyframes fxPulso { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(230, 188, 121, 0)); } 50% { transform: scale(1.04); filter: drop-shadow(0 0 14px rgba(230, 188, 121, .55)); } }
 @keyframes fxRespira { 0%, 100% { opacity: .75; transform: scale(.97); } 50% { opacity: 1; transform: scale(1.03); } }
-@keyframes fxCheck { to { stroke-dashoffset: 0; } }
-@media (prefers-reduced-motion: reduce) {
-  .fx-capa-check { stroke-dashoffset: 0; }
-  .fx-capa-fluxo { display: none; }
+@keyframes fxCheck { from { stroke-dashoffset: 64; } }
+
+/* Responsividade */
+@media (min-width: 1101px) and (max-width: 1360px) {
+  .fx-capa { grid-template-columns: minmax(0, 1.42fr) minmax(200px, .58fr); gap: 18px; padding: 26px 24px; }
+  .fx-capa-svg { max-width: 270px; }
+  .fx-capa-conteudo .primary-actions .cta, .fx-capa-conteudo .primary-actions .ghost-btn { padding-left: 14px; padding-right: 14px; }
 }
 @media (max-width: 1100px) {
-  .fx-capa { grid-template-columns: 1fr; gap: 10px; padding: 22px 18px; text-align: center; }
-  .fx-capa-svg { max-width: 250px; }
-  .fx-capa-conteudo .fx-home-marca { margin: 0 auto 16px; }
+  .fx-capa { grid-template-columns: 1fr; gap: 6px; padding: 24px 20px; text-align: center; }
   .fx-capa-conteudo .fx-home-marca img { margin: 0 auto; }
   .fx-capa-conteudo .status-badges, .fx-capa-conteudo .primary-actions { justify-content: center; }
   .fx-capa-conteudo h2 { text-align: center; }
+  .fx-capa-conteudo p { margin-left: auto; margin-right: auto; }
+  .fx-capa-arte { order: 2; margin-top: 8px; }
+  .fx-capa-svg { max-width: 260px; }
 }
-@media (min-width: 1101px) and (max-width: 1360px) {
-  .fx-capa { grid-template-columns: minmax(200px, .58fr) minmax(0, 1.42fr); gap: 18px; padding: 24px 22px; }
-  .fx-capa-svg { max-width: 270px; }
-  .fx-capa-conteudo .primary-actions .cta, .fx-capa-conteudo .primary-actions .ghost-btn { padding-left: 14px; padding-right: 14px; }
+@media (max-width: 480px) {
+  .fx-capa { padding: 20px 14px; border-radius: 18px; }
+  .fx-capa-svg { max-width: 200px; }
+  .fx-capa-conteudo .fx-home-marca img { width: min(300px, 100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-capa-fluxo, .fx-capa-aurora, .fx-capa-conteudo .primary-actions .cta::after { display: none; }
+  .fx-capa-palco { transform: none; }
+}
+@media (min-width: 1600px) {
+  .fx-capa { grid-template-columns: minmax(0, 1.12fr) minmax(280px, .88fr); }
+  .fx-capa-svg { max-width: 400px; }
 }
