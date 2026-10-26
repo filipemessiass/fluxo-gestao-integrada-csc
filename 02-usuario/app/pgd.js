@@ -4440,14 +4440,11 @@ function renderHome() {
   const hello = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
   const first = s => String(s || '').trim().split(/\s+/)[0];
   const who = isReader() ? first(cfg.name) : isSup ? first((PRESET && PRESET.nome) || cfg.name || (supCtx && supCtx.supervisor) || '') : first(cfg.name);
-  // Selos de situação
-  let connPill;
-  if (conn === 'ok') connPill = `<span class="status-pill">${I.folder}${dir ? `Pasta “${esc(dir.name)}”` : 'Pasta conectada'}</span>`;
-  else if (conn === 'prompt') connPill = `<span class="status-pill warn">${I.alert}Pasta aguardando reativação</span>`;
-  else connPill = `<span class="status-pill err">${I.alert}Nenhuma pasta conectada</span>`;
-  const pills = [connPill,
-    `<span class="status-pill">${I.refresh}${sync.state === 'syncing' ? 'Sincronizando…' : sync.state === 'error' ? 'Erro na sincronização' : conn === 'ok' ? sync.lastSync ? `${isSup ? 'Lido' : 'Sincronizado'} às ${fmtTime(sync.lastSync)}` : 'Conectado · primeira leitura pendente' : 'Sincronização indisponível'}</span>`,
-    `<span class="status-pill">${I.clock}${esc(new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' }))}</span>`];
+  // Frases que apresentam o sistema (o estado da pasta fica no rodapé do menu)
+  const pills = [
+    `<span class="status-pill fx-valor">${I.tasks}${isSup ? 'Equipe e demandas em um só lugar' : 'Demandas e projetos em um só lugar'}</span>`,
+    `<span class="status-pill fx-valor">${I.flow}Workflow E1 a E08 com governança</span>`,
+    `<span class="status-pill fx-valor">${I.chart}${isSup ? 'Indicadores da área no ritmo certo' : 'Indicadores no ritmo certo'}</span>`];
   let lead, actions, cards;
   if (isReader()) {
     const sups = readerSupsAll(), mk = curMonth(), a = aggregate(linesFor(mk).lines, 'todos', 'todos');
@@ -4537,11 +4534,6 @@ function renderHome() {
           <span class="fx-capa-chip fx-chip-doc"><b>${open.length}</b> ${open.length === 1 ? 'em aberto' : 'em aberto'}</span>
           <span class="fx-capa-chip fx-chip-gear"><b>${wfAbertos}</b> ${wfAbertos === 1 ? 'projeto em fluxo' : 'projetos em fluxo'}</span>
           <span class="fx-capa-chip fx-chip-ok"><b>${doneMonth}</b> ${doneMonth === 1 ? 'concluída no mês' : 'concluídas no mês'}</span>
-        </div>
-        <div class="fx-capa-legenda">
-          <span><i class="fx-leg-fluxo"></i>Caminho da demanda (solicitação → execução → aprovação)</span>
-          <span><i class="fx-leg-no"></i>Workflow E1 a E08, com gates em E3 e E5</span>
-          <small>Os números acompanham ${isSup ? 'as demandas da equipe' : 'as suas demandas'} e se atualizam a cada sincronização.</small>
         </div>
       </div>
     </section>
