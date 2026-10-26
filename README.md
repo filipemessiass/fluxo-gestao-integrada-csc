@@ -190,12 +190,14 @@ Os dois painéis usam o mesmo motor (`pgd.js`). O `mode` do preset decide o menu
 | Item | Para que serve |
 | --- | --- |
 | **Início** | Boas-vindas com cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
-| **Workflow (Projetos)** (grupo) | O título só abre e fecha a lista, com animação. Dentro ficam **Workflow** (tracker) e **E3 — Levantamento**, **E4 — Execução**, **E5 — Validação**, **E6 — Ajustes**, **E7 — Entrega**, **E08 — Hypercare** (seção 6). A lista começa fechada e já vem aberta quando a tela atual é do Workflow. |
-| **Tarefas** | Lista e quadro das suas demandas: filtros, nova demanda, notas de andamento, anexos, recorrência, relatório em PDF/Excel. |
-| **Validação** | Caixa de convites: demandas que colegas querem compartilhar ou transferir para você. |
 | **Indicadores** | Cartões por situação, itens que pedem atenção, régua de prazos, tabela por assunto e ritmo da semana. |
+| **Tarefas** | Lista e quadro das suas demandas: filtros, nova demanda, notas de andamento, anexos, recorrência, relatório em PDF/Excel. |
+| **Workflow (Projetos)** (grupo) | O título só abre e fecha a lista, com animação. Dentro ficam **Workflow** (tracker) e **E3 — Levantamento**, **E4 — Execução**, **E5 — Validação**, **E6 — Ajustes**, **E7 — Entrega**, **E08 — Hypercare** (seção 6). A lista começa fechada e já vem aberta quando a tela atual é do Workflow. |
 | **Ausência** | Registro das suas ausências, com o repasse das demandas que vencem no período. |
+| **Validação** | Caixa de convites: demandas que colegas querem compartilhar ou transferir para você. |
 | **Pasta e backup** | Conexão com a sua subpasta do OneDrive e com `_Compartilhadas`, backup em JSON, importação e pontos de restauração. |
+
+A ordem segue o raciocínio da gestão: visão geral (Início e Indicadores), execução do dia a dia (Tarefas e Workflow dos projetos), planejamento de ausências, validação de convites e, por fim, a configuração da pasta e dos backups.
 
 ### Menu da supervisão
 
