@@ -4314,8 +4314,11 @@ function renderNav() {
   const rq = cfg.mode === 'solicitante' ? reqMe() : null;
   $('#brandName').innerHTML = FX_PALAVRA + (PRESET && PRESET.teste ? ' <span class="teste-tag">TESTE</span>' : '');
   $('#brandName').title = 'FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · ' + (rq ? 'Solicitações' : cfg.mode === 'gestao' ? 'Gestão financeira' : cfg.mode === 'coordenacao' ? 'Coordenação' : isSup ? (SUBST ? 'Substituição da supervisão' : 'Supervisão') : 'Minhas demandas');
-  if (isReader()) $('#brandSub').textContent = `${cfg.name || ''}${cfg.mode === 'coordenacao' && coordCtx ? ' · ' + coordCtx.nome : cfg.mode === 'gestao' ? ' · Área financeira' : ''}`;
-  else $('#brandSub').textContent = rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição` : (window.SGPI_PERFIS && window.SGPI_PERFIS.ler() || {}).nome || supName()) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
+  const fxUsuario = isReader() ? `${cfg.name || ''}${cfg.mode === 'coordenacao' && coordCtx ? ' · ' + coordCtx.nome : cfg.mode === 'gestao' ? ' · Área financeira' : ''}`
+    : rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição` : (window.SGPI_PERFIS && window.SGPI_PERFIS.ler() || {}).nome || supName()) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
+  $('#brandSub').textContent = 'Processos Integrados · CSC';
+  $('#fxUserName').textContent = fxUsuario;
+  $('#fxUserName').title = fxUsuario;
   document.title = (late ? `(${late}) ` : '') + 'FLUXO · ' + (isSup ? 'Supervisão' : 'Analista');
 }
 // SGPI: o painel abre direto, sem exigir a pasta; o cartão de sincronização no menu leva à tela da pasta.
@@ -4489,7 +4492,6 @@ function renderHome() {
     <section class="fx-capa${fxCapaEntrada()}" aria-label="Apresentação">
       <span class="fx-capa-aurora" aria-hidden="true"></span>
       <div class="fx-capa-conteudo">
-        <span class="fx-capa-selo">${I.flow}${isSup ? 'Supervisão · Processos Integrados' : 'Processos Integrados · CSC'}</span>
         ${FX_MARCA_INICIO}
         <h2>Olá${who ? `, ${esc(who)}` : ''}! 👋</h2>
         <p class="fx-kicker">${isSup ? 'Veja como está o FLUXO da sua equipe.' : 'Veja como está o FLUXO das suas demandas.'}</p>

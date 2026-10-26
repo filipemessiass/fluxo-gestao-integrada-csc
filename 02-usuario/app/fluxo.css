@@ -182,9 +182,6 @@ body.sidebar-collapsed .sidebar-tools { flex-direction: column; gap: 10px; }
 .sync-card { background: var(--fx-surface-2); border-color: var(--fx-line); border-radius: var(--fx-radius); }
 .theme-switch { background: var(--fx-surface-2); border-color: var(--fx-line); }
 .theme-switch button[aria-pressed="true"] { background: var(--fx-accent-soft); color: var(--fx-accent); border-color: rgba(var(--fx-accent-rgb), .35); }
-.wf-sair { color: var(--fx-danger); }
-body.sidebar-collapsed .wf-sair .lbl { display: none; }
-body.sidebar-collapsed .wf-sair { padding: 0; }
 
 /* ============ 6. Componentes ============ */
 .btn { border-radius: 10px; border-color: var(--fx-line-input); background: var(--fx-surface); color: var(--fx-ink); font-weight: 600; transition: background var(--fx-fast) var(--fx-ease), border-color var(--fx-fast) var(--fx-ease), box-shadow var(--fx-fast) var(--fx-ease), transform var(--fx-fast) var(--fx-ease); }
@@ -228,7 +225,7 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 
 /* Aplicação da marca oficial e composição fluida do Início. */
 .sidebar-tools { background: var(--fx-surface-2); border-color: var(--fx-line); box-shadow: none; }
-#brandSub { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#brandSub { max-width: 150px; line-height: 1.3; letter-spacing: .05em; }
 .welcome-section { width: 100%; max-width: 1040px; min-height: min(780px, calc(100dvh - 140px)); padding: 8px 14px 30px; }
 .status-badges { margin-bottom: 20px; }
 .welcome-section h2 { margin-bottom: 8px; }
@@ -342,7 +339,7 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 .fx-capa {
   --fx-capa-traco: #0B2852; --fx-capa-fundo: #FFFFFF; --fx-mx: 70%; --fx-my: 40%; --fx-rx: 0deg; --fx-ry: 0deg;
   position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 48px); align-items: center;
-  width: 100%; min-height: clamp(500px, calc(100dvh - 200px), 720px); margin: -40px 0 22px; padding: clamp(8px, 1.5vw, 18px) 0; text-align: left;
+  width: 100%; min-height: clamp(500px, calc(100dvh - 200px), 720px); margin: -6px 0 22px; padding: clamp(8px, 1.5vw, 18px) 0; text-align: left;
 }
 :root[data-theme="dark"] .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fx-capa { --fx-capa-traco: #E2E8F0; --fx-capa-fundo: #192B41; } }
@@ -360,8 +357,6 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 
 /* ---- Coluna da ideia principal ---- */
 .fx-capa-conteudo { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
-.fx-capa-selo { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 8px 15px; border-radius: 999px; background: #3265AF; color: #fff; font-size: .74rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 10px 22px rgba(50, 101, 175, .28); }
-.fx-capa-selo svg { width: 15px; height: 15px; }
 .fx-capa-conteudo .fx-home-marca { width: min(470px, 100%); margin: 0 0 14px; }
 .fx-capa-conteudo .fx-home-marca img { width: 100%; }
 .fx-capa-conteudo h2 { margin: 0 0 4px; text-align: left; font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -.03em; }
@@ -452,7 +447,7 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
   .fx-capa-chip { font-size: .76rem; padding: 7px 11px; }
 }
 @media (max-width: 1100px) {
-  .fx-capa { grid-template-columns: 1fr !important; min-height: 0; margin-top: -30px; gap: 28px; text-align: center; }
+  .fx-capa { grid-template-columns: 1fr !important; min-height: 0; margin-top: -6px; gap: 28px; text-align: center; }
   .fx-capa-conteudo { align-items: center; }
   .fx-capa-conteudo h2 { text-align: center; }
   .fx-capa-conteudo p { margin-left: auto; margin-right: auto; }
@@ -461,7 +456,7 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
   .fx-capa-palco { width: min(100%, 460px); }
 }
 @media (max-width: 560px) {
-  .fx-capa { margin-top: -20px; }
+  .fx-capa { margin-top: -6px; }
   .fx-capa-conteudo .fx-home-marca { width: min(300px, 100%); }
   .fx-capa-acoes { padding: 18px 14px; }
   .fx-capa-chip { font-size: .7rem; padding: 6px 9px; }
@@ -471,4 +466,21 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 @media (prefers-reduced-motion: reduce) {
   .fx-capa-fluxo, .fx-capa-aurora, .fx-capa-conteudo .primary-actions .cta::after { display: none; }
   .fx-capa-palco { transform: none; }
+}
+
+/* ============ 12. Barra do usuário (topo direito do conteúdo) ============ */
+.fx-topo { position: absolute !important; top: 22px; right: 24px; z-index: 10 !important; display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 6px 0 14px; border: 1px solid var(--fx-line); border-radius: 999px; background: rgba(var(--fx-surface-rgb), .82); backdrop-filter: blur(8px); box-shadow: 0 6px 18px -10px rgba(16, 30, 48, .35); font-size: .86rem; }
+.close-btn:not([hidden]) ~ .fx-topo { right: 76px; }
+.fx-topo-user { display: inline-flex; align-items: center; gap: 8px; min-width: 0; color: var(--fx-ink); font-weight: 700; }
+.fx-topo-user svg { flex: none; width: 17px; height: 17px; color: var(--fx-brand-ink); }
+#fxUserName { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fx-topo-sep { width: 1px; height: 18px; background: var(--fx-line); }
+.fx-topo-sair { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: var(--fx-danger); font: inherit; font-weight: 700; cursor: pointer; transition: background var(--fx-base) var(--fx-ease); }
+.fx-topo-sair svg { width: 16px; height: 16px; }
+.fx-topo-sair:hover { background: rgba(220, 38, 38, .08); }
+.fx-topo-sair:focus-visible { outline: 2px solid var(--fx-brand); outline-offset: 2px; }
+@media (max-width: 560px) {
+  .fx-topo { top: 16px; right: 14px; gap: 8px; padding-left: 12px; font-size: .8rem; }
+  .close-btn:not([hidden]) ~ .fx-topo { right: 64px; }
+  #fxUserName { max-width: 120px; }
 }

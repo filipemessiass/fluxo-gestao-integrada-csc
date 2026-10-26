@@ -40,9 +40,10 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 
 | Local | Versão da marca |
 | --- | --- |
-| Menu lateral expandido | Símbolo + palavra FLUXO + nome do usuário (dinâmico), no cartão do cabeçalho |
+| Menu lateral expandido | Símbolo + palavra FLUXO + "Processos Integrados · CSC", no cartão do cabeçalho |
+| Barra do topo direito | Nome do usuário conectado (dinâmico) | Sair |
 | Menu lateral recolhido | Só o símbolo |
-| Início (analista e supervisão) | Capa de largura total: à esquerda, selo, logo completa com descrição e slogan, saudação, estados da pasta e a área "Comece por aqui"; à direita, a ilustração animada com etiquetas de números e legenda. Os cartões de atalho vêm abaixo |
+| Início (analista e supervisão) | Capa de largura total: à esquerda, logo completa com descrição e slogan, saudação, estados da pasta e a área "Comece por aqui"; à direita, a ilustração animada com etiquetas de números e legenda. Os cartões de atalho vêm abaixo |
 | Login: área institucional | Logo completa (versão escura) no topo esquerdo |
 | Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO" |
 | Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
@@ -55,7 +56,7 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 
 ## Ilustração da capa do Início
 
-A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda**: selo ("Processos Integrados · CSC" ou "Supervisão · Processos Integrados"), logo completa como título, saudação, resumo, estados da pasta e a área tracejada "Comece por aqui" com as ações. **À direita**: a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês) e uma legenda abaixo. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
+A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda**: logo completa como título, saudação, resumo, estados da pasta e a área tracejada "Comece por aqui" com as ações. **À direita**: a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês) e uma legenda abaixo. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
 
 A ilustração é um vetor desenhado nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e os efeitos em `../fluxo.css` (seção 11).
 

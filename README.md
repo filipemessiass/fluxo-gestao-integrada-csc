@@ -151,7 +151,7 @@ Tudo em `_legado` pode ser apagado quando você quiser. Os arquivos que estavam 
 3. **Direcionamento.** A supervisão vai para `02-usuario/supervisor/` e os analistas vão para `02-usuario/analista/`.
 4. **Painel.** A página confere a sessão e monta o `PAINEL_PRESET`, com modo, nome e pasta esperada. Em seguida carrega o motor. O painel sempre abre na seção **Início**, sem exigir a pasta. Até conectar, tudo fica guardado no navegador.
 5. **Sincronização.** Quando quiser, a pessoa conecta a pasta do OneDrive pelo menu. A partir daí o painel lê e grava os arquivos da pasta (seção 8).
-6. **Saída.** O botão **Sair (trocar perfil)** no menu lateral apaga a sessão e volta ao login. Os dados locais e os da pasta continuam.
+6. **Saída.** Na barra do topo direito, ao lado do nome do usuário, o botão **Sair** apaga a sessão e volta ao login. Os dados locais e os da pasta continuam.
 
 ---
 
@@ -189,7 +189,7 @@ Os dois painéis usam o mesmo motor (`pgd.js`). O `mode` do preset decide o menu
 
 | Item | Para que serve |
 | --- | --- |
-| **Início** | Capa de largura total em duas colunas. À esquerda, a ideia principal: selo, logo FLUXO com slogan, saudação, resumo, estados da pasta e a área tracejada "Comece por aqui" com as ações. À direita, a ilustração animada do fluxo com etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês) e legenda. Efeitos: borda viva, aurora, luz do cursor e inclinação 3D. No tablet e no celular vira uma coluna, com a ilustração abaixo. Em seguida, cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
+| **Início** | Capa de largura total em duas colunas. À esquerda, a ideia principal: logo FLUXO com slogan, saudação, resumo, estados da pasta e a área tracejada "Comece por aqui" com as ações. À direita, a ilustração animada do fluxo com etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês) e legenda. Efeitos: borda viva, aurora, luz do cursor e inclinação 3D. No tablet e no celular vira uma coluna, com a ilustração abaixo. Em seguida, cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
 | **Indicadores** | Cartões por situação, itens que pedem atenção, régua de prazos, tabela por assunto e ritmo da semana. |
 | **Tarefas** | Lista e quadro das suas demandas: filtros, nova demanda, notas de andamento, anexos, recorrência, relatório em PDF/Excel. |
 | **Workflow (Projetos)** (grupo) | O título só abre e fecha a lista, com animação. Dentro ficam **Workflow** (tracker) e **E3 — Levantamento**, **E4 — Execução**, **E5 — Validação**, **E6 — Ajustes**, **E7 — Entrega**, **E08 — Hypercare** (seção 6). A lista começa fechada e já vem aberta quando a tela atual é do Workflow. |
@@ -206,7 +206,7 @@ A ordem segue o raciocínio da gestão: visão geral (Início e Indicadores), ex
 ### Rodapé do menu lateral
 
 - **Cartão de sincronização:** mostra o estado da pasta. Clicar nele leva à tela da pasta, ou reativa a pasta quando ela está aguardando permissão.
-- **Sair (trocar perfil):** volta ao login.
+- **Barra do usuário (topo direito):** nome do usuário conectado | **Sair**, que volta ao login.
 - **Tema:** claro, escuro ou automático (segue o Windows).
 
 ---
@@ -682,7 +682,7 @@ São **57 verificações, todas aprovadas** (atualizado com a marca oficial). El
 | Área | O que foi verificado |
 | --- | --- |
 | Login | Senha errada recusada. Apelidos (`fm`, `supervisora`) aceitos. Erro acessível quando falta o usuário (`role="alert"`, `aria-invalid`). Mostrar e ocultar senha (`aria-pressed`). Sem sessão, o painel volta ao login. |
-| Marca | Palavra FLUXO oficial (clara e escura) e símbolo oficial no menu, com o nome do usuário dinâmico. Logo institucional no Início, no lugar do ícone isolado. Logo completa e símbolo + FLUXO no login. Favicon oficial. Aba "FLUXO". Nenhum "PGD" ou "SGPI" visível. |
+| Marca | Palavra FLUXO oficial (clara e escura) e símbolo oficial no menu, com "Processos Integrados · CSC" abaixo da marca; nome do usuário dinâmico e Sair na barra do topo direito. Logo institucional no Início, no lugar do ícone isolado. Logo completa e símbolo + FLUXO no login. Favicon oficial. Aba "FLUXO". Nenhum "PGD" ou "SGPI" visível. |
 | Temas | Escuro como padrão de primeiro acesso. Troca para claro. Automático segue o sistema. |
 | Menus | Ordem do menu do analista e da supervisão. Grupo Workflow (Projetos) abre e fecha sem trocar de tela. O sistema abre no Início. |
 | Workflow | Tracker e telas E1 a E08 aparecem mesmo sem projetos. Guia dos Campos. A supervisão grava E1/E2 em `atribuidas.json` e o analista aplica. Gate E3 trava a E4, gate E5 trava a E6. Evidência faltando fica destacada. E1/E2 somente leitura para o analista; E3 somente leitura para a supervisão. O status da demanda segue o workflow. |
