@@ -42,7 +42,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | --- | --- |
 | Menu lateral expandido | Símbolo + palavra FLUXO + nome do usuário (dinâmico), no cartão do cabeçalho |
 | Menu lateral recolhido | Só o símbolo |
-| Início (analista e supervisão) | Capa em duas colunas: à esquerda, a logo completa com descrição e slogan, seguida dos estados da pasta, da saudação e das ações; à direita, a ilustração animada do fluxo. Os indicadores vêm abaixo |
+| Início (analista e supervisão) | Capa de largura total: à esquerda, selo, logo completa com descrição e slogan, saudação, estados da pasta e a área "Comece por aqui"; à direita, a ilustração animada com etiquetas de números e legenda. Os cartões de atalho vêm abaixo |
 | Login: área institucional | Logo completa (versão escura) no topo esquerdo |
 | Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO" |
 | Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
@@ -55,7 +55,7 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 
 ## Ilustração da capa do Início
 
-A capa tem duas colunas: **à esquerda**, a marca, os estados da pasta, a saudação e as ações; **à direita**, a ilustração. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
+A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda**: selo ("Processos Integrados · CSC" ou "Supervisão · Processos Integrados"), logo completa como título, saudação, resumo, estados da pasta e a área tracejada "Comece por aqui" com as ações. **À direita**: a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês) e uma legenda abaixo. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
 
 A ilustração é um vetor desenhado nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e os efeitos em `../fluxo.css` (seção 11).
 
@@ -68,6 +68,7 @@ A ilustração é um vetor desenhado nas cores da marca a partir do ícone de pr
 | Luz do cursor | Brilho suave que acompanha o mouse sobre a capa |
 | Inclinação 3D | A ilustração inclina em perspectiva conforme a posição do mouse |
 | Entrada em cascata | Marca, estados, saudação e ações sobem em sequência. Só na primeira exibição, para não repetir a cada sincronização |
+| Etiquetas flutuantes | Os números da ilustração flutuam suavemente, em ritmos diferentes |
 | Ilustração viva | Engrenagens girando em sentidos opostos (mais rápidas com o mouse), pulsos dourados nas conexões, documento flutuando, hexágono pulsando, check se desenhando, halo e órbitas |
 | Botão principal | Um reflexo de luz percorre "Nova demanda" de tempos em tempos |
 
@@ -81,11 +82,11 @@ A ilustração é um vetor desenhado nas cores da marca a partir do ícone de pr
 
 | Largura | Layout |
 | --- | --- |
-| ≥ 1600 px | Duas colunas, ilustração até 400 px |
-| 1361–1599 px | Duas colunas (conteúdo 1,3 : ilustração 0,7) |
-| 1101–1360 px (notebook) | Duas colunas compactas, ilustração até 270 px |
-| ≤ 1100 px (tablet) | Uma coluna centralizada, com a ilustração abaixo do conteúdo (até 260 px) |
-| ≤ 480 px (celular) | Ilustração até 200 px e botões na largura total, para facilitar o toque |
+| ≥ 1600 px | Duas colunas iguais; altura da capa acompanha a tela (500–720 px) |
+| 1361–1599 px | Duas colunas (conteúdo 1,1 : ilustração 0,9), botões compactos para caberem numa linha |
+| 1101–1360 px (notebook) | Duas colunas, logo até 420 px |
+| ≤ 1100 px (tablet) | Uma coluna centralizada, com a ilustração e a legenda abaixo do conteúdo (até 460 px) |
+| ≤ 560 px (celular) | Logo até 300 px, etiquetas menores e botões na largura total, para facilitar o toque |
 
 ## Diferenças conhecidas em relação à prancha
 

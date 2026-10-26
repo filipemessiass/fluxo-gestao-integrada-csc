@@ -4484,18 +4484,36 @@ function renderHome() {
     const ss = substSups();
     if (ss.length) extra += `<p class="banner info"><span>${I.away} Você está respondendo por ${ss.map(s => `<b>${esc(s.supervisor)}</b> (até ${fmtDate(ausOf(s.id).fim)})`).join(', ')}. Designe, altere prazos, escreva notas e responda às solicitações na tela Substituição.</span><button class="btn sm primary" data-act="go" data-view="substituicao">Abrir substituição</button></p>`;
   }
+  const wfAbertos = wfProjetos().filter(p => wfTracker(p.t).atual).length;
   $('#homeArea').innerHTML = `
     <section class="fx-capa${fxCapaEntrada()}" aria-label="Apresentação">
       <span class="fx-capa-aurora" aria-hidden="true"></span>
       <div class="fx-capa-conteudo">
+        <span class="fx-capa-selo">${I.flow}${isSup ? 'Supervisão · Processos Integrados' : 'Processos Integrados · CSC'}</span>
         ${FX_MARCA_INICIO}
-        <div class="status-badges">${pills.join('')}</div>
         <h2>Olá${who ? `, ${esc(who)}` : ''}! 👋</h2>
         <p class="fx-kicker">${isSup ? 'Veja como está o FLUXO da sua equipe.' : 'Veja como está o FLUXO das suas demandas.'}</p>
         <p class="fx-capa-lead">${esc(lead)}</p>
-        <div class="primary-actions">${actions}</div>
+        <div class="status-badges">${pills.join('')}</div>
+        <div class="fx-capa-acoes">
+          <strong>Comece por aqui</strong>
+          <span>${isSup ? 'Distribua demandas, acompanhe a equipe e os indicadores da área.' : 'Registre uma demanda, acompanhe suas tarefas e os indicadores.'}</span>
+          <div class="primary-actions">${actions}</div>
+        </div>
       </div>
-      <div class="fx-capa-arte" aria-hidden="true"><div class="fx-capa-palco">${FX_CAPA_ARTE}</div></div>
+      <div class="fx-capa-arte" aria-hidden="true">
+        <div class="fx-capa-palco">
+          ${FX_CAPA_ARTE}
+          <span class="fx-capa-chip fx-chip-doc"><b>${open.length}</b> ${open.length === 1 ? 'em aberto' : 'em aberto'}</span>
+          <span class="fx-capa-chip fx-chip-gear"><b>${wfAbertos}</b> ${wfAbertos === 1 ? 'projeto em fluxo' : 'projetos em fluxo'}</span>
+          <span class="fx-capa-chip fx-chip-ok"><b>${doneMonth}</b> ${doneMonth === 1 ? 'concluída no mês' : 'concluídas no mês'}</span>
+        </div>
+        <div class="fx-capa-legenda">
+          <span><i class="fx-leg-fluxo"></i>Caminho da demanda (solicitação → execução → aprovação)</span>
+          <span><i class="fx-leg-no"></i>Workflow E1 a E08, com gates em E3 e E5</span>
+          <small>Os números acompanham ${isSup ? 'as demandas da equipe' : 'as suas demandas'} e se atualizam a cada sincronização.</small>
+        </div>
+      </div>
     </section>
     ${extra ? `<div class="home-extra">${extra}</div>` : ''}
     <div class="feature-grid">${cards}</div>
