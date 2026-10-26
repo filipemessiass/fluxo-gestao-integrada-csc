@@ -189,7 +189,7 @@ Os dois painéis usam o mesmo motor (`pgd.js`). O `mode` do preset decide o menu
 
 | Item | Para que serve |
 | --- | --- |
-| **Início** | Capa de largura total em duas colunas. À esquerda: logo FLUXO com slogan, saudação, resumo, três frases do sistema (demandas e projetos em um só lugar; Workflow E1 a E08 com governança; indicadores no ritmo certo) e a área tracejada "Comece por aqui" com as ações. À direita: a ilustração animada do fluxo com etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês). O estado da pasta fica no rodapé do menu. No tablet e no celular, vira uma coluna. Em seguida vêm os cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
+| **Início** | Capa de largura total em duas colunas. À esquerda: logo FLUXO com slogan, saudação, resumo, três cartões de destaque (demandas e projetos em um só lugar; Workflow E1 a E08 com governança; indicadores no ritmo certo) e a área tracejada "Comece por aqui" com as ações. À direita: a ilustração animada do fluxo, com etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês). Abaixo dela fica o **Pipeline do Workflow**: E1 a E08 com a quantidade de projetos em cada etapa e os gates E3 e E5 destacados. Cada etapa abre a sua tela, e "Abrir o tracker" leva ao Workflow. O estado da pasta fica no rodapé do menu. No tablet e no celular, vira uma coluna. Em seguida vêm os cartões de atalho (em aberto, atrasadas, vencem em breve, Workflow). |
 | **Indicadores** | Cartões por situação, itens que pedem atenção, régua de prazos, tabela por assunto e ritmo da semana. |
 | **Tarefas** | Lista e quadro das suas demandas: filtros, nova demanda, notas de andamento, anexos, recorrência, relatório em PDF/Excel. |
 | **Workflow (Projetos)** (grupo) | O título só abre e fecha a lista, com animação. Dentro ficam **Workflow** (tracker) e **E3 — Levantamento**, **E4 — Execução**, **E5 — Validação**, **E6 — Ajustes**, **E7 — Entrega**, **E08 — Hypercare** (seção 6). A lista começa fechada e já vem aberta quando a tela atual é do Workflow. |
@@ -201,7 +201,13 @@ A ordem segue o raciocínio da gestão: visão geral (Início e Indicadores), ex
 
 ### Menu da supervisão
 
-**Início**, o grupo **Workflow (Projetos)** (Workflow, **E1 — Solicitação**, **E2 — Triagem** e E3 a E08), Solicitações, Pedidos a Processos Integrados, telas das coordenações (quando a célula é transversal), Visão da área, Demandas, Dashboard (com exportação para PowerPoint), Ausências e **Pastas e ajustes** (conexão com a pasta `Processos Integrados`).
+A ordem segue o raciocínio da gestão:
+
+1. **Visão geral:** **Início**, **Dashboard** (com exportação para PowerPoint) e **Visão da área**.
+2. **Gestão do dia a dia:** **Demandas** e o grupo **Workflow (Projetos)** (Workflow, **E1 — Solicitação**, **E2 — Triagem** e E3 a E08).
+3. **Entradas:** **Solicitações**, **Pedidos a Processos Integrados** e as telas das coordenações (quando a célula é transversal).
+4. **Planejamento:** **Ausências**.
+5. **Configuração:** **Pastas e ajustes** (conexão com a pasta `Processos Integrados`).
 
 ### Rodapé do menu lateral
 

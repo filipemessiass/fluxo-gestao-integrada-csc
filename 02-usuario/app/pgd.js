@@ -4250,7 +4250,8 @@ const NAVS = {
   coordenacao:[['inicio', 'Início', I.home, ''], ['supervisoes', 'Supervisões', I.building, ''], ['substituicao', 'Substituição', I.swap, 'subst'], ['minhas', 'Solicitações', I.inbox, 'myreq'], ['indicadores', 'Visão geral', I.chart, 'late'], ['demandas', 'Demandas', I.team, ''], ['dashboard', 'Dashboard', I.dash, ''], ['ausencia', 'Ausências', I.away, 'ausr'], ['fontes', 'Pastas', I.gear, '']],
   solicitante:[['inicio', 'Início', I.home, ''], ['minhas', 'Minhas solicitações', I.inbox, 'myreq']],
   colaborador:[['inicio', 'Início', I.home, ''], ['indicadores', 'Indicadores', I.chart, 'late'], ['tarefas', 'Tarefas', I.tasks, 'open'], ['workflow', 'Workflow (Projetos)', I.flow, 'wf'], ['ausencia', 'Ausência', I.away, 'ausme'], ['validacao', 'Validação', I.inbox, 'conv'], ['backup', 'Pasta e backup', I.db, '']],
-  supervisor:[['inicio', 'Início', I.home, ''], ['workflow', 'Workflow (Projetos)', I.flow, 'wf'], ['solicitacoes', 'Solicitações', I.inbox, 'req'], ['minhas', 'Pedidos a Processos Integrados', I.inbox, 'myreq'], ['coord-cf', 'Contábil Fiscal', I.building, 'coord'], ['coord-ft', 'Finanças e Tesouraria', I.building, 'coord'], ['indicadores', 'Visão da área', I.chart, 'late'], ['demandas', 'Demandas', I.team, 'bell'], ['dashboard', 'Dashboard', I.dash, ''], ['ausencia', 'Ausências', I.away, 'aus'], ['fontes', 'Pastas e ajustes', I.gear, '']]
+  // Supervisão: visão geral (Início, Dashboard, Visão da área) → gestão (Demandas, Workflow) → entradas (Solicitações, Pedidos, coordenações) → planejamento (Ausências) → configuração
+  supervisor:[['inicio', 'Início', I.home, ''], ['dashboard', 'Dashboard', I.dash, ''], ['indicadores', 'Visão da área', I.chart, 'late'], ['demandas', 'Demandas', I.team, 'bell'], ['workflow', 'Workflow (Projetos)', I.flow, 'wf'], ['solicitacoes', 'Solicitações', I.inbox, 'req'], ['minhas', 'Pedidos a Processos Integrados', I.inbox, 'myreq'], ['coord-cf', 'Contábil Fiscal', I.building, 'coord'], ['coord-ft', 'Finanças e Tesouraria', I.building, 'coord'], ['ausencia', 'Ausências', I.away, 'aus'], ['fontes', 'Pastas e ajustes', I.gear, '']]
 };
 // Itens do menu conforme o tipo de painel e a pasta conectada
 function navItems() {
@@ -4440,11 +4441,13 @@ function renderHome() {
   const hello = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
   const first = s => String(s || '').trim().split(/\s+/)[0];
   const who = isReader() ? first(cfg.name) : isSup ? first((PRESET && PRESET.nome) || cfg.name || (supCtx && supCtx.supervisor) || '') : first(cfg.name);
-  // Frases que apresentam o sistema (o estado da pasta fica no rodapé do menu)
-  const pills = [
-    `<span class="status-pill fx-valor">${I.tasks}${isSup ? 'Equipe e demandas em um só lugar' : 'Demandas e projetos em um só lugar'}</span>`,
-    `<span class="status-pill fx-valor">${I.flow}Workflow E1 a E08 com governança</span>`,
-    `<span class="status-pill fx-valor">${I.chart}${isSup ? 'Indicadores da área no ritmo certo' : 'Indicadores no ritmo certo'}</span>`];
+  // Destaques que apresentam o sistema (o estado da pasta fica no rodapé do menu); "pills" guarda só avisos, como ausência
+  const pills = [];
+  const valores = [
+    [I.tasks, isSup ? 'Equipe e demandas' : 'Demandas e projetos', 'em um só lugar'],
+    [I.flow, 'Workflow E1 a E08', 'com governança'],
+    [I.chart, isSup ? 'Indicadores da área' : 'Indicadores', 'no ritmo certo']
+  ].map(([ic, forte, resto]) => `<li class="fx-valor">${ic}<span><b>${forte}</b>${resto}</span></li>`).join('');
   let lead, actions, cards;
   if (isReader()) {
     const sups = readerSupsAll(), mk = curMonth(), a = aggregate(linesFor(mk).lines, 'todos', 'todos');
@@ -4512,7 +4515,14 @@ function renderHome() {
     const ss = substSups();
     if (ss.length) extra += `<p class="banner info"><span>${I.away} Você está respondendo por ${ss.map(s => `<b>${esc(s.supervisor)}</b> (até ${fmtDate(ausOf(s.id).fim)})`).join(', ')}. Designe, altere prazos, escreva notas e responda às solicitações na tela Substituição.</span><button class="btn sm primary" data-act="go" data-view="substituicao">Abrir substituição</button></p>`;
   }
-  const wfAbertos = wfProjetos().filter(p => wfTracker(p.t).atual).length;
+  const wfTrs = wfProjetos().map(p => wfTracker(p.t));
+  const wfAbertos = wfTrs.filter(t => t.atual).length, wfFeitos = wfTrs.length - wfAbertos;
+  const wfPorEtapa = n => wfTrs.filter(t => t.atual && t.atual.numero === n).length;
+  const wfTelas = WF_VIEWS();
+  const pipeline = WF.ETAPAS.map(e => {
+    const qtd = wfPorEtapa(e.numero), view = wfTelas.includes('wf-e' + e.numero) ? 'wf-e' + e.numero : 'workflow';
+    return `<li><button type="button" class="fx-pipe-no${e.gate ? ' gate' : ''}${qtd ? ' ativo' : ''}" data-act="go" data-view="${view}" title="${esc(`${e.codigo} — ${e.nome}${e.gate ? ' · gate de governança' : ''}: ${plural(qtd, 'projeto', 'projetos')}`)}"><span class="fx-pipe-cod">${e.codigo}</span><span class="fx-pipe-qtd">${qtd || '—'}</span></button></li>`;
+  }).join('');
   $('#homeArea').innerHTML = `
     <section class="fx-capa${fxCapaEntrada()}" aria-label="Apresentação">
       <span class="fx-capa-aurora" aria-hidden="true"></span>
@@ -4521,7 +4531,8 @@ function renderHome() {
         <h2>Olá${who ? `, ${esc(who)}` : ''}! 👋</h2>
         <p class="fx-kicker">${isSup ? 'Veja como está o FLUXO da sua equipe.' : 'Veja como está o FLUXO das suas demandas.'}</p>
         <p class="fx-capa-lead">${esc(lead)}</p>
-        <div class="status-badges">${pills.join('')}</div>
+        ${pills.length ? `<div class="status-badges">${pills.join('')}</div>` : ''}
+        <ul class="fx-valores" aria-label="O que o FLUXO reúne">${valores}</ul>
         <div class="fx-capa-acoes">
           <strong>Comece por aqui</strong>
           <span>${isSup ? 'Distribua demandas, acompanhe a equipe e os indicadores da área.' : 'Registre uma demanda, acompanhe suas tarefas e os indicadores.'}</span>
@@ -4534,6 +4545,11 @@ function renderHome() {
           <span class="fx-capa-chip fx-chip-doc"><b>${open.length}</b> ${open.length === 1 ? 'em aberto' : 'em aberto'}</span>
           <span class="fx-capa-chip fx-chip-gear"><b>${wfAbertos}</b> ${wfAbertos === 1 ? 'projeto em fluxo' : 'projetos em fluxo'}</span>
           <span class="fx-capa-chip fx-chip-ok"><b>${doneMonth}</b> ${doneMonth === 1 ? 'concluída no mês' : 'concluídas no mês'}</span>
+        </div>
+        <div class="fx-pipe" aria-label="Pipeline do Workflow">
+          <div class="fx-pipe-topo"><strong>${I.flow}Pipeline do Workflow</strong><span>${plural(wfAbertos, 'em andamento', 'em andamento')} · ${plural(wfFeitos, 'concluído', 'concluídos')}</span></div>
+          <ol class="fx-pipe-trilha">${pipeline}</ol>
+          <div class="fx-pipe-rodape"><span><i class="fx-pipe-marca"></i>Gates de governança em E3 e E5</span><button type="button" class="fx-pipe-link" data-act="go" data-view="workflow">Abrir o tracker →</button></div>
         </div>
       </div>
     </section>
