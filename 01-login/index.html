@@ -20,10 +20,7 @@
         .fx-slogan { margin: 0; font-size: clamp(2.4rem, 4.6vw, 3.9rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
         .fx-slogan span { color: var(--fx-brand); }
         .fx-mensagem { max-width: 34ch; margin: 18px 0 0; font-size: 1.15rem; line-height: 1.6; color: #CBD5E1; }
-        .fx-principios { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-        .fx-principios li { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border: 1px solid rgba(230, 188, 121, .28); border-radius: 999px; background: rgba(16, 30, 48, .35); color: #E2E8F0; font-size: .82rem; font-weight: 600; }
-        .fx-principios li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--fx-brand); }
-        .fx-desc { margin: 0; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: #9AABC1; }
+        .fx-intro-texto { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 
         /* Formulário */
         .fx-acesso { display: flex; flex-direction: column; justify-content: center; padding: 48px clamp(24px, 5vw, 72px); background: var(--fx-bg); }
@@ -51,10 +48,63 @@
         .fx-rodape { width: min(420px, 100%); margin: 22px auto 0; text-align: center; font-size: .8rem; color: var(--fx-ink-3); line-height: 1.6; }
         .fx-rodape b { color: var(--fx-brand-ink); font-weight: 700; }
 
+        .fx-rodape .fx-elaborado { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; letter-spacing: .04em; }
+        .fx-rodape .fx-elaborado::before, .fx-rodape .fx-elaborado::after { content: ''; width: 18px; height: 1px; background: linear-gradient(90deg, rgba(210, 164, 82, 0), #D2A452); }
+        .fx-rodape .fx-elaborado::after { background: linear-gradient(90deg, #D2A452, rgba(210, 164, 82, 0)); }
+        .fx-rodape .fx-elaborado strong { color: var(--fx-ink-2); font-weight: 700; }
+        .fx-aviso { display: block; margin-top: 8px; font-size: .74rem; color: var(--fx-warning-ink, #E6BC79); }
+        .fx-aviso[hidden] { display: none; }
+        .fx-mao { font-style: normal; }
+
+        /* ===== Efeitos (premium): rede viva, aurora, luz do cursor, brilho dourado, entrada em cascata e cartão com borda viva ===== */
+        .fx-intro { --fx-mx: 30%; --fx-my: 40%; }
+        .fx-aurora { position: absolute; inset: -25%; z-index: -2; pointer-events: none; filter: blur(60px); opacity: .55;
+            background: radial-gradient(26% 30% at 72% 28%, rgba(57, 116, 198, .55), transparent 70%), radial-gradient(22% 26% at 30% 78%, rgba(230, 188, 121, .35), transparent 70%), radial-gradient(18% 22% at 12% 20%, rgba(57, 116, 198, .30), transparent 70%);
+            animation: fxAuroraLogin 20s ease-in-out infinite alternate; }
+        @keyframes fxAuroraLogin { 0% { transform: translate3d(0, 0, 0) rotate(0deg); } 50% { transform: translate3d(-5%, 4%, 0) rotate(7deg); } 100% { transform: translate3d(4%, -3%, 0) rotate(-5deg); } }
+        .fx-luz { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .4s ease; background: radial-gradient(460px circle at var(--fx-mx) var(--fx-my), rgba(230, 188, 121, .14), transparent 60%); }
+        .fx-intro.fx-ativa .fx-luz { opacity: 1; }
+        .fx-rede { opacity: .75; }
+        .fx-rede-pulso path { fill: none; stroke: url(#fxOuroLogin); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 26 560; animation: fxPulsoRede 6s linear infinite; }
+        .fx-rede-pulso path:nth-child(2) { animation-delay: 2s; animation-duration: 7s; }
+        .fx-rede-pulso path:nth-child(3) { animation-delay: 3.6s; animation-duration: 8s; }
+        @keyframes fxPulsoRede { from { stroke-dashoffset: 586; } to { stroke-dashoffset: 0; } }
+        .fx-rede-nos circle { transform-box: fill-box; transform-origin: center; animation: fxNo 3.6s ease-in-out infinite; }
+        .fx-rede-nos circle:nth-child(2n) { animation-delay: 1.2s; }
+        .fx-rede-nos circle:nth-child(3n) { animation-delay: 2.1s; }
+        @keyframes fxNo { 0%, 100% { transform: scale(1); opacity: .7; } 50% { transform: scale(1.7); opacity: 1; } }
+        .fx-slogan span { background: linear-gradient(100deg, #C6913A 0%, #F7DA8C 35%, #E6BC79 50%, #F7DA8C 65%, #C6913A 100%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: fxOuroTexto 6s ease-in-out infinite; }
+        @keyframes fxOuroTexto { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
+        .fx-mao { display: inline-block; transform-origin: 70% 80%; animation: fxMao 4.5s ease-in-out 1.4s infinite; }
+        @keyframes fxMao { 0%, 78%, 100% { transform: rotate(0); } 84% { transform: rotate(-12deg); } 90% { transform: rotate(8deg); } 95% { transform: rotate(-4deg); } }
+        .fx-slogan::after { content: ''; display: block; width: 72px; height: 3px; margin-top: 18px; border-radius: 3px; background: linear-gradient(90deg, #D2A452, rgba(210, 164, 82, 0)); }
+        /* Entrada em cascata */
+        .fx-entra { animation: fxSobeLogin .7s var(--fx-ease, cubic-bezier(.2, .8, .2, 1)) backwards; }
+        .fx-entra-2 { animation-delay: .12s; } .fx-entra-3 { animation-delay: .24s; } .fx-entra-4 { animation-delay: .36s; }
+        @keyframes fxSobeLogin { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+        /* Cartão de vidro com borda viva */
+        .fx-card { position: relative; isolation: isolate; background: rgba(var(--fx-surface-rgb), .78); backdrop-filter: blur(14px); border-color: transparent; }
+        .fx-card::before { content: ''; position: absolute; inset: 0; z-index: -1; padding: 1.5px; border-radius: inherit; pointer-events: none;
+            background: conic-gradient(from var(--fx-angulo-login, 0deg), rgba(230, 188, 121, .85), rgba(57, 116, 198, .45), rgba(230, 188, 121, .12), rgba(57, 116, 198, .45), rgba(230, 188, 121, .85));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: fxBordaLogin 9s linear infinite; }
+        @property --fx-angulo-login { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+        @keyframes fxBordaLogin { to { --fx-angulo-login: 360deg; } }
+        .fx-acesso { position: relative; isolation: isolate; }
+        .fx-acesso::before { content: ''; position: absolute; left: 50%; top: 50%; width: 560px; height: 560px; transform: translate(-50%, -55%); border-radius: 50%; z-index: -1; pointer-events: none; background: radial-gradient(circle, rgba(57, 116, 198, .16), transparent 62%); }
+        .fx-entrar { position: relative; overflow: hidden; }
+        .fx-entrar::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .32) 50%, transparent 70%); transform: translateX(-120%); animation: fxBrilhoEntrar 5s ease-in-out 1.8s infinite; pointer-events: none; }
+        @keyframes fxBrilhoEntrar { 0%, 72% { transform: translateX(-120%); } 88%, 100% { transform: translateX(120%); } }
+        .fx-entrar:hover { box-shadow: 0 14px 32px rgba(50, 101, 175, .45); }
+        .fx-entrar:focus-visible, .fx-olho:focus-visible { outline: 2px solid #E6BC79; outline-offset: 2px; }
+        @media (prefers-reduced-motion: reduce) {
+            .fx-aurora, .fx-rede-pulso, .fx-entrar::after { display: none; }
+            .fx-rede-nos circle, .fx-slogan span, .fx-mao, .fx-card::before, .fx-entra { animation: none; }
+        }
+
         @media (max-width: 920px) {
-            body { grid-template-columns: minmax(0, 1fr); }
+            body { grid-template-columns: minmax(0, 1fr); align-content: start; }
+            .fx-acesso { justify-content: flex-start; }
             .fx-intro, .fx-acesso { min-width: 0; }
-            .fx-desc { letter-spacing: .04em; }
             .fx-intro { padding: 32px 24px 36px; gap: 24px; }
             .fx-logo { width: min(300px, 100%); }
             .fx-acesso { padding: 32px 16px 40px; }
@@ -62,30 +112,35 @@
     </style>
 </head>
 <body>
-    <section class="fx-intro" aria-label="Apresentação">
+    <section class="fx-intro" id="fxIntro" aria-label="Apresentação">
+        <span class="fx-aurora" aria-hidden="true"></span>
+        <span class="fx-luz" aria-hidden="true"></span>
         <svg class="fx-rede" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs><linearGradient id="fxOuroLogin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B8862F" stop-opacity="0"/><stop offset=".5" stop-color="#F7DA8C"/><stop offset="1" stop-color="#C6913A"/></linearGradient></defs>
             <g fill="none" stroke="rgba(230,188,121,.22)" stroke-width="1.5">
                 <path d="M40 470 C 180 470, 200 330, 340 330 S 520 190, 660 190 S 780 120, 800 110"/>
                 <path d="M0 230 C 140 230, 180 120, 320 120 S 470 260, 610 260 S 740 400, 800 400" stroke="rgba(91,146,221,.22)"/>
                 <path d="M120 600 C 220 520, 300 560, 420 470 S 620 420, 800 520"/>
             </g>
-            <g fill="rgba(230,188,121,.45)"><circle cx="340" cy="330" r="5"/><circle cx="660" cy="190" r="5"/><circle cx="420" cy="470" r="4"/></g>
-            <g fill="rgba(91,146,221,.5)"><circle cx="320" cy="120" r="4"/><circle cx="610" cy="260" r="5"/></g>
+            <g class="fx-rede-pulso">
+                <path d="M40 470 C 180 470, 200 330, 340 330 S 520 190, 660 190 S 780 120, 800 110"/>
+                <path d="M0 230 C 140 230, 180 120, 320 120 S 470 260, 610 260 S 740 400, 800 400"/>
+                <path d="M120 600 C 220 520, 300 560, 420 470 S 620 420, 800 520"/>
+            </g>
+            <g class="fx-rede-nos">
+                <circle cx="340" cy="330" r="5" fill="rgba(230,188,121,.55)"/><circle cx="660" cy="190" r="5" fill="rgba(230,188,121,.55)"/><circle cx="420" cy="470" r="4" fill="rgba(230,188,121,.55)"/>
+                <circle cx="320" cy="120" r="4" fill="rgba(91,146,221,.6)"/><circle cx="610" cy="260" r="5" fill="rgba(91,146,221,.6)"/>
+            </g>
         </svg>
-        <img class="fx-logo" src="../02-usuario/app/marca/fluxo-logo-dark.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos">
-        <div>
-            <h1 class="fx-slogan">Segue o <span>FLUXO</span> ✌️</h1>
-            <p class="fx-mensagem">Organize demandas, conecte equipes e acompanhe resultados em um só lugar.</p>
-        </div>
-        <div>
-            <ul class="fx-principios" aria-label="Princípios">
-                <li>Integração</li><li>Clareza</li><li>Movimento</li><li>Controle</li><li>Simplicidade</li>
-            </ul>
+        <img class="fx-logo fx-entra" src="../02-usuario/app/marca/fluxo-logo-dark.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos">
+        <div class="fx-intro-texto">
+            <h1 class="fx-slogan fx-entra fx-entra-2">Segue o <span>FLUXO</span> <i class="fx-mao" aria-hidden="true">✌️</i></h1>
+            <p class="fx-mensagem fx-entra fx-entra-3">Organize demandas, conecte equipes e acompanhe resultados em um só lugar.</p>
         </div>
     </section>
 
     <main class="fx-acesso">
-        <form class="fx-card" id="loginForm" autocomplete="on" novalidate aria-describedby="loginAlert">
+        <form class="fx-card fx-entra fx-entra-2" id="loginForm" autocomplete="on" novalidate aria-describedby="loginAlert">
             <span class="fx-card-marca"><img class="fx-claro" src="../02-usuario/app/marca/fluxo-logo-horizontal.svg" alt="FLUXO"><img class="fx-escuro" src="../02-usuario/app/marca/fluxo-logo-horizontal-dark.svg" alt="FLUXO"></span>
             <h2>Acesse o FLUXO</h2>
             <p>Entre com seu usuário e sua senha para abrir o seu painel.</p>
@@ -105,7 +160,7 @@
             <button class="fx-entrar" type="submit" id="loginEntrar">Entrar</button>
             <div class="fx-alerta" id="loginAlert" role="alert" aria-live="assertive"></div>
         </form>
-        <p class="fx-rodape"><b>FLUXO</b> · Sua gestão no ritmo certo.<br><span id="loginStatus">Para sincronizar com a pasta do OneDrive, use o Microsoft Edge ou o Google Chrome no computador.</span></p>
+        <p class="fx-rodape fx-entra fx-entra-4"><b>FLUXO</b> · Sua gestão no ritmo certo.<br><span class="fx-elaborado">Elaborado: <strong>Processos Integrados</strong></span><span class="fx-aviso" id="loginStatus" hidden>Para sincronizar com a pasta do OneDrive, use o Microsoft Edge ou o Google Chrome no computador.</span></p>
     </main>
 
     <script src="perfis.js"></script>
@@ -165,8 +220,19 @@
                 }, 300);
             });
 
-            if ('showDirectoryPicker' in window) {
-                document.getElementById('loginStatus').textContent = 'Seus dados são sincronizados pela pasta do OneDrive da área.';
+            // Navegador sem acesso a pastas (Firefox, Safari, celular): avisa abaixo da assinatura
+            if (!('showDirectoryPicker' in window)) document.getElementById('loginStatus').hidden = false;
+
+            // Luz que acompanha o cursor na área institucional (só com mouse e sem "reduzir animações")
+            var intro = document.getElementById('fxIntro');
+            if (window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                intro.addEventListener('pointermove', function (e) {
+                    var r = intro.getBoundingClientRect();
+                    intro.style.setProperty('--fx-mx', ((e.clientX - r.left) / r.width * 100) + '%');
+                    intro.style.setProperty('--fx-my', ((e.clientY - r.top) / r.height * 100) + '%');
+                    intro.classList.add('fx-ativa');
+                });
+                intro.addEventListener('pointerleave', function () { intro.classList.remove('fx-ativa'); });
             }
         })();
     </script>

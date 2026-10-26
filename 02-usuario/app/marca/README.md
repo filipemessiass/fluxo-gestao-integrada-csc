@@ -44,8 +44,8 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | Barra do topo direito | Nome do usuário conectado (dinâmico) | Sair |
 | Menu lateral recolhido | Só o símbolo |
 | Início (analista e supervisão) | Capa de largura total: à esquerda, logo completa com descrição e slogan, saudação, estados da pasta e a área "Comece por aqui"; à direita, a ilustração animada com etiquetas de números e legenda. Os cartões de atalho vêm abaixo |
-| Login: área institucional | Logo completa (versão escura) no topo esquerdo |
-| Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO" |
+| Login: área institucional | Logo completa (versão escura) no topo esquerdo; "Segue o FLUXO ✌️" com FLUXO em dourado animado. Efeitos: rede com pulsos dourados, nós pulsando, aurora e luz que segue o cursor |
+| Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO". Cartão de vidro com borda viva (dourado ↔ azul) e reflexo no botão Entrar. Abaixo: "FLUXO · Sua gestão no ritmo certo." e "Elaborado: Processos Integrados". Com "reduzir animações", os movimentos param |
 | Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
 | Aba do navegador | `fluxo-favicon.svg` |
 
