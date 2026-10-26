@@ -465,27 +465,6 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 .fx-valor span { display: flex; flex-direction: column; min-width: 0; color: var(--fx-ink-3); font-size: .76rem; line-height: 1.3; }
 .fx-valor b { color: var(--fx-ink); font-size: .86rem; font-weight: 700; white-space: nowrap; }
 
-/* Pipeline do Workflow abaixo da ilustração: projetos por etapa atual, com os gates E3 e E5 destacados */
-.fx-pipe { width: min(100%, 700px); margin: 0 auto; padding: 14px 16px 12px; border: 1px solid var(--fx-line); border-radius: 16px; background: rgba(var(--fx-surface-rgb), .74); backdrop-filter: blur(8px); box-shadow: 0 14px 34px -22px rgba(16, 30, 48, .5); }
-.fx-pipe-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-bottom: 14px; color: var(--fx-ink-3); font-size: .76rem; }
-.fx-pipe-topo strong { display: inline-flex; align-items: center; gap: 7px; color: var(--fx-ink); font-size: .86rem; font-weight: 700; }
-.fx-pipe-topo strong svg { width: 16px; height: 16px; color: #B8862F; }
-.fx-pipe-trilha { position: relative; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
-.fx-pipe-trilha::before { content: ''; position: absolute; top: 17px; left: 6%; right: 6%; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--fx-line), #D2A452 50%, var(--fx-line)); }
-.fx-pipe-no { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
-.fx-pipe-cod { display: grid; place-items: center; width: 36px; height: 36px; border: 2px solid var(--fx-line); border-radius: 50%; background: var(--fx-surface); color: var(--fx-ink-2); font-size: .66rem; font-weight: 800; letter-spacing: .02em; transition: transform var(--fx-fast) var(--fx-ease), border-color var(--fx-fast) var(--fx-ease), background var(--fx-fast) var(--fx-ease); }
-.fx-pipe-no.gate .fx-pipe-cod { border-color: #D2A452; box-shadow: 0 0 0 3px rgba(230, 188, 121, .18); }
-.fx-pipe-no.ativo .fx-pipe-cod { border-color: var(--fx-accent); background: var(--fx-accent); color: #fff; animation: fxPipePulso 2.6s ease-in-out infinite; }
-.fx-pipe-qtd { color: var(--fx-ink-3); font-size: .76rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.fx-pipe-no.ativo .fx-pipe-qtd { color: var(--fx-accent); }
-.fx-pipe-no:hover .fx-pipe-cod { transform: translateY(-2px); border-color: var(--fx-accent); }
-.fx-pipe-no:focus-visible { outline: none; }
-.fx-pipe-no:focus-visible .fx-pipe-cod, .fx-pipe-link:focus-visible { outline: 2px solid var(--fx-accent); outline-offset: 2px; }
-@keyframes fxPipePulso { 0%, 100% { box-shadow: 0 0 0 0 rgba(var(--fx-accent-rgb), .35); } 50% { box-shadow: 0 0 0 7px rgba(var(--fx-accent-rgb), 0); } }
-.fx-pipe-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--fx-line); color: var(--fx-ink-3); font-size: .74rem; }
-.fx-pipe-marca { display: inline-block; width: 10px; height: 10px; margin-right: 7px; border: 2px solid #D2A452; border-radius: 50%; vertical-align: -1px; }
-.fx-pipe-link { padding: 2px 0; border: 0; background: none; color: var(--fx-accent); font: inherit; font-weight: 700; cursor: pointer; }
-.fx-pipe-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 1100px) {
   .fx-valores { margin-left: auto; margin-right: auto; }
   .fx-valor { text-align: left; }
@@ -493,12 +472,7 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 @media (max-width: 560px) {
   .fx-valores { grid-template-columns: minmax(0, 1fr); max-width: 340px; gap: 8px; }
   .fx-valor { flex-direction: row; align-items: center; }
-  .fx-pipe { padding: 12px 10px 10px; }
-  .fx-pipe-cod { width: 30px; height: 30px; font-size: .58rem; }
-  .fx-pipe-trilha::before { top: 14px; }
-  .fx-pipe-qtd { font-size: .7rem; }
 }
-@media (prefers-reduced-motion: reduce) { .fx-pipe-no.ativo .fx-pipe-cod { animation: none; } }
 
 /* ============ 12. Menu lateral: altura da tela, rolagem própria e marca ============ */
 /* Marca sem cartão: símbolo + FLUXO + "Processos Integrados · CSC" alinhados; filete dourado separa do menu */

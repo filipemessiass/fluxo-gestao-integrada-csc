@@ -4515,14 +4515,7 @@ function renderHome() {
     const ss = substSups();
     if (ss.length) extra += `<p class="banner info"><span>${I.away} Você está respondendo por ${ss.map(s => `<b>${esc(s.supervisor)}</b> (até ${fmtDate(ausOf(s.id).fim)})`).join(', ')}. Designe, altere prazos, escreva notas e responda às solicitações na tela Substituição.</span><button class="btn sm primary" data-act="go" data-view="substituicao">Abrir substituição</button></p>`;
   }
-  const wfTrs = wfProjetos().map(p => wfTracker(p.t));
-  const wfAbertos = wfTrs.filter(t => t.atual).length, wfFeitos = wfTrs.length - wfAbertos;
-  const wfPorEtapa = n => wfTrs.filter(t => t.atual && t.atual.numero === n).length;
-  const wfTelas = WF_VIEWS();
-  const pipeline = WF.ETAPAS.map(e => {
-    const qtd = wfPorEtapa(e.numero), view = wfTelas.includes('wf-e' + e.numero) ? 'wf-e' + e.numero : 'workflow';
-    return `<li><button type="button" class="fx-pipe-no${e.gate ? ' gate' : ''}${qtd ? ' ativo' : ''}" data-act="go" data-view="${view}" title="${esc(`${e.codigo} — ${e.nome}${e.gate ? ' · gate de governança' : ''}: ${plural(qtd, 'projeto', 'projetos')}`)}"><span class="fx-pipe-cod">${e.codigo}</span><span class="fx-pipe-qtd">${qtd || '—'}</span></button></li>`;
-  }).join('');
+  const wfAbertos = wfProjetos().filter(p => wfTracker(p.t).atual).length;
   $('#homeArea').innerHTML = `
     <section class="fx-capa${fxCapaEntrada()}" aria-label="Apresentação">
       <span class="fx-capa-aurora" aria-hidden="true"></span>
@@ -4545,11 +4538,6 @@ function renderHome() {
           <span class="fx-capa-chip fx-chip-doc"><b>${open.length}</b> ${open.length === 1 ? 'em aberto' : 'em aberto'}</span>
           <span class="fx-capa-chip fx-chip-gear"><b>${wfAbertos}</b> ${wfAbertos === 1 ? 'projeto em fluxo' : 'projetos em fluxo'}</span>
           <span class="fx-capa-chip fx-chip-ok"><b>${doneMonth}</b> ${doneMonth === 1 ? 'concluída no mês' : 'concluídas no mês'}</span>
-        </div>
-        <div class="fx-pipe" role="region" aria-label="Pipeline do Workflow">
-          <div class="fx-pipe-topo"><strong>${I.flow}Pipeline do Workflow</strong><span>${plural(wfAbertos, 'em andamento', 'em andamento')} · ${plural(wfFeitos, 'concluído', 'concluídos')}</span></div>
-          <ol class="fx-pipe-trilha">${pipeline}</ol>
-          <div class="fx-pipe-rodape"><span><i class="fx-pipe-marca"></i>Gates de governança em E3 e E5</span><button type="button" class="fx-pipe-link" data-act="go" data-view="workflow">Abrir o tracker →</button></div>
         </div>
       </div>
     </section>
