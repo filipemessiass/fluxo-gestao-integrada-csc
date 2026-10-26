@@ -43,7 +43,7 @@ As demandas do tipo **Projeto** ganham o campo `workflow` dentro do `demandas.js
 }
 ```
 
-O formato é o mesmo do SGPI original: um registro por etapa.
+O formato é o mesmo do SGPI original: um registro por etapa. Dois campos opcionais acompanham os projetos vindos da base: `codigo` (ID exibido, ex.: `FM-0001`) e `responsavel` (pessoa ou área indicada na matriz). Arquivos sem eles continuam válidos.
 
 - **`status`:** lista com um valor por critério, na ordem dos critérios da etapa. Os valores possíveis são `⏳ Pendente`, `🔄 Em andamento`, `✔ Concluído`, `⛔ Bloqueado` e `N/A`.
 - **`evidencia` e `observacao`:** valem para a etapa inteira.
@@ -56,6 +56,10 @@ O formato é o mesmo do SGPI original: um registro por etapa.
   - **E3 a E08:** o analista, no próprio `demandas.json`.
   - **E1 e E2:** a supervisão, em `atribuidas.json`. Se o projeto ainda não foi recebido pelo analista, o registro vai dentro da própria demanda, em `tasks`. Se já foi recebido, vai como ação em `acoes`, no formato `{ "tipo": "workflow", "taskId", "etapa", "dados": { …registro da etapa… }, "em", "por" }`.
 - O painel do analista aplica cada ação uma vez e registra o `id` dela em `recebidas`, como faz com as demais ações do PGD.
+
+## Base de projetos do Workflow
+
+A pasta [`base-workflow/`](base-workflow/) guarda a matriz de projetos de cada analista e o gerador que a grava no `demandas.json` dele. O primeiro perfil montado é Filipe Messias, com 10 projetos (`Processos Integrados/Filipe Messias/demandas.json`).
 
 ## No navegador
 

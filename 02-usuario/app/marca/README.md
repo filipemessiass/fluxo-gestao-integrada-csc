@@ -40,7 +40,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 
 | Local | Versão da marca |
 | --- | --- |
-| Menu lateral expandido | Símbolo + palavra FLUXO + "Processos Integrados · CSC", no cartão do cabeçalho |
+| Menu lateral expandido | Símbolo + palavra FLUXO no cartão do cabeçalho; abaixo, "Processos Integrados · CSC" entre filetes dourados, como o slogan da logo |
 | Barra do topo direito | Nome do usuário conectado (dinâmico) | Sair |
 | Menu lateral recolhido | Só o símbolo |
 | Início (analista e supervisão) | Capa de largura total: à esquerda, logo completa com descrição e slogan, saudação, estados da pasta e a área "Comece por aqui"; à direita, a ilustração animada com etiquetas de números e legenda. Os cartões de atalho vêm abaixo |
@@ -105,3 +105,4 @@ Geradas no Microsoft Edge (1440 × 900; celular 390 px), com o sistema rodando:
 - `06-supervisao-inicio-claro.png`, `07-supervisao-inicio-escuro.png`.
 - `09-workflow-claro.png`, `10-tarefas-escuro.png`, `11-indicadores-claro.png`.
 - `13-inicio-notebook.png`, `14-inicio-tablet.png`, `15-inicio-fullhd.png`: capa em 1280 px, 820 px e 1920 px.
+- `16-menu-altura-total.png`, `17-menu-tela-baixa.png`: menu lateral na altura da tela (1440 × 900) e em tela baixa (1366 × 640).

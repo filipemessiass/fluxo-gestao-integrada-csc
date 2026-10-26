@@ -1360,3 +1360,10 @@ body.sidebar-collapsed .nav-group .nav-chev { display: none; }
 .view.sgpi-wf { color: var(--text); }
 .sgpi-wf .capa-hero h2 { margin: 6px 0 8px; }
 .sgpi-wf select, .sgpi-wf input, .sgpi-wf textarea { font-family: inherit; }
+
+/* Base de projetos: tabela-resumo (ID, Projeto, Atividade, Situação, Fluxo) na largura do painel */
+.sgpi-wf .wf-base-table { width: 100%; min-width: 640px; }
+.sgpi-wf .wf-base-table th:first-child, .sgpi-wf .wf-base-table td:first-child { width: 96px; white-space: nowrap; }
+.sgpi-wf .wf-base-table th.num, .sgpi-wf .wf-base-table td.num { width: 90px; text-align: right; font-variant-numeric: tabular-nums; }
+.sgpi-wf .wf-base-table td { vertical-align: middle; }
+.sgpi-wf .workflow-table td.code-font { white-space: nowrap; }

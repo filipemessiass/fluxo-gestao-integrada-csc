@@ -220,7 +220,8 @@ O Workflow acompanha as demandas do **tipo Projeto** por 8 etapas. A seção man
 - **Faixa "Governança Derivada"** com o título "Workflow · Tracker E1 a E08", o selo "⚙️ Motor Automático" e o botão **Novo projeto** (analista) ou **Atribuir projeto** (supervisão). Os dois abrem o cadastro já com o tipo Projeto.
 - **Distribuição por Estágio (Funil):** quantos projetos estão em cada etapa atual, de E1 a E08, mais "✔ Fluxo concluído".
 - **Cartões:** Bloqueios (critérios travados), Gate E3 (levantamento pendente) e Gate E5 (homologação pendente).
-- **Matriz de Evolução por Demanda:** ID, Projeto (assunto), Atividade (título), Responsável, o status de E1 a E08, Etapa atual, % fluxo, Dias, Situação, Bloqueios e Gates. Clicar no status de uma etapa abre a tela dela já filtrada pelo projeto. Para o analista, E1/E2 aparecem como "Sup." e são só leitura.
+- **Base de projetos:** tabela-resumo com ID, Projeto, Atividade, Situação e Fluxo, e um contador por situação (ex.: "10 projetos · 8 concluídos · 1 em andamento · 1 em hypercare").
+- **Matriz de Evolução por Demanda:** ID, Projeto (assunto), Atividade (título), Responsável, o status de E1 a E08, Etapa atual, % fluxo, Dias, Situação, Bloqueios e Gates. O ID usa o código da base (ex.: FM-0001) quando existe, e o Responsável usa o indicado na matriz, com o analista como padrão. Clicar no status de uma etapa abre a tela dela já filtrada pelo projeto. Para o analista, E1/E2 aparecem como "Sup." e são só leitura.
 
 ### Telas das etapas (E1 a E08)
 
@@ -363,6 +364,8 @@ vê a etapa atual e o % do fluxo
 Enquanto o analista não sincroniza, a supervisão vê o projeto já com os próprios ajustes, marcado com a etiqueta "ajuste a sincronizar". Se o projeto ainda não foi recebido, aparece a etiqueta "Aguardando o analista receber".
 
 ---
+
+**Base de projetos por analista.** A matriz de cada analista fica em [`03-database-onedrive/base-workflow/`](03-database-onedrive/base-workflow/). O gerador `gerar-base.js` converte a matriz em projetos no `demandas.json` da pasta do analista e confere cada projeto contra o motor do Workflow antes de gravar. O primeiro perfil montado é `filipe.messias` (10 projetos).
 
 ## 7. Banco de dados: a pasta do OneDrive
 

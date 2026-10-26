@@ -75,11 +75,12 @@ document.body.insertAdjacentHTML('afterbegin', `
     <div class="sidebar-tools">
       <div class="sidebar-brand">
         <span class="sidebar-brand-icon pgd-mark" title="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos"><img class="fx-claro" src="../app/marca/fluxo-icon.svg" alt=""><img class="fx-escuro" src="../app/marca/fluxo-icon-dark.svg" alt=""></span>
-        <span class="sidebar-brand-text"><strong id="brandName">FLUXO</strong><small id="brandSub"></small></span>
+        <span class="sidebar-brand-text"><strong id="brandName">FLUXO</strong></span>
       </div>
       <button class="sidebar-collapse" id="sidebarCollapse" type="button" aria-label="Recolher menu lateral" aria-expanded="true" title="Recolher menu lateral">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
+      <small id="brandSub" class="fx-brand-sub"></small>
     </div>
     <div class="ws-switch" id="wsSwitch" hidden></div>
     <ul id="navList"></ul>

@@ -384,6 +384,9 @@ function normTask(t) {
   };
   const wf = window.SGPI_WORKFLOW ? SGPI_WORKFLOW.normalizar(t.workflow) : null;
   if (wf) o.workflow = wf;
+  // Workflow: código do projeto na base (ex.: FM-0001) e responsável indicado na matriz (opcionais)
+  if (t.codigo) o.codigo = String(t.codigo).trim().slice(0, 30);
+  if (t.responsavel) o.responsavel = String(t.responsavel).trim().slice(0, 80);
   if (o.tipo === 'recorrente') {
     const base = o.dueOriginal || o.due;
     if (!o.periodo && base) o.periodo = periodKey(o.periodicidade, base);
@@ -3898,7 +3901,7 @@ const wfEsc = esc;
 const wfTracker = t => WF.tracker(t);
 const wfEhProjeto = t => t.tipo === 'projeto' || !!t.workflow;
 const wfPct = v => v === '' || v == null ? '—' : `${(Math.round(v * 1000) / 10).toLocaleString('pt-BR', { minimumFractionDigits:1 })}%`;
-const wfCodigo = t => '#' + String(t.id).replace(/[^a-z0-9]/gi, '').slice(0, 6).toUpperCase();
+const wfCodigo = t => t.codigo || '#' + String(t.id).replace(/[^a-z0-9]/gi, '').slice(0, 6).toUpperCase();
 const wfEtapasMenu = () => WF.ETAPAS.filter(e => isTeam() || e.dono === 'analista');
 const WF_VIEWS = () => wfEtapasMenu().map(e => 'wf-e' + e.numero);
 const wfPodeEditar = n => WF.etapa(n).dono === (isTeam() ? 'supervisor' : 'analista') && (!isTeam() || conn === 'ok');
@@ -3986,12 +3989,19 @@ function renderWorkflow() {
         <article class="capa-kpi-card tone-cyan"><div class="capa-kpi-head"><span class="capa-kpi-icon"><i class="fa-solid fa-clipboard-check"></i></span><small>Gate E5</small></div><strong>${gateE5}</strong><span>Homologação pendente</span></article>
       </div>
     </div>
+    <section class="panel" style="margin-bottom:18px;">
+      <div class="panel-title"><h3><i class="fa-solid fa-database"></i> Base de projetos</h3><span class="badge info">${wfEsc(wfResumoBase(itens))}</span></div>
+      <div class="table-wrap" style="margin-top:14px;"><table class="data-table wf-base-table"><thead><tr><th>ID</th><th>Projeto</th><th>Atividade</th><th>Situação</th><th class="num">Fluxo</th></tr></thead><tbody>
+        ${itens.length ? itens.map((p, i) => `<tr><td class="code-font"><strong>${wfEsc(wfCodigo(p.t))}</strong></td><td>${wfEsc(p.t.category || '—')}</td><td>${wfEsc(p.t.title)}</td><td><span class="badge ${WF.classeStatus(WF.situacao(p.t))}">${wfEsc(WF.situacao(p.t))}</span></td><td class="num"><strong>${wfPct(trs[i].pctFluxo)}</strong></td></tr>`).join('')
+        : '<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-database"></i><div>Nenhum projeto na base ainda. Use “Novo projeto” para começar.</div></div></td></tr>'}
+      </tbody></table></div>
+    </section>
     <section class="panel">
       <div class="panel-title"><h3><i class="fa-solid fa-table-cells"></i> Matriz de Evolução por Demanda</h3><span class="badge success">49 Critérios</span></div>
       <div class="table-wrap sticky-table" style="margin-top:14px;"><table class="data-table workflow-table"><thead><tr><th>ID</th><th>Projeto</th><th>Atividade</th><th>Responsável</th>
         ${WF.ETAPAS.map(e => `<th${e.gate ? ' class="gate-col"' : ''} title="${e.dono === 'supervisor' ? 'Origem: Supervisão (E1/E2).' : 'Origem: critérios do Analista.'} Clique no status para abrir a etapa.">${e.codigo}${e.dono === 'supervisor' ? ' · Sup.' : e.gate ? ' ⚠' : ''}</th>`).join('')}
         <th>Etapa atual</th><th>% fluxo</th><th>Dias</th><th>Situação</th><th>Bloqueios</th><th>Gates</th></tr></thead><tbody>
-        ${itens.length ? itens.map((p, i) => { const t = trs[i]; return `<tr><td class="code-font"><strong>${wfEsc(wfCodigo(p.t))}</strong></td><td>${wfEsc(p.t.category || '—')}</td><td>${wfEsc(p.t.title)}${p.t.pendente ? '<br><span class="badge warning">Aguardando o analista receber</span>' : ''}${p.pend ? `<br><span class="badge info">${plural(p.pend, 'ajuste a sincronizar', 'ajustes a sincronizar')}</span>` : ''}</td><td>${wfEsc(p.dono)}</td>
+        ${itens.length ? itens.map((p, i) => { const t = trs[i]; return `<tr><td class="code-font"><strong>${wfEsc(wfCodigo(p.t))}</strong></td><td>${wfEsc(p.t.category || '—')}</td><td>${wfEsc(p.t.title)}${p.t.pendente ? '<br><span class="badge warning">Aguardando o analista receber</span>' : ''}${p.pend ? `<br><span class="badge info">${plural(p.pend, 'ajuste a sincronizar', 'ajustes a sincronizar')}</span>` : ''}</td><td>${wfEsc(p.t.responsavel || p.dono)}</td>
           ${t.etapas.map(e => { const ver = isTeam() || e.etapa > 2; return ver ? `<td><button class="badge tracker-chip ${WF.classeStatus(e.status)}" type="button" data-wf-go="${e.etapa}" data-ref="${wfEsc(p.ref)}">${wfEsc(e.status)}</button></td>` : `<td><span class="badge tracker-chip ${WF.classeStatus(e.status)}" title="Input do Supervisor · somente leitura para o Analista">${wfEsc(e.status)}</span></td>`; }).join('')}
           <td><strong>${wfEsc(t.etapaAtual)}</strong></td><td><div class="progress-line"><span style="width:${t.pctFluxo * 100}%;"></span></div><small>${wfPct(t.pctFluxo)}</small></td><td class="num">${dias(p.t)}</td><td><span class="badge ${WF.classeStatus(WF.situacao(p.t))}">${wfEsc(WF.situacao(p.t))}</span></td><td>${wfEsc(bloq(t))}</td><td>${wfEsc(gates(t))}</td></tr>`; }).join('')
         : `<tr><td colspan="19"><div class="empty-state"><i class="fa-solid fa-diagram-project"></i><div>${isTeam() ? (conn === 'ok' ? 'Seu FLUXO está em dia! Não há projetos da equipe nesta visualização. Use “Atribuir projeto” para começar.' : 'Conecte a pasta da área em “Pastas e ajustes” para ler os projetos da equipe.') : 'Seu FLUXO está em dia! Não há projetos nesta visualização. Use “Novo projeto” para começar.'}</div></div></td></tr>`}
@@ -4211,6 +4221,12 @@ document.addEventListener('input', e => {
 });
 
 // Novo projeto: abre o cadastro (analista) ou a atribuição (supervisão) já com o tipo Projeto
+// Resumo da base: total e quantidade por situação (ex.: 10 projetos · 8 concluídos · 1 em andamento)
+function wfResumoBase(itens) {
+  const cont = {}; itens.forEach(p => { const s = WF.situacao(p.t); cont[s] = (cont[s] || 0) + 1; });
+  const nomes = { 'Concluído':['concluído', 'concluídos'], 'Em andamento':['em andamento', 'em andamento'], 'Em Hypercare':['em hypercare', 'em hypercare'], 'Bloqueado':['bloqueado', 'bloqueados'], 'Não iniciado':['não iniciado', 'não iniciados'] };
+  return [plural(itens.length, 'projeto', 'projetos')].concat(Object.keys(nomes).filter(s => cont[s]).map(s => `${cont[s]} ${nomes[s][cont[s] === 1 ? 0 : 1]}`)).join(' · ');
+}
 function wfNovo(sup) {
   if (sup) { openAssign(); const s = $('#aTipo'); if (s && $('#assignDialog').open) { s.value = 'projeto'; s.dispatchEvent(new Event('change', { bubbles:true })); } return; }
   openDialog(); const s = $('#fTipo'); if (s) { s.value = 'projeto'; s.dispatchEvent(new Event('change', { bubbles:true })); }
@@ -4316,7 +4332,7 @@ function renderNav() {
   $('#brandName').title = 'FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · ' + (rq ? 'Solicitações' : cfg.mode === 'gestao' ? 'Gestão financeira' : cfg.mode === 'coordenacao' ? 'Coordenação' : isSup ? (SUBST ? 'Substituição da supervisão' : 'Supervisão') : 'Minhas demandas');
   const fxUsuario = isReader() ? `${cfg.name || ''}${cfg.mode === 'coordenacao' && coordCtx ? ' · ' + coordCtx.nome : cfg.mode === 'gestao' ? ' · Área financeira' : ''}`
     : rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição` : (window.SGPI_PERFIS && window.SGPI_PERFIS.ler() || {}).nome || supName()) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
-  $('#brandSub').textContent = 'Processos Integrados · CSC';
+  $('#brandSub').textContent = 'Processos Integrados · CSC';
   $('#fxUserName').textContent = fxUsuario;
   $('#fxUserName').title = fxUsuario;
   document.title = (late ? `(${late}) ` : '') + 'FLUXO · ' + (isSup ? 'Supervisão' : 'Analista');
