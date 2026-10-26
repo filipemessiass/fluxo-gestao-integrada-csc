@@ -42,7 +42,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | --- | --- |
 | Menu lateral expandido | Símbolo + palavra FLUXO + nome do usuário (dinâmico), no cartão do cabeçalho |
 | Menu lateral recolhido | Só o símbolo |
-| Início (analista e supervisão) | Logo completa com descrição e slogan, abrindo a página, antes dos estados da pasta, da saudação, das ações e dos indicadores |
+| Início (analista e supervisão) | Capa em duas colunas: à esquerda, a ilustração animada do fluxo; à direita, a logo completa com descrição e slogan, seguida dos estados da pasta, da saudação e das ações. Os indicadores vêm abaixo |
 | Login: área institucional | Logo completa (versão escura) no topo esquerdo |
 | Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO" |
 | Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
@@ -52,6 +52,20 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 - no motor: constantes `FX_PALAVRA` e `FX_MARCA_INICIO` em `../pgd.js`;
 - no menu: símbolo em `../pgd-markup.js`;
 - no login: em `01-login/index.html`.
+
+## Ilustração da capa do Início
+
+É uma ilustração em vetor, desenhada nas cores da marca a partir do ícone de processo (documento → duas engrenagens → hexágono de aprovação). Fica embutida em `../pgd.js` (`FX_CAPA_ARTE`), com o estilo e as animações em `../fluxo.css` (seção 11). As animações são:
+
+- engrenagens girando em sentidos opostos, mais rápidas ao passar o mouse;
+- pulsos dourados percorrendo as conexões;
+- documento flutuando;
+- hexágono pulsando com brilho dourado e o check se desenhando;
+- halo e órbitas girando ao fundo.
+
+Os traços acompanham o tema: azul-marinho no claro, quase branco no escuro. Com `prefers-reduced-motion`, os movimentos são desligados.
+
+Abaixo de 1100 px, a capa vira uma coluna, com a ilustração acima da marca.
 
 ## Diferenças conhecidas em relação à prancha
 
@@ -68,3 +82,4 @@ Geradas no Microsoft Edge (1440 × 900; celular 390 px), com o sistema rodando:
 - `05-menu-recolhido.png`.
 - `06-supervisao-inicio-claro.png`, `07-supervisao-inicio-escuro.png`.
 - `09-workflow-claro.png`, `10-tarefas-escuro.png`, `11-indicadores-claro.png`.
+- `13-inicio-notebook.png`: capa em 1280 px.
