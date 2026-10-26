@@ -1,101 +1,172 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SGPI · Login</title>
-    <link rel="stylesheet" href="../02-usuario/app/pgd.css">
+    <title>FLUXO · Entrar</title>
+    <meta name="description" content="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos">
+    <meta name="theme-color" content="#101E30">
+    <link rel="icon" type="image/svg+xml" href="../02-usuario/app/marca/favicon.svg">
+    <link rel="stylesheet" href="../02-usuario/app/fluxo.css">
     <style>
-        body { min-height: 100vh; display: flex; flex-direction: column; background: var(--paper); }
-        .login-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 28px; background: var(--surface); border-bottom: 1px solid var(--line); }
-        .login-brand { display: flex; align-items: center; gap: 12px; }
-        .login-brand svg { width: 40px; height: 40px; }
-        .login-brand strong { display: block; font-size: 1.15rem; font-weight: 900; letter-spacing: .04em; }
-        .login-brand span { font-size: .8rem; color: var(--ink-3); }
-        .login-status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: .8rem; color: var(--ink-2); }
-        .login-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--st-con); box-shadow: 0 0 6px var(--st-con); }
-        .login-main { flex: 1; width: min(980px, 100%); margin: 0 auto; padding: 32px 18px; display: grid; gap: 22px; align-content: start; }
-        .login-hero { padding: 30px 32px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(135deg, var(--surface), rgba(var(--accent-rgb), .08)); }
-        .login-hero .eyebrow { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-        .login-hero .eyebrow svg { width: 14px; height: 14px; }
-        .login-hero h1 { margin: 8px 0; font-size: clamp(1.5rem, 3.4vw, 2.2rem); font-weight: 800; line-height: 1.15; }
-        .login-hero p { margin: 0; color: var(--ink-2); max-width: 70ch; line-height: 1.6; }
-        .login-card { padding: 26px 28px; }
-        .login-card h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; font-size: 1.2rem; }
-        .login-card h2 svg { width: 22px; height: 22px; color: var(--accent); }
-        .login-card > p { margin: 0 0 18px; color: var(--ink-2); }
-        .login-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 14px; align-items: end; }
-        .login-form .field { margin: 0; }
-        .login-form .btn { height: 44px; padding: 0 22px; }
-        .login-alert { display: none; margin-top: 14px; padding: 11px 14px; border-radius: 10px; font-weight: 600; }
-        .login-alert.err { display: block; background: var(--st-atr-soft); color: var(--st-atr); }
-        .login-alert.ok { display: block; background: var(--st-con-soft); color: var(--st-con); }
-        .login-foot { padding: 16px 18px 24px; text-align: center; font-size: .8rem; color: var(--ink-3); }
-        .login-pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .login-pills span { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
-        @media (max-width: 760px) { .login-form { grid-template-columns: 1fr; } .login-hero, .login-card { padding: 22px; } }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(380px, .85fr); overflow-x: hidden; background: var(--fx-bg); color: var(--fx-ink); }
+
+        /* Área institucional */
+        .fx-intro { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 48px 56px; background: var(--fx-hero); color: #F8FAFC; isolation: isolate; }
+        .fx-intro::after { content: ''; position: absolute; inset: auto -20% -35% auto; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(230, 188, 121, .18), transparent 62%); z-index: -1; }
+        .fx-rede { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: .5; }
+        .fx-logo { width: 232px; height: auto; }
+        .fx-slogan { margin: 0; font-size: clamp(2.4rem, 4.6vw, 3.9rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
+        .fx-slogan span { color: var(--fx-brand); }
+        .fx-mensagem { max-width: 34ch; margin: 18px 0 0; font-size: 1.15rem; line-height: 1.6; color: #CBD5E1; }
+        .fx-principios { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+        .fx-principios li { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border: 1px solid rgba(230, 188, 121, .28); border-radius: 999px; background: rgba(16, 30, 48, .35); color: #E2E8F0; font-size: .82rem; font-weight: 600; }
+        .fx-principios li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--fx-brand); }
+        .fx-desc { margin: 0; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: #9AABC1; }
+
+        /* Formulário */
+        .fx-acesso { display: flex; flex-direction: column; justify-content: center; padding: 48px clamp(24px, 5vw, 72px); background: var(--fx-bg); }
+        .fx-card { width: min(420px, 100%); margin: 0 auto; padding: 36px 32px 30px; border: 1px solid var(--fx-line); border-radius: var(--fx-radius-lg); background: var(--fx-surface); box-shadow: var(--fx-shadow-pop); }
+        .fx-card .fx-simbolo { width: 44px; height: 44px; margin-bottom: 18px; }
+        .fx-card h2 { margin: 0; font-size: 1.55rem; font-weight: 750; letter-spacing: -.02em; }
+        .fx-card > p { margin: 6px 0 24px; color: var(--fx-ink-2); }
+        .fx-campo { display: grid; gap: 7px; margin-bottom: 16px; }
+        .fx-campo label { font-size: .86rem; font-weight: 600; color: var(--fx-ink-2); }
+        .fx-input { display: flex; align-items: center; height: 46px; border: 1px solid var(--fx-line-input); border-radius: 10px; background: var(--fx-surface-2); transition: border-color var(--fx-fast) var(--fx-ease), box-shadow var(--fx-fast) var(--fx-ease); }
+        .fx-input:focus-within { border-color: var(--fx-accent); box-shadow: 0 0 0 3px rgba(var(--fx-accent-rgb), .22); }
+        .fx-input[data-invalido="true"] { border-color: var(--fx-danger); }
+        .fx-input input { flex: 1; min-width: 0; height: 100%; padding: 0 14px; border: 0; border-radius: 10px; background: transparent; color: var(--fx-ink); font: inherit; font-size: 1rem; outline: none; }
+        .fx-olho { display: grid; place-items: center; width: 44px; height: 44px; margin-right: 1px; border: 0; border-radius: 9px; background: none; color: var(--fx-ink-3); cursor: pointer; }
+        .fx-olho:hover { color: var(--fx-ink); }
+        .fx-olho svg { width: 20px; height: 20px; }
+        .fx-entrar { width: 100%; height: 48px; margin-top: 8px; border: 0; border-radius: 10px; background: var(--fx-accent); color: var(--fx-on-accent); font: inherit; font-size: 1rem; font-weight: 750; cursor: pointer; box-shadow: 0 10px 26px rgba(var(--fx-accent-rgb), .28); transition: background var(--fx-fast) var(--fx-ease), transform var(--fx-fast) var(--fx-ease); }
+        .fx-entrar:hover { background: var(--fx-accent-2); }
+        .fx-entrar:active { transform: translateY(1px); }
+        .fx-entrar:disabled { opacity: .7; cursor: progress; }
+        .fx-alerta { display: none; margin-top: 16px; padding: 11px 14px; border-radius: 10px; font-size: .92rem; font-weight: 600; }
+        .fx-alerta.err { display: block; background: var(--fx-danger-soft); color: var(--fx-danger); }
+        .fx-alerta.ok { display: block; background: var(--fx-success-soft); color: var(--fx-success); }
+        .fx-rodape { width: min(420px, 100%); margin: 22px auto 0; text-align: center; font-size: .8rem; color: var(--fx-ink-3); line-height: 1.6; }
+        .fx-rodape b { color: var(--fx-brand-ink); font-weight: 700; }
+
+        @media (max-width: 920px) {
+            body { grid-template-columns: minmax(0, 1fr); }
+            .fx-intro, .fx-acesso { min-width: 0; }
+            .fx-desc { letter-spacing: .04em; }
+            .fx-intro { padding: 32px 24px 36px; gap: 24px; }
+            .fx-logo { width: 180px; }
+            .fx-acesso { padding: 32px 16px 40px; }
+        }
     </style>
 </head>
 <body>
-    <header class="login-top">
-        <div class="login-brand">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#405CFF"/><stop offset="1" stop-color="#0012C8"/></linearGradient></defs><rect width="64" height="64" rx="14.4" fill="url(#lg)"/><path d="M16 34l11.5 11.5L48.6 21.8" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <div><strong>SGPI</strong><span>Processos Integrados · Centro de Serviços Compartilhados</span></div>
+    <section class="fx-intro" aria-label="Apresentação">
+        <svg class="fx-rede" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g fill="none" stroke="rgba(230,188,121,.22)" stroke-width="1.5">
+                <path d="M40 470 C 180 470, 200 330, 340 330 S 520 190, 660 190 S 780 120, 800 110"/>
+                <path d="M0 230 C 140 230, 180 120, 320 120 S 470 260, 610 260 S 740 400, 800 400" stroke="rgba(91,146,221,.22)"/>
+                <path d="M120 600 C 220 520, 300 560, 420 470 S 620 420, 800 520"/>
+            </g>
+            <g fill="rgba(230,188,121,.45)"><circle cx="340" cy="330" r="5"/><circle cx="660" cy="190" r="5"/><circle cx="420" cy="470" r="4"/></g>
+            <g fill="rgba(91,146,221,.5)"><circle cx="320" cy="120" r="4"/><circle cx="610" cy="260" r="5"/></g>
+        </svg>
+        <img class="fx-logo" src="../02-usuario/app/marca/fluxo-horizontal-escuro.svg" alt="FLUXO">
+        <div>
+            <h1 class="fx-slogan">Segue o <span>FLUXO</span> ✌️</h1>
+            <p class="fx-mensagem">Organize demandas, conecte equipes e acompanhe resultados em um só lugar.</p>
         </div>
-        <span class="login-status" id="loginStatus"><i></i>Banco: pasta OneDrive (conexão no painel)</span>
-    </header>
+        <div>
+            <ul class="fx-principios" aria-label="Princípios">
+                <li>Integração</li><li>Clareza</li><li>Movimento</li><li>Controle</li><li>Simplicidade</li>
+            </ul>
+            <p class="fx-desc" style="margin-top:18px">Plataforma Integrada de Gestão de Demandas e Processos</p>
+        </div>
+    </section>
 
-    <main class="login-main">
-        <section class="login-hero">
-            <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Portal de acesso</span>
-            <h1>SGPI (Sistema Gerencial de Processos Integrados)</h1>
-            <p>Gestão de demandas da equipe e Workflow (Projetos) com as etapas E1 a E08. A supervisão e os analistas compartilham os dados pela pasta Processos Integrados no OneDrive.</p>
-        </section>
-
-        <section class="panel login-card">
-            <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>Autenticação de acesso</h2>
-            <p>Informe seu usuário e sua senha para entrar no seu painel.</p>
-            <form class="login-form" id="loginForm" autocomplete="on">
-                <div class="field"><label for="loginUsuario">Usuário</label><input id="loginUsuario" placeholder="Ex.: filipe.messias" required autofocus autocomplete="username"></div>
-                <div class="field"><label for="loginSenha">Senha</label><input id="loginSenha" type="password" placeholder="Digite sua senha" required autocomplete="current-password"></div>
-                <button class="btn primary" type="submit">Acessar</button>
-            </form>
-            <div class="login-alert" id="loginAlert" role="status"></div>
-        </section>
+    <main class="fx-acesso">
+        <form class="fx-card" id="loginForm" autocomplete="on" novalidate aria-describedby="loginAlert">
+            <img class="fx-simbolo" src="../02-usuario/app/marca/fluxo-app.svg" alt="" aria-hidden="true">
+            <h2>Acesse o FLUXO</h2>
+            <p>Entre com seu usuário e sua senha para abrir o seu painel.</p>
+            <div class="fx-campo">
+                <label for="loginUsuario">Usuário</label>
+                <div class="fx-input" id="boxUsuario"><input id="loginUsuario" name="username" placeholder="Ex.: filipe.messias" required autofocus autocomplete="username" spellcheck="false" autocapitalize="off"></div>
+            </div>
+            <div class="fx-campo">
+                <label for="loginSenha">Senha</label>
+                <div class="fx-input" id="boxSenha">
+                    <input id="loginSenha" name="password" type="password" placeholder="Digite sua senha" required autocomplete="current-password">
+                    <button type="button" class="fx-olho" id="loginOlho" aria-label="Mostrar senha" aria-pressed="false" aria-controls="loginSenha">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+            <button class="fx-entrar" type="submit" id="loginEntrar">Entrar</button>
+            <div class="fx-alerta" id="loginAlert" role="alert" aria-live="assertive"></div>
+        </form>
+        <p class="fx-rodape"><b>FLUXO</b> · Sua gestão no ritmo certo.<br><span id="loginStatus">Para sincronizar com a pasta do OneDrive, use o Microsoft Edge ou o Google Chrome no computador.</span></p>
     </main>
-
-    <footer class="login-foot">
-        <strong>SGPI</strong> · Departamento de Processos Integrados (CSC)
-        <div class="login-pills"><span>Banco em pasta OneDrive</span><span>Funciona sem servidor</span><span>Edge ou Chrome</span></div>
-    </footer>
 
     <script src="perfis.js"></script>
     <script>
         (function () {
             'use strict';
             var P = window.SGPI_PERFIS;
+            var form = document.getElementById('loginForm');
             var alerta = document.getElementById('loginAlert');
+            var usuario = document.getElementById('loginUsuario');
+            var senha = document.getElementById('loginSenha');
+            var olho = document.getElementById('loginOlho');
+            var OLHO_ABERTO = olho.innerHTML;
+            var OLHO_FECHADO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.1 6.1C3.6 7.8 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.4-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
 
             function avisar(texto, tipo) {
                 alerta.textContent = texto;
-                alerta.className = 'login-alert ' + tipo;
+                alerta.className = 'fx-alerta ' + tipo;
+            }
+            function marcar(input, invalido) {
+                input.setAttribute('aria-invalid', invalido ? 'true' : 'false');
+                input.parentNode.setAttribute('data-invalido', invalido ? 'true' : 'false');
             }
 
+            olho.addEventListener('click', function () {
+                var mostrar = senha.type === 'password';
+                senha.type = mostrar ? 'text' : 'password';
+                olho.setAttribute('aria-pressed', String(mostrar));
+                olho.setAttribute('aria-label', mostrar ? 'Ocultar senha' : 'Mostrar senha');
+                olho.innerHTML = mostrar ? OLHO_FECHADO : OLHO_ABERTO;
+                senha.focus();
+            });
+            [usuario, senha].forEach(function (c) { c.addEventListener('input', function () { marcar(c, false); }); });
+
             // Direcionamento: supervisão → 02-usuario/supervisor · analista → 02-usuario/analista
-            document.getElementById('loginForm').addEventListener('submit', function (e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                var usuario = document.getElementById('loginUsuario').value;
-                var perfil = P.autenticar(usuario, document.getElementById('loginSenha').value);
-                if (!perfil) { avisar('Usuário ou senha inválidos. Verifique os dados digitados.', 'err'); return; }
+                if (!usuario.value.trim() || !senha.value) {
+                    marcar(usuario, !usuario.value.trim());
+                    marcar(senha, !senha.value);
+                    avisar(!usuario.value.trim() ? 'Informe seu usuário.' : 'Informe sua senha.', 'err');
+                    (!usuario.value.trim() ? usuario : senha).focus();
+                    return;
+                }
+                var perfil = P.autenticar(usuario.value, senha.value);
+                if (!perfil) {
+                    marcar(usuario, true); marcar(senha, true);
+                    avisar('Usuário ou senha inválidos. Verifique os dados digitados.', 'err');
+                    senha.select();
+                    return;
+                }
                 P.entrar(perfil);
-                avisar('Acesso liberado. Abrindo o painel de ' + perfil.nome + '...', 'ok');
+                document.getElementById('loginEntrar').disabled = true;
+                avisar('Acesso liberado. Abrindo o FLUXO de ' + perfil.nome + '...', 'ok');
                 setTimeout(function () {
                     location.href = '../02-usuario/' + (perfil.papel === 'supervisor' ? 'supervisor' : 'analista') + '/index.html';
                 }, 300);
             });
 
-            if (!('showDirectoryPicker' in window)) {
-                document.getElementById('loginStatus').innerHTML = '<i style="background:var(--st-atr);box-shadow:none"></i>Use Edge ou Chrome para sincronizar com o OneDrive';
+            if ('showDirectoryPicker' in window) {
+                document.getElementById('loginStatus').textContent = 'Seus dados são sincronizados pela pasta do OneDrive da área.';
             }
         })();
     </script>

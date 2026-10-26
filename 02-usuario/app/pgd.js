@@ -132,7 +132,7 @@ function nextDue(per, iso, dia) {
 }
 
 /* ================= Estado ================= */
-const cfg = Object.assign({ mode:null, name:'', theme:'auto', dueSoonDays:3, pollSec:30 }, ls.get(CFG_KEY, {}));
+const cfg = Object.assign({ mode:null, name:'', theme:'dark', dueSoonDays:3, pollSec:30 }, ls.get(CFG_KEY, {}));
 if (PRESET && !cfg.name) cfg.name = PRESET.nome || '';
 const saveCfg = () => ls.set(CFG_KEY, cfg);
 if (ROLE_SUBST && cfg.mode !== 'supervisor') { const main = lsRaw(NS_BASE + ':config') || {}; Object.assign(cfg, { mode:'supervisor', substituto:true, name:main.name || (PRESET && PRESET.nome) || '', theme:main.theme || cfg.theme }); saveCfg(); }
@@ -2696,7 +2696,7 @@ function buildPDF(list, scope) {
   pages.push(ops);
   // Rodapé e montagem do arquivo
   const N = pages.length;
-  pages.forEach((p, i) => { ops = p; txt(M, PH - 22, `Painel de demandas, ${who}`, 7.5, false, [0.48, 0.52, 0.6]); txtR(PW - M, PH - 22, `Página ${i + 1} de ${N}`, 7.5, false, [0.48, 0.52, 0.6]); });
+  pages.forEach((p, i) => { ops = p; txt(M, PH - 22, `FLUXO, ${who}`, 7.5, false, [0.48, 0.52, 0.6]); txtR(PW - M, PH - 22, `Página ${i + 1} de ${N}`, 7.5, false, [0.48, 0.52, 0.6]); });
   const objs = [];
   objs[1] = '<< /Type /Catalog /Pages 2 0 R >>';
   objs[3] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
@@ -2713,7 +2713,7 @@ function buildPDF(list, scope) {
   for (let i = 1; i < objs.length; i++) { offs[i] = out.length; out += `${i} 0 obj\n${objs[i]}\nendobj\n`; }
   const xref = out.length;
   out += `xref\n0 ${objs.length}\n0000000000 65535 f \n` + offs.slice(1).map(o => String(o).padStart(10, '0') + ' 00000 n \n').join('');
-  out += `trailer\n<< /Size ${objs.length} /Root 1 0 R /Info << /Title (${pdfStr('Relatório de demandas de ' + who)}) /Producer (Painel de demandas) >> >>\nstartxref\n${xref}\n%%EOF`;
+  out += `trailer\n<< /Size ${objs.length} /Root 1 0 R /Info << /Title (${pdfStr('Relatório de demandas de ' + who)}) /Producer (FLUXO) >> >>\nstartxref\n${xref}\n%%EOF`;
   return out;
 }
 
@@ -2965,7 +2965,7 @@ async function saveDialog() {
   if (shareKeys.length) { createInvite(d, shareKeys); $('#taskDialog').close(); return; }
   if (id) d.id = id;
   const r = upsertTask(d); $('#taskDialog').close();
-  toast(r && r.next ? `Demanda salva. Próxima ocorrência criada para ${fmtDate(r.next.due)}.` : id ? 'Demanda atualizada' : 'Demanda criada');
+  toast(r && r.next ? `Alterações salvas. Próxima ocorrência criada para ${fmtDate(r.next.due)}.` : id ? 'Alterações salvas.' : 'Demanda adicionada ao FLUXO.');
 }
 function openView(ref) {
   const { m, t, key } = findMemberTask(ref); if (!m || !t) return;
@@ -3199,7 +3199,7 @@ function renderTasks() {
   syncToolbar('colab', data.tasks);
   const area = $('#taskArea');
   if (!data.tasks.length) {
-    area.innerHTML = `<div class="empty"><h2>Comece cadastrando sua primeira demanda</h2><p>Cada demanda que você cadastrar fica gravada na sua pasta e aparece automaticamente no painel do supervisor.</p><div class="actions"><button class="btn primary" data-act="new">Nova demanda</button></div></div>`;
+    area.innerHTML = `<div class="empty"><h2>Seu FLUXO começa aqui</h2><p>Cadastre sua primeira demanda. Ela fica gravada na sua pasta e aparece automaticamente para a supervisão.</p><div class="actions"><button class="btn primary" data-act="new">Nova demanda</button></div></div>`;
     return;
   }
   const list = filterList(data.tasks).sort(sorter);
@@ -3609,7 +3609,7 @@ function buildPPTX() {
   const soon = tasksNow.filter(t => isSoon(t)).sort((a, b) => diffDays(a.due) - diffDays(b.due));
   const analysts = team.members.filter(m => (owner === 'todos' || m.key === owner) && (!isReader() || (ui.dsup || 'todas') === 'todas' || m.sup === ui.dsup)).map(m => ({ m, a:aggregate(lines, m.key, tipo) })).filter(x => x.a.demandas || x.a.atrasadas);
   const byTipo = TIPOS.map(k => ({ k, a:aggregate(lines, owner, k) }));
-  const gen = new Date(), author = isReader() ? (cfg.name || (cfg.mode === 'gestao' ? 'Gestão' : 'Coordenação')) : supName(), meta = `Painel de demandas · ${filt} · Gerado em ${fmtDateTime(gen.getTime())} por ${author}`;
+  const gen = new Date(), author = isReader() ? (cfg.name || (cfg.mode === 'gestao' ? 'Gestão' : 'Coordenação')) : supName(), meta = `FLUXO · ${filt} · Gerado em ${fmtDateTime(gen.getTime())} por ${author}`;
   const status = oficial ? 'Mês fechado (números oficiais)' : isCur ? `Mês em andamento (números parciais até ${fmtDate(todayISO())})` : 'Mês recalculado a partir do histórico';
   const slides = [];
 
@@ -3620,7 +3620,7 @@ function buildPPTX() {
     pxShape(10.2, 4.3, 4.4, 4.4, { geom:'ellipse', fill:{ c:'FFFFFF', alpha:7000 } }),
     pxShape(0.9, 1.25, 1.3, 0.06, { fill:'FFFFFF' }),
     pxText(0.9, 1.45, 9, 0.4, [{ runs:[['Resultados da área', { size:14, bold:true, color:'FFFFFF', caps:true, spc:200 }]] }]),
-    pxText(0.9, 1.95, 10.5, 1.9, [{ lineSpc:90000, runs:[['Painel de demandas', { size:46, bold:true, color:'FFFFFF' }]] }, { runs:[[mName, { size:46, bold:true, color:'FFFFFF' }]] }]),
+    pxText(0.9, 1.95, 10.5, 1.9, [{ lineSpc:90000, runs:[['FLUXO', { size:46, bold:true, color:'FFFFFF' }]] }, { runs:[[mName, { size:46, bold:true, color:'FFFFFF' }]] }]),
     pxText(0.9, 4.2, 9, 0.5, [{ runs:[[filt, { size:18, color:'FFFFFF' }]] }]),
     pxText(0.9, 4.7, 9, 0.4, [{ runs:[[status, { size:13, color:'DDE3FF' }]] }]),
     pxShape(0.9, 5.9, 4.8, 0.7, { fill:{ c:'FFFFFF', alpha:14000 }, radius:20000, anchor:'ctr', inset:0.2, paras:[{ runs:[[`${author} · ${fmtDate(todayISO())}`, { size:13, bold:true, color:'FFFFFF' }]] }] })
@@ -3783,8 +3783,8 @@ function pptxPackage(slides) {
   files.push(['[Content_Types].xml', X + `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/><Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/><Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/><Override PartName="/ppt/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/><Override PartName="/ppt/presProps.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presProps+xml"/><Override PartName="/ppt/viewProps.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.viewProps+xml"/><Override PartName="/ppt/tableStyles.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>${slides.map((_, i) => `<Override PartName="/ppt/slides/slide${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>`).join('')}</Types>`]);
   files.push(['_rels/.rels', X + `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL}/officeDocument" Target="ppt/presentation.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="${REL}/extended-properties" Target="docProps/app.xml"/></Relationships>`]);
   const now = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
-  files.push(['docProps/core.xml', X + `<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>Painel de demandas da área</dc:title><dc:creator>${xmlEsc(supName())}</dc:creator><cp:lastModifiedBy>${xmlEsc(supName())}</cp:lastModifiedBy><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${now}</dcterms:modified></cp:coreProperties>`]);
-  files.push(['docProps/app.xml', X + `<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Painel de demandas</Application><Slides>${slides.length}</Slides><PresentationFormat>Widescreen</PresentationFormat></Properties>`]);
+  files.push(['docProps/core.xml', X + `<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>FLUXO · Demandas da área</dc:title><dc:creator>${xmlEsc(supName())}</dc:creator><cp:lastModifiedBy>${xmlEsc(supName())}</cp:lastModifiedBy><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${now}</dcterms:modified></cp:coreProperties>`]);
+  files.push(['docProps/app.xml', X + `<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>FLUXO</Application><Slides>${slides.length}</Slides><PresentationFormat>Widescreen</PresentationFormat></Properties>`]);
   files.push(['ppt/presentation.xml', X + `<p:presentation ${NSA} saveSubsetFonts="1"><p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst><p:sldIdLst>${slides.map((_, i) => `<p:sldId id="${256 + i}" r:id="rId${10 + i}"/>`).join('')}</p:sldIdLst><p:sldSz cx="${PX.W}" cy="${PX.H}"/><p:notesSz cx="6858000" cy="9144000"/><p:defaultTextStyle><a:defPPr><a:defRPr lang="pt-BR"/></a:defPPr></p:defaultTextStyle></p:presentation>`]);
   files.push(['ppt/_rels/presentation.xml.rels', X + `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL}/slideMaster" Target="slideMasters/slideMaster1.xml"/><Relationship Id="rId2" Type="${REL}/theme" Target="theme/theme1.xml"/><Relationship Id="rId3" Type="${REL}/presProps" Target="presProps.xml"/><Relationship Id="rId4" Type="${REL}/viewProps" Target="viewProps.xml"/><Relationship Id="rId5" Type="${REL}/tableStyles" Target="tableStyles.xml"/>${slides.map((_, i) => `<Relationship Id="rId${10 + i}" Type="${REL}/slide" Target="slides/slide${i + 1}.xml"/>`).join('')}</Relationships>`]);
   files.push(['ppt/presProps.xml', X + `<p:presentationPr ${NSA}/>`]);
@@ -3994,7 +3994,7 @@ function renderWorkflow() {
         ${itens.length ? itens.map((p, i) => { const t = trs[i]; return `<tr><td class="code-font"><strong>${wfEsc(wfCodigo(p.t))}</strong></td><td>${wfEsc(p.t.category || '—')}</td><td>${wfEsc(p.t.title)}${p.t.pendente ? '<br><span class="badge warning">Aguardando o analista receber</span>' : ''}${p.pend ? `<br><span class="badge info">${plural(p.pend, 'ajuste a sincronizar', 'ajustes a sincronizar')}</span>` : ''}</td><td>${wfEsc(p.dono)}</td>
           ${t.etapas.map(e => { const ver = isTeam() || e.etapa > 2; return ver ? `<td><button class="badge tracker-chip ${WF.classeStatus(e.status)}" type="button" data-wf-go="${e.etapa}" data-ref="${wfEsc(p.ref)}">${wfEsc(e.status)}</button></td>` : `<td><span class="badge tracker-chip ${WF.classeStatus(e.status)}" title="Input do Supervisor · somente leitura para o Analista">${wfEsc(e.status)}</span></td>`; }).join('')}
           <td><strong>${wfEsc(t.etapaAtual)}</strong></td><td><div class="progress-line"><span style="width:${t.pctFluxo * 100}%;"></span></div><small>${wfPct(t.pctFluxo)}</small></td><td class="num">${dias(p.t)}</td><td><span class="badge ${WF.classeStatus(WF.situacao(p.t))}">${wfEsc(WF.situacao(p.t))}</span></td><td>${wfEsc(bloq(t))}</td><td>${wfEsc(gates(t))}</td></tr>`; }).join('')
-        : `<tr><td colspan="19"><div class="empty-state"><i class="fa-solid fa-diagram-project"></i><div>${isTeam() ? (conn === 'ok' ? 'Nenhum projeto na equipe. Use “Atribuir projeto”.' : 'Conecte a pasta da área em “Pastas e ajustes” para ler os projetos da equipe.') : 'Nenhum projeto cadastrado. Use “Novo projeto”.'}</div></div></td></tr>`}
+        : `<tr><td colspan="19"><div class="empty-state"><i class="fa-solid fa-diagram-project"></i><div>${isTeam() ? (conn === 'ok' ? 'Seu FLUXO está em dia! Não há projetos da equipe nesta visualização. Use “Atribuir projeto” para começar.' : 'Conecte a pasta da área em “Pastas e ajustes” para ler os projetos da equipe.') : 'Seu FLUXO está em dia! Não há projetos nesta visualização. Use “Novo projeto” para começar.'}</div></div></td></tr>`}
       </tbody></table></div>
     </section>`;
 }
@@ -4260,11 +4260,11 @@ function renderNav() {
     return `<li><a href="#${v}" class="nav-link${on ? ' active' : ''}" id="nav-${v}" data-view="${v}" title="${esc(label)}"${on ? ' aria-current="page"' : ''}>${icon}<span class="lbl">${label}</span>${b}</a></li>`;
   }).join('');
   const rq = cfg.mode === 'solicitante' ? reqMe() : null;
-  $('#brandName').innerHTML = 'SGPI' + (PRESET && PRESET.teste ? ' <span class="teste-tag">TESTE</span>' : '');
-  $('#brandName').title = 'Painel de Gestão de Demandas · ' + (rq ? 'Solicitações' : cfg.mode === 'gestao' ? 'Gestão financeira' : cfg.mode === 'coordenacao' ? 'Coordenação' : isSup ? (SUBST ? 'Substituição da supervisão' : 'Supervisão') : 'Minhas demandas');
+  $('#brandName').innerHTML = 'FLUXO' + (PRESET && PRESET.teste ? ' <span class="teste-tag">TESTE</span>' : '');
+  $('#brandName').title = 'FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · ' + (rq ? 'Solicitações' : cfg.mode === 'gestao' ? 'Gestão financeira' : cfg.mode === 'coordenacao' ? 'Coordenação' : isSup ? (SUBST ? 'Substituição da supervisão' : 'Supervisão') : 'Minhas demandas');
   if (isReader()) $('#brandSub').textContent = `${cfg.name || ''}${cfg.mode === 'coordenacao' && coordCtx ? ' · ' + coordCtx.nome : cfg.mode === 'gestao' ? ' · Área financeira' : ''}`;
   else $('#brandSub').textContent = rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição${supCtx ? ' · ' + supTitle(supCtx) : ''}` : (PRESET && PRESET.rotulo) || (supCtx ? `${supName()} · ${supTitle(supCtx)}` : 'Supervisão')) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
-  document.title = (late ? `(${late}) ` : '') + 'SGPI · ' + (isSup ? 'Supervisão' : 'Analista');
+  document.title = (late ? `(${late}) ` : '') + 'FLUXO · ' + (isSup ? 'Supervisão' : 'Analista');
 }
 // SGPI: o painel abre direto, sem exigir a pasta; o cartão de sincronização no menu leva à tela da pasta.
 const SGPI_SEM_AVISO_PASTA = true;
@@ -4433,13 +4433,15 @@ function renderHome() {
     if (ss.length) extra += `<p class="banner info"><span>${I.away} Você está respondendo por ${ss.map(s => `<b>${esc(s.supervisor)}</b> (até ${fmtDate(ausOf(s.id).fim)})`).join(', ')}. Designe, altere prazos, escreva notas e responda às solicitações na tela Substituição.</span><button class="btn sm primary" data-act="go" data-view="substituicao">Abrir substituição</button></p>`;
   }
   $('#homeArea').innerHTML = `
-    <div class="apresentacao-icon app-logo" aria-hidden="true"><img src="${PGD_LOGO}" alt=""></div>
+    <div class="apresentacao-icon app-logo" aria-hidden="true"><img src="../app/marca/fluxo-app.svg" alt=""></div>
     <div class="status-badges">${pills.join('')}</div>
-    <h2>${hello}${who ? `, ${esc(who)}` : ''}</h2>
+    <h2>Olá${who ? `, ${esc(who)}` : ''}! 👋</h2>
+    <p class="fx-kicker">${isSup ? 'Veja como está o FLUXO da sua equipe.' : 'Veja como está o FLUXO das suas demandas.'}</p>
     <p>${esc(lead)}</p>
     <div class="primary-actions">${actions}</div>
     ${extra ? `<div class="home-extra">${extra}</div>` : ''}
-    <div class="feature-grid">${cards}</div>`;
+    <div class="feature-grid">${cards}</div>
+    <p class="fx-assinatura">FLUXO · Sua gestão no ritmo certo.</p>`;
 }
 function bindSidebarToggle() {
   const key = NS + ':menuRecolhido', btn = $('#sidebarCollapse');
@@ -4611,7 +4613,7 @@ async function offerV1Import() {
 }
 async function resetProfile() {
   if (!ROLE_SUBST && window.SGPI_PERFIS) {
-    const ok = await ask({ title:'Sair do SGPI', message:'Você volta para o login para escolher outro perfil. Nada é apagado deste navegador nem das pastas do OneDrive.', buttons:[{ label:'Cancelar', value:false, cls:'ghost' }, { label:'Sair', value:true, cls:'primary' }] });
+    const ok = await ask({ title:'Sair do FLUXO', message:'Você volta para o login para escolher outro perfil. Nada é apagado deste navegador nem das pastas do OneDrive.', buttons:[{ label:'Cancelar', value:false, cls:'ghost' }, { label:'Sair', value:true, cls:'primary' }] });
     if (ok) window.SGPI_PERFIS.sair(window.SGPI_LOGIN_URL);
     return;
   }
@@ -5412,7 +5414,7 @@ function bind() {
       case 'conv-cancelar': cancelOwnShared(b.dataset.cid); break;
       case 'reconnect-comp': reconnectComp(); break;
       case 'reconnect': reconnect(); break;
-      case 'sync-now': sync.state = 'idle'; if (cfg.mode === 'solicitante') await syncMyRequests(true); else await pull(true); toast('Sincronização concluída'); break;
+      case 'sync-now': sync.state = 'idle'; if (cfg.mode === 'solicitante') await syncMyRequests(true); else await pull(true); toast(conn === 'ok' && sync.state !== 'error' ? 'Seu FLUXO está atualizado.' : 'Sincronização pendente.', conn === 'ok' && sync.state !== 'error' ? '' : 'erro'); break;
       case 'scan-now': sync.state = 'idle'; scanTeam(true); break;
       case 'toggle': toggleDone(id); break;
       case 'edit': openDialog(id); break;
@@ -5536,7 +5538,7 @@ function bind() {
     if (e.key !== 'Enter') return;
     const v = e.target.value.trim(); if (!v) return;
     const r = upsertTask({ title:v, tipo:'sob_demanda' }); e.target.value = '';
-    toast('Demanda adicionada como “Sob demanda”, sem prazo', '', { label:'Editar', fn:() => openDialog(r.id) });
+    toast('Demanda adicionada ao FLUXO como “Sob demanda”, sem prazo', '', { label:'Editar', fn:() => openDialog(r.id) });
   });
   const area = $('#taskArea');
   area.addEventListener('change', e => {

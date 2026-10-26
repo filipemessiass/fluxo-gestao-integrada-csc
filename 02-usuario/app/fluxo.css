@@ -1,0 +1,274 @@
+/*
+ * FLUXO · 02-usuario/app/fluxo.css — design system da marca FLUXO.
+ * Carregado por último: define os tokens FLUXO (--fx-*) e liga a eles os tokens do motor
+ * (pgd.css) e da seção Workflow (workflow.css). Nenhuma regra de negócio depende deste arquivo.
+ *
+ * Ordem: 1. Fonte · 2. Tokens (claro, escuro, automático) · 3. Ligação com o motor
+ *        4. Base · 5. Marca e menu lateral · 6. Componentes · 7. Início · 8. Workflow · 9. Movimento
+ */
+
+/* ============ 1. Fonte (Inter, licença OFL, servida localmente) ============ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('vendor/inter/inter-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('vendor/inter/inter-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ============ 2. Tokens ============ */
+/* Tema claro corporativo (base) */
+:root {
+  --fx-font: 'Inter', 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  --fx-font-num: 'Inter', 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
+
+  --fx-bg: #F7F9FC;
+  --fx-bg-2: #EEF2F8;
+  --fx-surface: #FFFFFF;
+  --fx-surface-rgb: 255, 255, 255;
+  --fx-surface-2: #F2F5FA;
+  --fx-surface-3: #E7ECF4;
+  --fx-line: rgba(16, 30, 48, .10);
+  --fx-line-strong: rgba(16, 30, 48, .28);
+  --fx-line-input: rgba(16, 30, 48, .18);
+
+  --fx-ink: #101E30;
+  --fx-ink-2: #334155;
+  --fx-ink-3: #56657A;
+
+  --fx-brand: #E6BC79;            /* dourado institucional (marca, destaques) */
+  --fx-brand-ink: #8A5F1E;        /* dourado legível sobre fundo claro */
+  --fx-accent: #2F62AD;           /* cor de interação: links, ativo, botão primário */
+  --fx-accent-rgb: 47, 98, 173;
+  --fx-accent-2: #3974C6;
+  --fx-accent-soft: rgba(57, 116, 198, .10);
+  --fx-on-accent: #FFFFFF;
+  --fx-focus: #3974C6;
+
+  --fx-info: #3974C6;      --fx-info-soft: #E6EEF9;
+  --fx-success: #1B7F59;   --fx-success-soft: #E2F3EB;
+  --fx-warning: #B7791F;   --fx-warning-ink: #85540E;   --fx-warning-soft: #FBF1DE;
+  --fx-danger: #C2434D;    --fx-danger-soft: #FBE8E9;
+  --fx-violet: #6352C9;    --fx-violet-soft: #EEEBFB;
+
+  --fx-hero: linear-gradient(135deg, #192B41 0%, #243B54 58%, #2D4C6E 100%);
+  --fx-shell: linear-gradient(180deg, #F7F9FC 0%, #EEF2F8 100%);
+  --fx-radius-sm: 8px;
+  --fx-radius: 12px;
+  --fx-radius-lg: 16px;
+  --fx-shadow: 0 1px 2px rgba(16, 30, 48, .06), 0 8px 24px rgba(16, 30, 48, .06);
+  --fx-shadow-pop: 0 24px 60px rgba(16, 30, 48, .22);
+  --fx-ease: cubic-bezier(.2, .7, .2, 1);
+  --fx-fast: 160ms;
+  --fx-base: 220ms;
+}
+
+/* Tema escuro premium: escolhido no menu ou automático (segue o Windows) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fx-bg: #101E30; --fx-bg-2: #0C1726; --fx-surface: #192B41; --fx-surface-rgb: 25, 43, 65; --fx-surface-2: #213650; --fx-surface-3: #2A4362;
+    --fx-line: rgba(203, 213, 225, .12); --fx-line-strong: rgba(203, 213, 225, .30); --fx-line-input: rgba(203, 213, 225, .20);
+    --fx-ink: #F8FAFC; --fx-ink-2: #CBD5E1; --fx-ink-3: #9AABC1;
+    --fx-brand-ink: #E6BC79;
+    --fx-accent: #E6BC79; --fx-accent-rgb: 230, 188, 121; --fx-accent-2: #F1D09B; --fx-accent-soft: rgba(230, 188, 121, .13); --fx-on-accent: #101E30; --fx-focus: #F1D09B;
+    --fx-info: #79A7E8; --fx-info-soft: rgba(57, 116, 198, .22);
+    --fx-success: #4CC497; --fx-success-soft: rgba(33, 151, 106, .22);
+    --fx-warning: #E9B45E; --fx-warning-ink: #F1C77F; --fx-warning-soft: rgba(217, 154, 53, .20);
+    --fx-danger: #EF8A92; --fx-danger-soft: rgba(214, 91, 100, .22);
+    --fx-violet: #ADA0F2; --fx-violet-soft: rgba(173, 160, 242, .16);
+    --fx-shell: radial-gradient(1200px 600px at 85% -10%, rgba(57, 116, 198, .16), transparent 60%), linear-gradient(180deg, #101E30 0%, #0C1726 100%);
+    --fx-shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 10px 30px rgba(0, 0, 0, .28);
+    --fx-shadow-pop: 0 24px 60px rgba(0, 0, 0, .55);
+  }
+}
+:root[data-theme="dark"] {
+  --fx-bg: #101E30; --fx-bg-2: #0C1726; --fx-surface: #192B41; --fx-surface-rgb: 25, 43, 65; --fx-surface-2: #213650; --fx-surface-3: #2A4362;
+  --fx-line: rgba(203, 213, 225, .12); --fx-line-strong: rgba(203, 213, 225, .30); --fx-line-input: rgba(203, 213, 225, .20);
+  --fx-ink: #F8FAFC; --fx-ink-2: #CBD5E1; --fx-ink-3: #9AABC1;
+  --fx-brand-ink: #E6BC79;
+  --fx-accent: #E6BC79; --fx-accent-rgb: 230, 188, 121; --fx-accent-2: #F1D09B; --fx-accent-soft: rgba(230, 188, 121, .13); --fx-on-accent: #101E30; --fx-focus: #F1D09B;
+  --fx-info: #79A7E8; --fx-info-soft: rgba(57, 116, 198, .22);
+  --fx-success: #4CC497; --fx-success-soft: rgba(33, 151, 106, .22);
+  --fx-warning: #E9B45E; --fx-warning-ink: #F1C77F; --fx-warning-soft: rgba(217, 154, 53, .20);
+  --fx-danger: #EF8A92; --fx-danger-soft: rgba(214, 91, 100, .22);
+  --fx-violet: #ADA0F2; --fx-violet-soft: rgba(173, 160, 242, .16);
+  --fx-shell: radial-gradient(1200px 600px at 85% -10%, rgba(57, 116, 198, .16), transparent 60%), linear-gradient(180deg, #101E30 0%, #0C1726 100%);
+  --fx-shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 10px 30px rgba(0, 0, 0, .28);
+  --fx-shadow-pop: 0 24px 60px rgba(0, 0, 0, .55);
+}
+
+/* ============ 3. Ligação com os tokens do motor (pgd.css) ============ */
+/* Mesmos seletores do pgd.css; como este arquivo vem depois, os valores FLUXO prevalecem nos três modos. */
+:root, :root[data-theme="dark"] {
+  --accent: var(--fx-accent); --accent-2: var(--fx-accent-2); --accent-soft: var(--fx-accent-soft); --on-accent: var(--fx-on-accent);
+  --accent-rgb: var(--fx-accent-rgb); --accent2-rgb: var(--fx-accent-rgb);
+  --soft-border: var(--fx-line); --muted: var(--fx-ink-3);
+  --ink: var(--fx-ink); --ink-2: var(--fx-ink-2); --ink-3: var(--fx-ink-3);
+  --paper: var(--fx-bg); --surface: var(--fx-surface); --surface-2: var(--fx-surface-2); --line: var(--fx-line); --col-bg: var(--fx-accent-soft);
+  --st-nao: var(--fx-ink-3); --st-nao-soft: var(--fx-surface-2);
+  --st-and: var(--fx-info); --st-and-soft: var(--fx-info-soft);
+  --st-con: var(--fx-success); --st-con-soft: var(--fx-success-soft);
+  --st-atr: var(--fx-danger); --st-atr-soft: var(--fx-danger-soft);
+  --soon: var(--fx-warning-ink); --soon-bar: var(--fx-warning); --soon-soft: var(--fx-warning-soft);
+  --font-display: var(--fx-font-num); --font-body: var(--fx-font);
+  --r-sm: var(--fx-radius-sm); --r-md: var(--fx-radius-sm); --r-lg: var(--fx-radius);
+  --shadow-card: var(--fx-shadow); --shadow-pop: var(--fx-shadow-pop);
+  --glass: rgba(var(--fx-surface-rgb), .94); --card-grad: linear-gradient(180deg, var(--fx-surface) 0%, var(--fx-surface-2) 100%);
+  --line-strong: var(--fx-line-strong); --line-input: var(--fx-line-input); --toast-bg: #101E30;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent: var(--fx-accent); --accent-2: var(--fx-accent-2); --accent-soft: var(--fx-accent-soft); --on-accent: var(--fx-on-accent);
+    --accent-rgb: var(--fx-accent-rgb); --accent2-rgb: var(--fx-accent-rgb);
+    --soft-border: var(--fx-line); --muted: var(--fx-ink-3);
+    --ink: var(--fx-ink); --ink-2: var(--fx-ink-2); --ink-3: var(--fx-ink-3);
+    --paper: var(--fx-bg); --surface: var(--fx-surface); --surface-2: var(--fx-surface-2); --line: var(--fx-line); --col-bg: var(--fx-accent-soft);
+    --st-nao: var(--fx-ink-3); --st-nao-soft: var(--fx-surface-2);
+    --st-and: var(--fx-info); --st-and-soft: var(--fx-info-soft);
+    --st-con: var(--fx-success); --st-con-soft: var(--fx-success-soft);
+    --st-atr: var(--fx-danger); --st-atr-soft: var(--fx-danger-soft);
+    --soon: var(--fx-warning-ink); --soon-bar: var(--fx-warning); --soon-soft: var(--fx-warning-soft);
+    --glass: rgba(var(--fx-surface-rgb), .94); --card-grad: linear-gradient(180deg, var(--fx-surface) 0%, var(--fx-surface-2) 100%);
+    --line-strong: var(--fx-line-strong); --line-input: var(--fx-line-input); --toast-bg: #2A4362;
+    --shadow-card: var(--fx-shadow); --shadow-pop: var(--fx-shadow-pop);
+  }
+}
+:root[data-theme="dark"] { --toast-bg: #2A4362; }
+
+/* ============ 4. Base ============ */
+body { background: var(--fx-shell); background-attachment: fixed; color: var(--fx-ink); font-family: var(--fx-font); font-feature-settings: 'cv11', 'ss01'; }
+::selection { background: rgba(var(--fx-accent-rgb), .28); }
+:focus-visible { outline: 2px solid var(--fx-focus); outline-offset: 2px; }
+.btn:focus-visible, .nav-link:focus-visible, .sel:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--fx-focus); outline-offset: 2px; }
+.kpi-num, .tile-num, .due b, .attn .n, .stat b, .table .num, .nav-count { font-family: var(--fx-font-num); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+
+/* Área de conteúdo: superfície única com a faixa da marca no topo */
+.content { background: var(--fx-surface); border-color: var(--fx-line); border-radius: var(--fx-radius-lg); box-shadow: var(--fx-shadow); }
+.content::before { height: 3px; background: linear-gradient(90deg, var(--fx-brand), #5B92DD 55%, var(--fx-brand)); background-size: 200% 100%; }
+.content::after { background: radial-gradient(circle at 30% 20%, rgba(230, 188, 121, .14), transparent 60%), radial-gradient(circle at 70% 60%, rgba(57, 116, 198, .14), transparent 62%); }
+.view-head h1 { letter-spacing: -.02em; font-weight: 750; }
+
+/* ============ 5. Marca e menu lateral ============ */
+.sidebar { background: var(--fx-surface); border-color: var(--fx-line); border-radius: var(--fx-radius-lg); box-shadow: var(--fx-shadow); }
+.sidebar-brand-icon.pgd-mark svg { width: 40px; height: 40px; filter: drop-shadow(0 6px 14px rgba(16, 30, 48, .35)); }
+#brandName { font-family: var(--fx-font-num); font-weight: 850; letter-spacing: .14em; font-size: 1.12rem; }
+#brandSub { color: var(--fx-ink-3); letter-spacing: .04em; }
+.fx-brand-ctx { display: block; margin-top: 1px; font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--fx-brand-ink); }
+/* Recolhido: mostra só o símbolo */
+body.sidebar-collapsed .sidebar-brand { display: flex; justify-content: center; }
+body.sidebar-collapsed .sidebar-brand-text { display: none; }
+body.sidebar-collapsed .sidebar-tools { flex-direction: column; gap: 10px; }
+
+.nav-link { border-color: transparent; background: transparent; border-radius: 10px; box-shadow: none; transition: background var(--fx-fast) var(--fx-ease), color var(--fx-fast) var(--fx-ease), border-color var(--fx-fast) var(--fx-ease), transform var(--fx-fast) var(--fx-ease); }
+.nav-link svg, .nav-fa { color: var(--fx-ink-3); }
+.nav-link:hover { background: var(--fx-surface-2); color: var(--fx-ink); transform: translateX(2px); box-shadow: none; border-color: transparent; }
+.nav-link:hover svg, .nav-link:hover .nav-fa { color: var(--fx-accent); }
+.nav-link.active { background: var(--fx-accent-soft); color: var(--fx-accent); border-color: rgba(var(--fx-accent-rgb), .30); transform: none; box-shadow: none; font-weight: 650; }
+.nav-link.active svg, .nav-link.active .nav-fa { color: var(--fx-accent); }
+.nav-link::before { background: var(--fx-brand); width: 3px; border-radius: 0 3px 3px 0; }
+.nav-group-title.active:not(:hover) { background: transparent; border-color: transparent; }
+.nav-group.open > .nav-group-title { color: var(--fx-ink); }
+.nav-count { background: var(--fx-surface-3); color: var(--fx-ink-2); }
+.nav-count.late, .nav-count.bellc { background: var(--fx-danger); color: #fff; }
+.sync-card { background: var(--fx-surface-2); border-color: var(--fx-line); border-radius: var(--fx-radius); }
+.theme-switch { background: var(--fx-surface-2); border-color: var(--fx-line); }
+.theme-switch button[aria-pressed="true"] { background: var(--fx-accent-soft); color: var(--fx-accent); border-color: rgba(var(--fx-accent-rgb), .35); }
+.wf-sair { color: var(--fx-danger); }
+body.sidebar-collapsed .wf-sair .lbl { display: none; }
+body.sidebar-collapsed .wf-sair { padding: 0; }
+
+/* ============ 6. Componentes ============ */
+.btn { border-radius: 10px; border-color: var(--fx-line-input); background: var(--fx-surface); color: var(--fx-ink); font-weight: 600; transition: background var(--fx-fast) var(--fx-ease), border-color var(--fx-fast) var(--fx-ease), box-shadow var(--fx-fast) var(--fx-ease), transform var(--fx-fast) var(--fx-ease); }
+.btn:hover { border-color: rgba(var(--fx-accent-rgb), .55); background: var(--fx-surface-2); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--fx-accent); border-color: var(--fx-accent); color: var(--fx-on-accent); font-weight: 700; box-shadow: 0 8px 22px rgba(var(--fx-accent-rgb), .28); }
+.btn.primary:hover { background: var(--fx-accent-2); border-color: var(--fx-accent-2); color: var(--fx-on-accent); }
+.btn.danger, .btn.ghost.danger { color: var(--fx-danger); }
+.btn.ghost { background: transparent; }
+input, select, textarea, .sel { background-color: var(--fx-surface); border-color: var(--fx-line-input); color: var(--fx-ink); border-radius: 10px; }
+input::placeholder, textarea::placeholder { color: var(--fx-ink-3); opacity: .9; }
+.panel, .kpi, .tile, .feature-card, .attn, .empty { background: var(--fx-surface); border-color: var(--fx-line); border-radius: var(--fx-radius); }
+.empty { border-style: dashed; border-color: rgba(var(--fx-accent-rgb), .35); background: var(--fx-surface-2); }
+.tile.hero { background: var(--fx-hero); box-shadow: var(--fx-shadow); }
+.table th { color: var(--fx-ink-3); background: var(--fx-surface-2); }
+.table tr:hover td { background: rgba(var(--fx-accent-rgb), .05); }
+.banner { border-radius: var(--fx-radius); }
+.banner.info { background: var(--fx-info-soft); color: var(--fx-ink); border-color: rgba(57, 116, 198, .35); }
+.banner.err { background: var(--fx-danger-soft); color: var(--fx-ink); }
+dialog { background: var(--fx-surface); color: var(--fx-ink); border: 1px solid var(--fx-line); border-radius: var(--fx-radius-lg); box-shadow: var(--fx-shadow-pop); }
+dialog::backdrop { background: rgba(7, 14, 24, .55); backdrop-filter: blur(3px); }
+dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
+.toast { background: var(--toast-bg); color: #F8FAFC; border: 1px solid rgba(230, 188, 121, .35); border-radius: var(--fx-radius); box-shadow: var(--fx-shadow-pop); }
+.status-pill { background: var(--fx-surface-2); border-color: var(--fx-line); color: var(--fx-ink-2); box-shadow: none; }
+.status-pill.warn { color: var(--fx-warning-ink); }
+.status-pill.err { color: var(--fx-danger); }
+
+/* ============ 7. Início ============ */
+/* Ações principais (cta) e secundárias (ghost-btn) da tela Início */
+.cta { background: var(--fx-accent); color: var(--fx-on-accent); border-color: var(--fx-accent); box-shadow: 0 10px 26px rgba(var(--fx-accent-rgb), .28); }
+.cta svg { color: var(--fx-on-accent); }
+.cta:hover { background: var(--fx-accent-2); }
+.ghost-btn { background: var(--fx-surface); border-color: var(--fx-line-input); color: var(--fx-ink); }
+.ghost-btn:hover { border-color: rgba(var(--fx-accent-rgb), .55); }
+.apresentacao-icon.app-logo img { width: 112px; height: 112px; filter: drop-shadow(0 18px 30px rgba(16, 30, 48, .35)); }
+.welcome-section h2 { letter-spacing: -.025em; font-weight: 800; }
+.welcome-section > p.fx-kicker { margin: -8px 0 12px; font-size: 1.05rem; font-weight: 600; color: var(--fx-brand-ink); }
+.feature-card { box-shadow: var(--fx-shadow); transition: transform var(--fx-fast) var(--fx-ease), box-shadow var(--fx-fast) var(--fx-ease), border-color var(--fx-fast) var(--fx-ease); }
+.feature-card:hover { transform: translateY(-2px); border-color: rgba(var(--fx-accent-rgb), .45); }
+.fx-assinatura { margin-top: 28px; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fx-ink-3); }
+
+/* ============ 8. Workflow ============ */
+/* Status sempre com texto e ícone, nunca só com cor */
+.sgpi-wf .tracker-chip::before, .sgpi-wf .stage-status-chip .stage-status-text::before, .sgpi-wf .badge.success::before, .sgpi-wf .badge.warning::before, .sgpi-wf .badge.danger::before { display: inline-block; margin-right: 4px; font: 900 .72em/1 'Font Awesome 6 Free'; }
+.sgpi-wf .tracker-chip.success::before, .sgpi-wf .stage-status-chip.success .stage-status-text::before { content: '\f00c'; }
+.sgpi-wf .tracker-chip.warning::before, .sgpi-wf .stage-status-chip.warning .stage-status-text::before { content: '\f110'; }
+.sgpi-wf .tracker-chip.danger::before, .sgpi-wf .stage-status-chip.danger .stage-status-text::before { content: '\f05e'; }
+.sgpi-wf .tracker-chip.info::before, .sgpi-wf .stage-status-chip.info .stage-status-text::before { content: '\f111'; font-weight: 400; }
+.sgpi-wf .badge.success::before, .sgpi-wf .badge.warning::before, .sgpi-wf .badge.danger::before { content: none; }
+/* Faixas institucionais com o gradiente FLUXO e o brilho dourado */
+.sgpi-wf .capa-hero, .sgpi-wf .stage-top-banner { background: var(--fx-hero); border: 1px solid rgba(230, 188, 121, .22); }
+.sgpi-wf .capa-hero .eyebrow, .sgpi-wf .stage-top-banner .eyebrow { background: rgba(230, 188, 121, .16); color: #F1D09B; }
+.sgpi-wf .stage-top-banner, .sgpi-wf .stage-top-banner .stage-header-title, .sgpi-wf .stage-top-banner p { color: #F8FAFC; }
+.sgpi-wf .owner-auto { background: rgba(255, 255, 255, .08); color: #F1D09B; border-color: rgba(230, 188, 121, .35); }
+/* Etapas como stepper: trilho conectando E1 → E08 */
+.sgpi-wf .step-pills { position: relative; gap: 10px; }
+.sgpi-wf .step-pill { position: relative; border-radius: 999px; transition: background var(--fx-fast) var(--fx-ease), color var(--fx-fast) var(--fx-ease); }
+.sgpi-wf .step-pill + .step-pill::before { content: ''; position: absolute; left: -11px; top: 50%; width: 10px; height: 2px; background: rgba(230, 188, 121, .45); }
+.sgpi-wf .step-pill.active { background: var(--fx-brand); color: #101E30; border-color: var(--fx-brand); }
+.sgpi-wf .panel, .sgpi-wf .capa-kpi-card, .sgpi-wf .stage-controls, .sgpi-wf .stage-macro-card, .sgpi-wf .stage-help-card { border-color: var(--fx-line); }
+.sgpi-wf .data-table thead th { background: var(--fx-surface-2); color: var(--fx-ink-3); }
+.sgpi-wf .funnel-fill, .sgpi-wf .progress-line span { background: linear-gradient(90deg, #3974C6, var(--fx-brand)); }
+.sgpi-wf select, .sgpi-wf input, .sgpi-wf textarea { background-color: var(--fx-surface); color: var(--fx-ink); border-color: var(--fx-line-input); }
+.sgpi-wf .empty-state, .sgpi-wf .stage-empty { color: var(--fx-ink-2); }
+
+/* Barras de título dos painéis do Workflow: faixa institucional com texto claro (contraste nos dois temas) */
+.sgpi-wf .panel-title { background: var(--fx-hero); border-bottom: 1px solid rgba(230, 188, 121, .25); border-radius: var(--fx-radius) var(--fx-radius) 0 0; }
+.sgpi-wf .panel-title h3, .sgpi-wf .panel-title h3 i { color: #F8FAFC; }
+.sgpi-wf .panel-title .badge { background: rgba(255, 255, 255, .10); color: #F1D09B; border: 1px solid rgba(230, 188, 121, .35); }
+.sgpi-wf .stage-header-main .eyebrow { justify-self: start; width: max-content; }
+/* Botões dentro das faixas institucionais (Novo projeto, Guia dos Campos) */
+.sgpi-wf .capa-hero .btn-stage-help, .sgpi-wf .stage-top-banner .btn-stage-help { background: var(--fx-brand); color: #101E30; border: 1px solid var(--fx-brand); box-shadow: 0 8px 20px rgba(0, 0, 0, .22); }
+.sgpi-wf .capa-hero .btn-stage-help i, .sgpi-wf .stage-top-banner .btn-stage-help i { color: #101E30; }
+.sgpi-wf .capa-hero .btn-stage-help:hover, .sgpi-wf .stage-top-banner .btn-stage-help:hover { background: #F1D09B; }
+/* Filtros das etapas: quebram linha conforme a largura, sem cortar botões */
+.sgpi-wf .stage-filter-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.sgpi-wf .stage-filter-grid .stage-search { grid-column: span 2; }
+.sgpi-wf .stage-clear { white-space: nowrap; }
+.sgpi-wf .stage-filter-grid .stage-current-only { grid-column: span 2; }
+
+/* ============ 9. Movimento ============ */
+.content > .view { animation: fxEntrada var(--fx-base) var(--fx-ease); }
+@keyframes fxEntrada { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes fxPop { from { opacity: 0; transform: translateY(6px) scale(.985); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

@@ -1,6 +1,16 @@
-# SGPI — Sistema Gerencial de Processos Integrados
+# FLUXO — Plataforma Integrada de Gestão de Demandas e Processos
+
+> **Segue o FLUXO ✌️** · Sua gestão no ritmo certo.
 
 Esta é a documentação de estudo do projeto. Ela explica o que o sistema faz, como as pastas estão organizadas, como o login direciona cada pessoa, como os painéis funcionam, como o Workflow (Projetos) controla as etapas E1 a E08 e como a pasta do OneDrive faz o papel de banco de dados.
+
+O **FLUXO** é a nova marca do antigo SGPI, que é construído sobre o motor do PGD. O rebranding mudou só a interface. Ficaram como estavam:
+
+- os identificadores internos (`sgpi:sessao`, `painelEquipe:…`, `PAINEL_PRESET`, `pgd.js`…);
+- o formato dos arquivos JSON;
+- as regras de negócio.
+
+A identidade visual está detalhada em [02-usuario/app/marca/README.md](02-usuario/app/marca/README.md).
 
 ## Sumário
 
@@ -19,12 +29,15 @@ Esta é a documentação de estudo do projeto. Ela explica o que o sistema faz, 
 13. [Limitações e segurança](#13-limitações-e-segurança)
 14. [Roteiro de estudo](#14-roteiro-de-estudo)
 15. [Glossário](#15-glossário)
+16. [Identidade FLUXO e design system](#16-identidade-fluxo-e-design-system)
+17. [Relatório de testes do rebranding](#17-relatório-de-testes-do-rebranding)
+18. [Pendências e decisões](#18-pendências-e-decisões)
 
 ---
 
 ## 1. Visão geral
 
-O SGPI é o painel de gestão de demandas da equipe de Processos Integrados. Ele tem dois perfis:
+O FLUXO é a plataforma de gestão de demandas da equipe de Processos Integrados. Ela atende colaboradores, analistas e a supervisão do CSC e da Torre Financeira, com dois perfis:
 
 - **Supervisão (Juliana Batista):** acompanha as demandas de toda a equipe, atribui demandas aos analistas e conduz a triagem dos projetos (etapas E1 e E2).
 - **Analistas (José Victor, Viviane Cunha, Filipe Messias e Juliana Santos):** cadastram e atualizam as próprias demandas e conduzem a execução dos projetos (etapas E3 a E08).
@@ -37,7 +50,7 @@ O projeto segue o padrão do **PGD (Painel de Gestão de Demandas)** e tem três
 | **O OneDrive faz o papel de banco** | Os dados são arquivos JSON numa pasta sincronizada pelo OneDrive. O navegador lê e grava essa pasta, e o OneDrive leva os arquivos para os outros computadores. |
 | **Cada arquivo tem um só dono** | O analista grava só o próprio `demandas.json`. A supervisão grava só o `atribuidas.json` na pasta de cada analista. Duas pessoas nunca escrevem no mesmo arquivo. |
 
-Sobre o PGD, o SGPI acrescenta:
+Sobre o PGD, o FLUXO acrescenta:
 
 - o **login com usuário e senha**, que direciona cada pessoa ao painel certo;
 - o módulo **Workflow (Projetos)**, que acompanha as demandas do tipo Projeto pelas etapas E1 a E08, com 49 critérios e dois gates.
@@ -54,19 +67,21 @@ SGPI/
 ├── README.md                       esta documentação
 │
 ├── 01-login/                       1. LOGIN E DIRECIONAMENTO
-│   ├── index.html                  tela de usuário e senha
+│   ├── index.html                  tela de entrada FLUXO (usuário, senha, mostrar/ocultar)
 │   └── perfis.js                   perfis, credenciais, sessão e preset de cada painel
 │
 ├── 02-usuario/                     2. PAINEL DO USUÁRIO
 │   ├── analista/index.html         entrada do analista (confere a sessão e monta o preset)
 │   ├── supervisor/index.html       entrada da supervisão
 │   └── app/                        motor comum aos dois painéis
-│       ├── pgd.css                 tema visual do PGD (claro/escuro, layout, componentes)
-│       ├── workflow.css            estilo original da seção Workflow (escopo .sgpi-wf)
+│       ├── pgd.css                 estrutura visual do motor (layout e componentes)
+│       ├── workflow.css            estilo original da seção Workflow (escopo .sgpi-wf), com cores em tokens
+│       ├── fluxo.css               design system FLUXO: tokens, temas, componentes (carregado por último)
 │       ├── pgd-markup.js           marcação: menu, telas e diálogos
 │       ├── workflow.js             motor do Workflow: etapas, critérios, gates, status
 │       ├── pgd.js                  motor: dados, pasta, sincronização, telas e Workflow
-│       └── vendor/fontawesome/     ícones usados na seção Workflow
+│       ├── marca/                  identidade FLUXO: logotipos SVG, favicon, guia e capturas
+│       └── vendor/                 fontawesome/ (ícones) e inter/ (fonte Inter, OFL)
 │
 ├── 03-database-onedrive/           3. BANCO EM PASTA DO ONEDRIVE
 │   ├── README.md                   formato dos arquivos do banco
@@ -86,7 +101,9 @@ SGPI/
 | Arquivo | Responsabilidade |
 | --- | --- |
 | `01-login/perfis.js` | Lista de perfis (id, nome, papel, subpasta, apelidos de login, senha); `autenticar()` confere usuário e senha; `entrar()`/`ler()`/`sair()` cuidam da sessão; `preset()` gera a configuração do painel de cada perfil. |
-| `01-login/index.html` | Formulário de login. Com usuário e senha corretos, grava a sessão e redireciona para o painel do papel da pessoa. |
+| `01-login/index.html` | Tela de entrada FLUXO. Tem uma área institucional (marca, "Segue o FLUXO ✌️" e mensagem) e um cartão de acesso (usuário, senha com mostrar/ocultar e erros acessíveis). Com usuário e senha corretos, grava a sessão e redireciona para o painel do papel da pessoa. |
+| `02-usuario/app/fluxo.css` | Design system FLUXO: tokens de cor, tipografia, forma e movimento para os temas escuro (padrão), claro e automático, mais o estilo do menu lateral, botões, campos, modais, Início e Workflow. Liga os tokens do motor e do Workflow aos tokens FLUXO. |
+| `02-usuario/app/marca/` | Logotipos (horizontal, símbolo, versões escura, clara e monocromática), ícone de aplicativo, favicon, guia da marca (`README.md`) e capturas de tela reais. |
 | `02-usuario/*/index.html` | Lê a sessão. Sem sessão, ou com sessão de outro papel, volta ao login. Com sessão válida, define `window.PAINEL_PRESET` e carrega o motor. |
 | `02-usuario/app/pgd-markup.js` | Insere no `<body>` a marcação do painel: menu lateral, uma `<section class="view">` por tela (incluindo `view-workflow` e `view-wf-e1` a `view-wf-e8`) e os `<dialog>` (demanda, atribuição…). |
 | `02-usuario/app/workflow.js` | Define `window.SGPI_WORKFLOW`: as 8 etapas com os critérios e o motor de status do SGPI original (status da etapa, encadeamento, gate, etapa atual, situação). Não acessa tela nem arquivo. |
@@ -414,7 +431,7 @@ Pastas que começam com `_`, `.` ou `~` não são lidas como analistas.
 ```
 
 - **`tasks`** são as demandas novas. O painel do analista as copia para o `demandas.json` dele e registra o id em `recebidas`.
-- **`acoes`** são as mudanças em demandas que o analista já recebeu. Os tipos do PGD são `editar`, `nota`, `cancelar`, `transferir` e outros. O SGPI acrescenta o tipo **`workflow`**, que traz E1 ou E2; o analista ignora ações `workflow` de outras etapas.
+- **`acoes`** são as mudanças em demandas que o analista já recebeu. Os tipos do PGD são `editar`, `nota`, `cancelar`, `transferir` e outros. O FLUXO acrescenta o tipo **`workflow`**, que traz E1 ou E2; o analista ignora ações `workflow` de outras etapas.
 - O analista primeiro importa as demandas novas e depois aplica as ações. Por isso uma ação de E1/E2 enviada logo depois da atribuição também chega.
 - Itens já recebidos e muito antigos são limpos na próxima gravação da supervisão.
 
@@ -544,7 +561,8 @@ A estrutura já é a de um site estático.
 | Mudar a tela do Workflow | `pgd.js`, bloco "Workflow (Projetos)": `renderWorkflow` (tracker), `renderWfEtapa` (telas das etapas), `wfGravar` (gravação) e `wfMenuHTML` (grupo do menu). O estilo fica em `workflow.css`. |
 | Mudar o menu | `pgd.js`, constante `NAVS`. |
 | Mudar a marcação de uma tela ou diálogo | `02-usuario/app/pgd-markup.js`. |
-| Mudar cores ou layout | `02-usuario/app/pgd.css` (variáveis em `:root`; estilos do Workflow no fim do arquivo). |
+| Mudar cores, fontes ou temas | `02-usuario/app/fluxo.css`: altere os tokens `--fx-*`. Eles alimentam o motor (`pgd.css`) e o Workflow (`workflow.css`). |
+| Trocar o logotipo | `02-usuario/app/marca/` (arquivos SVG) e o símbolo embutido no menu, em `pgd-markup.js` (`sidebar-brand-icon`). |
 | Novo campo na demanda | `pgd.js`: `normTask` (normalização), diálogo da demanda, exibição e exportação. Toda mudança precisa atualizar `updatedAt`. |
 
 ---
@@ -582,7 +600,7 @@ A estrutura já é a de um site estático.
 
 | Termo | Significado |
 | --- | --- |
-| **PGD** | Painel de Gestão de Demandas: o painel em HTML que serve de base ao SGPI. |
+| **PGD** | Painel de Gestão de Demandas: o painel em HTML que serve de base ao FLUXO. |
 | **Preset** | Configuração (`PAINEL_PRESET`) que diz ao motor quem é o usuário e qual pasta ele usa. |
 | **Handle** | Referência a uma pasta do computador, devolvida pela File System Access API e guardada no IndexedDB. |
 | **Caixa de entrada** | O `atribuidas.json`: a supervisão deposita demandas e ações nele, e o analista as recolhe. |
@@ -590,3 +608,104 @@ A estrutura já é a de um site estático.
 | **Lápide** | Registro de exclusão (`deleted`) que impede uma demanda apagada de voltar. |
 | **Gate** | Etapa de aprovação (E3 e E5) que trava as etapas seguintes até ser concluída com evidência. |
 | **Polling** | Releitura periódica da pasta (a cada 30 s) para trazer as alterações dos outros. |
+
+---
+
+## 16. Identidade FLUXO e design system
+
+O guia completo da marca está em [02-usuario/app/marca/README.md](02-usuario/app/marca/README.md). Resumo:
+
+- **Marca:** símbolo em traço contínuo que forma um "F", com nós conectados (início, etapa e destino), em dourado `#E6BC79` e azul `#3974C6` sobre azul-noite `#101E30`. Há logotipo horizontal e símbolo isolado, em versões para fundo escuro, fundo claro e monocromática, além do ícone de aplicativo e do favicon, todos em SVG.
+- **Temas:**
+  - escuro premium, que é o padrão para quem entra pela primeira vez;
+  - claro corporativo;
+  - automático, que segue o Windows.
+  As três opções ficam no rodapé do menu lateral.
+- **Tokens:** todos em `02-usuario/app/fluxo.css`, com prefixo `--fx-*`. Os tokens antigos do motor e do Workflow apontam para eles. As cores fixas do CSS original do Workflow (cerca de 190) foram trocadas por tokens, o que permite o tema escuro também nessa seção.
+- **Tipografia:** Inter variável, servida localmente (`vendor/inter`, licença OFL), com Segoe UI como reserva.
+- **Componentes padronizados:**
+  - botões primário, secundário e destrutivo;
+  - campos e seletores, tabelas, cartões, modais (com animação de abertura), avisos e etiquetas de status;
+  - estados vazios e foco visível no teclado.
+- **Menu lateral:**
+  - símbolo, nome FLUXO e identificação da pessoa no topo;
+  - item ativo com a barra dourada;
+  - no modo recolhido, só o símbolo e os ícones.
+- **Workflow:**
+  - faixas institucionais em azul-noite com brilho dourado;
+  - etapas em formato de trilha (E3 — E4 — …);
+  - status sempre com texto e ícone, nunca só com cor.
+  As 8 etapas, os 49 critérios, os gates, o encadeamento, as evidências e os campos de E5, E6 e E08 não mudaram.
+- **Movimento:** transições de 160 a 220 ms. Com `prefers-reduced-motion`, as animações são desligadas.
+
+### Arquivos alterados no rebranding
+
+| Arquivo | O que mudou |
+| --- | --- |
+| `01-login/index.html` | Tela reescrita com a identidade FLUXO. A autenticação e o direcionamento continuam chamando o mesmo `perfis.js`. |
+| `02-usuario/analista/index.html`, `02-usuario/supervisor/index.html` | Título "FLUXO", favicon, `fluxo.css` e texto do `noscript`. |
+| `02-usuario/app/fluxo.css` | **Novo**: design system FLUXO. |
+| `02-usuario/app/workflow.css` | Cores fixas trocadas por tokens `--fx-*`. As regras não mudaram. |
+| `02-usuario/app/pgd-markup.js` | Símbolo FLUXO no menu e rótulo do botão Sair, para o modo recolhido. |
+| `02-usuario/app/pgd.js` | Só textos e marca: nome FLUXO no menu, aba, relatórios e apresentação; saudação e assinatura no Início; mensagens de confirmação e estados vazios; tema escuro como padrão de primeiro acesso. O "Seu FLUXO está atualizado." só aparece se a sincronização terminar sem erro. |
+| `02-usuario/app/marca/` | **Novo**: logotipos, favicon, guia da marca e capturas. |
+| `02-usuario/app/vendor/inter/` | **Novo**: fonte Inter com a licença. |
+| `index.html`, `README.md` | Título, favicon e documentação. |
+
+**O que foi preservado de propósito:**
+- o formato dos JSON;
+- as chaves `sgpi:sessao` e `painelEquipe:…` do `localStorage` e do IndexedDB;
+- os IDs das demandas;
+- as regras de mesclagem e a sincronização com o OneDrive;
+- permissões, atribuição, importação, exportação e backups;
+- os nomes internos `pgd`, `sgpi` e `SGPI_*`.
+
+## 17. Relatório de testes do rebranding
+
+Os testes rodaram na branch `rebranding-fluxo`, em 26/10/2026.
+
+### Testes automatizados de ponta a ponta
+
+São **54 verificações, todas aprovadas**. Elas rodam num navegador simulado (jsdom), com a pasta do OneDrive simulada sobre uma cópia da base de teste.
+
+| Área | O que foi verificado |
+| --- | --- |
+| Login | Senha errada recusada. Apelidos (`fm`, `supervisora`) aceitos. Erro acessível quando falta o usuário (`role="alert"`, `aria-invalid`). Mostrar e ocultar senha (`aria-pressed`). Sem sessão, o painel volta ao login. |
+| Marca | "FLUXO" no menu e na aba. Slogan e mensagem no login. Símbolo e favicon. Nenhum "PGD" ou "SGPI" visível no login nem no painel. |
+| Temas | Escuro como padrão de primeiro acesso. Troca para claro. Automático segue o sistema. |
+| Menus | Ordem do menu do analista e da supervisão. Grupo Workflow (Projetos) abre e fecha sem trocar de tela. O sistema abre no Início. |
+| Workflow | Tracker e telas E1 a E08 aparecem mesmo sem projetos. Guia dos Campos. A supervisão grava E1/E2 em `atribuidas.json` e o analista aplica. Gate E3 trava a E4, gate E5 trava a E6. Evidência faltando fica destacada. E1/E2 somente leitura para o analista; E3 somente leitura para a supervisão. O status da demanda segue o workflow. |
+| Dados | Os 34 registros e os campos do PGD (`serieId`, `histStatus`) foram preservados. Supervisão não altera `demandas.json` do analista. Chaves do navegador preservadas. |
+| Backup | Backup em JSON gerado. Importação de JSON com "Mesclar" incluiu a demanda, que apareceu no Workflow. |
+
+### Testes num navegador real (Microsoft Edge)
+
+- **Console:** login, Início, Workflow, E4, E08, Tarefas, Indicadores, Pasta e backup, E1 da supervisão e Dashboard não registraram nenhum erro.
+- **Capturas** em `02-usuario/app/marca/capturas/`:
+  - login (normal, com erro e no celular);
+  - Início (escuro, claro e supervisão);
+  - Workflow (escuro e claro), etapa E4 e Guia dos Campos;
+  - Tarefas, Indicadores e Pasta e backup;
+  - menu recolhido;
+  - prancha da marca.
+- **Larguras:** 1440 px (desktop) e 390 px (celular, login). As capturas mostraram três problemas, já corrigidos:
+  - filtros das etapas cortados;
+  - rótulo "Sair" vazando no menu recolhido;
+  - cartão do login transbordando no celular.
+
+### O que não foi testado
+
+- **Conexão real com a pasta do OneDrive:** o seletor de pastas exige um clique de uma pessoa, então os testes usaram uma pasta simulada. As regras de leitura, gravação e mesclagem são as mesmas de antes.
+- **Exportação para PDF e PowerPoint:** só os textos mudaram ("FLUXO" no lugar de "Painel de demandas"). Os arquivos gerados não foram abertos.
+- **Leitor de tela real (NVDA ou Narrador):** os rótulos ARIA foram verificados por código, mas não com o leitor.
+- **Firefox e Safari:** abrem o painel, mas não conectam pastas, como antes.
+
+## 18. Pendências e decisões
+
+| Item | Situação |
+| --- | --- |
+| Segurança do login | Continua sendo só controle de tela: senha `1234` escrita no `perfis.js`. O rebranding não mexeu nisso de propósito. Para uma autenticação corporativa de verdade, seria preciso entrar com a conta Microsoft (Entra ID). A proteção real dos dados continua sendo a permissão na pasta do OneDrive. |
+| Nomes internos `pgd`/`sgpi` | Mantidos para não quebrar dados, sessões e pastas já conectadas. Renomear exigiria um plano de migração das chaves do navegador. |
+| Pasta `_legado` | Contém as versões anteriores e o pacote de teste do PGD. Pode ser apagada quando quiser. |
+| Tamanho das capturas | Cerca de 4 MB em PNG. Podem ser removidas do bucket S3, porque são só documentação. |
+| Telas herdadas do PGD que não são do Analista nem da Supervisão (Coordenação, Gestão, Solicitante) | Recebem os tokens e a marca automaticamente, mas não foram revisadas uma a uma, porque esses perfis não estão no login do FLUXO. |
