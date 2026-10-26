@@ -615,7 +615,16 @@ A estrutura já é a de um site estático.
 
 O guia completo da marca está em [02-usuario/app/marca/README.md](02-usuario/app/marca/README.md). Resumo:
 
-- **Marca:** símbolo em traço contínuo que forma um "F", com nós conectados (início, etapa e destino), em dourado `#E6BC79` e azul `#3974C6` sobre azul-noite `#101E30`. Há logotipo horizontal e símbolo isolado, em versões para fundo escuro, fundo claro e monocromática, além do ícone de aplicativo e do favicon, todos em SVG.
+- **Marca oficial (prancha de 26/10/2026), reconstruída em vetor:**
+  - **Símbolo:** um "F" de duas faixas azul-marinho com borda dourada, nós dourados e haste.
+  - **Palavra FLUXO:** azul-marinho, com o **X** formado por um chevron dourado e um azul.
+  - **Textos:** descrição institucional e "Segue o FLUXO ✌️".
+  - **Arquivos:** logos completa, horizontal e com slogan, palavra, símbolo e favicon, em versões clara e escura. Ficam em `02-usuario/app/marca/` e são gerados por `gerar-marca.js`.
+  - **Onde aparece:**
+    - menu lateral: símbolo + FLUXO + usuário (recolhido: só o símbolo);
+    - Início: logo completa com o slogan;
+    - login: logo completa na área institucional e símbolo + FLUXO no cartão.
+  - **Comparação com a prancha:** `marca/capturas/00-comparacao-referencia.png`.
 - **Temas:**
   - escuro premium, que é o padrão para quem entra pela primeira vez;
   - claro corporativo;
@@ -666,12 +675,12 @@ Os testes rodaram na branch `rebranding-fluxo`, em 26/10/2026.
 
 ### Testes automatizados de ponta a ponta
 
-São **54 verificações, todas aprovadas**. Elas rodam num navegador simulado (jsdom), com a pasta do OneDrive simulada sobre uma cópia da base de teste.
+São **57 verificações, todas aprovadas** (atualizado com a marca oficial). Elas rodam num navegador simulado (jsdom), com a pasta do OneDrive simulada sobre uma cópia da base de teste.
 
 | Área | O que foi verificado |
 | --- | --- |
 | Login | Senha errada recusada. Apelidos (`fm`, `supervisora`) aceitos. Erro acessível quando falta o usuário (`role="alert"`, `aria-invalid`). Mostrar e ocultar senha (`aria-pressed`). Sem sessão, o painel volta ao login. |
-| Marca | "FLUXO" no menu e na aba. Slogan e mensagem no login. Símbolo e favicon. Nenhum "PGD" ou "SGPI" visível no login nem no painel. |
+| Marca | Palavra FLUXO oficial (clara e escura) e símbolo oficial no menu, com o nome do usuário dinâmico. Logo institucional no Início, no lugar do ícone isolado. Logo completa e símbolo + FLUXO no login. Favicon oficial. Aba "FLUXO". Nenhum "PGD" ou "SGPI" visível. |
 | Temas | Escuro como padrão de primeiro acesso. Troca para claro. Automático segue o sistema. |
 | Menus | Ordem do menu do analista e da supervisão. Grupo Workflow (Projetos) abre e fecha sem trocar de tela. O sistema abre no Início. |
 | Workflow | Tracker e telas E1 a E08 aparecem mesmo sem projetos. Guia dos Campos. A supervisão grava E1/E2 em `atribuidas.json` e o analista aplica. Gate E3 trava a E4, gate E5 trava a E6. Evidência faltando fica destacada. E1/E2 somente leitura para o analista; E3 somente leitura para a supervisão. O status da demanda segue o workflow. |
@@ -681,13 +690,14 @@ São **54 verificações, todas aprovadas**. Elas rodam num navegador simulado (
 ### Testes num navegador real (Microsoft Edge)
 
 - **Console:** login, Início, Workflow, E4, E08, Tarefas, Indicadores, Pasta e backup, E1 da supervisão e Dashboard não registraram nenhum erro.
-- **Capturas** em `02-usuario/app/marca/capturas/`:
-  - login (normal, com erro e no celular);
-  - Início (escuro, claro e supervisão);
-  - Workflow (escuro e claro), etapa E4 e Guia dos Campos;
-  - Tarefas, Indicadores e Pasta e backup;
+- **Console:** sem erros também em Validação, Ausência e E3, e todos os ativos de marca referenciados no código existem.
+- **Capturas** em `02-usuario/app/marca/capturas/`, com o registro em `marca/VALIDACAO-2026-10-26.md`:
+  - comparação com a prancha oficial;
+  - login (desktop, celular e com erro);
+  - Início do analista (claro, escuro e celular);
+  - Início da supervisão (claro e escuro);
   - menu recolhido;
-  - prancha da marca.
+  - Workflow, Tarefas e Indicadores.
 - **Larguras:** 1440 px (desktop) e 390 px (celular, login). As capturas mostraram três problemas, já corrigidos:
   - filtros das etapas cortados;
   - rótulo "Sair" vazando no menu recolhido;

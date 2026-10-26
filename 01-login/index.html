@@ -16,7 +16,7 @@
         .fx-intro { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 48px 56px; background: var(--fx-hero); color: #F8FAFC; isolation: isolate; }
         .fx-intro::after { content: ''; position: absolute; inset: auto -20% -35% auto; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(230, 188, 121, .18), transparent 62%); z-index: -1; }
         .fx-rede { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: .5; }
-        .fx-logo { width: 232px; height: auto; }
+        .fx-logo { width: min(380px, 100%); height: auto; }
         .fx-slogan { margin: 0; font-size: clamp(2.4rem, 4.6vw, 3.9rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
         .fx-slogan span { color: var(--fx-brand); }
         .fx-mensagem { max-width: 34ch; margin: 18px 0 0; font-size: 1.15rem; line-height: 1.6; color: #CBD5E1; }
@@ -28,7 +28,8 @@
         /* Formulário */
         .fx-acesso { display: flex; flex-direction: column; justify-content: center; padding: 48px clamp(24px, 5vw, 72px); background: var(--fx-bg); }
         .fx-card { width: min(420px, 100%); margin: 0 auto; padding: 36px 32px 30px; border: 1px solid var(--fx-line); border-radius: var(--fx-radius-lg); background: var(--fx-surface); box-shadow: var(--fx-shadow-pop); }
-        .fx-card .fx-simbolo { width: 44px; height: 44px; margin-bottom: 18px; }
+        .fx-card-marca { display: block; margin-bottom: 20px; }
+        .fx-card-marca img { width: 168px; height: auto; }
         .fx-card h2 { margin: 0; font-size: 1.55rem; font-weight: 750; letter-spacing: -.02em; }
         .fx-card > p { margin: 6px 0 24px; color: var(--fx-ink-2); }
         .fx-campo { display: grid; gap: 7px; margin-bottom: 16px; }
@@ -40,8 +41,8 @@
         .fx-olho { display: grid; place-items: center; width: 44px; height: 44px; margin-right: 1px; border: 0; border-radius: 9px; background: none; color: var(--fx-ink-3); cursor: pointer; }
         .fx-olho:hover { color: var(--fx-ink); }
         .fx-olho svg { width: 20px; height: 20px; }
-        .fx-entrar { width: 100%; height: 48px; margin-top: 8px; border: 0; border-radius: 10px; background: var(--fx-accent); color: var(--fx-on-accent); font: inherit; font-size: 1rem; font-weight: 750; cursor: pointer; box-shadow: 0 10px 26px rgba(var(--fx-accent-rgb), .28); transition: background var(--fx-fast) var(--fx-ease), transform var(--fx-fast) var(--fx-ease); }
-        .fx-entrar:hover { background: var(--fx-accent-2); }
+        .fx-entrar { width: 100%; height: 48px; margin-top: 8px; border: 0; border-radius: 10px; background: #3265AF; color: #FFFFFF; font: inherit; font-size: 1rem; font-weight: 750; cursor: pointer; box-shadow: 0 10px 26px rgba(50, 101, 175, .35); transition: background var(--fx-fast) var(--fx-ease), transform var(--fx-fast) var(--fx-ease); }
+        .fx-entrar:hover { background: #4177C3; }
         .fx-entrar:active { transform: translateY(1px); }
         .fx-entrar:disabled { opacity: .7; cursor: progress; }
         .fx-alerta { display: none; margin-top: 16px; padding: 11px 14px; border-radius: 10px; font-size: .92rem; font-weight: 600; }
@@ -55,7 +56,7 @@
             .fx-intro, .fx-acesso { min-width: 0; }
             .fx-desc { letter-spacing: .04em; }
             .fx-intro { padding: 32px 24px 36px; gap: 24px; }
-            .fx-logo { width: 180px; }
+            .fx-logo { width: min(300px, 100%); }
             .fx-acesso { padding: 32px 16px 40px; }
         }
     </style>
@@ -71,7 +72,7 @@
             <g fill="rgba(230,188,121,.45)"><circle cx="340" cy="330" r="5"/><circle cx="660" cy="190" r="5"/><circle cx="420" cy="470" r="4"/></g>
             <g fill="rgba(91,146,221,.5)"><circle cx="320" cy="120" r="4"/><circle cx="610" cy="260" r="5"/></g>
         </svg>
-        <img class="fx-logo" src="../02-usuario/app/marca/fluxo-logo-light.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos">
+        <img class="fx-logo" src="../02-usuario/app/marca/fluxo-logo-dark.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos">
         <div>
             <h1 class="fx-slogan">Segue o <span>FLUXO</span> ✌️</h1>
             <p class="fx-mensagem">Organize demandas, conecte equipes e acompanhe resultados em um só lugar.</p>
@@ -80,13 +81,12 @@
             <ul class="fx-principios" aria-label="Princípios">
                 <li>Integração</li><li>Clareza</li><li>Movimento</li><li>Controle</li><li>Simplicidade</li>
             </ul>
-            <p class="fx-desc" style="margin-top:18px">Plataforma Integrada de Gestão de Demandas e Processos</p>
         </div>
     </section>
 
     <main class="fx-acesso">
         <form class="fx-card" id="loginForm" autocomplete="on" novalidate aria-describedby="loginAlert">
-            <img class="fx-simbolo" src="../02-usuario/app/marca/fluxo-icon.svg" alt="" aria-hidden="true">
+            <span class="fx-card-marca"><img class="fx-claro" src="../02-usuario/app/marca/fluxo-logo-horizontal.svg" alt="FLUXO"><img class="fx-escuro" src="../02-usuario/app/marca/fluxo-logo-horizontal-dark.svg" alt="FLUXO"></span>
             <h2>Acesse o FLUXO</h2>
             <p>Entre com seu usuário e sua senha para abrir o seu painel.</p>
             <div class="fx-campo">

@@ -228,12 +228,8 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 
 /* Aplicação da marca oficial e composição fluida do Início. */
 .sidebar-tools { background: var(--fx-surface-2); border-color: var(--fx-line); box-shadow: none; }
-.sidebar-brand-icon.pgd-mark { background: #101e30; border-radius: 11px; overflow: hidden; }
-.sidebar-brand-icon.pgd-mark img { display: block; width: 36px; height: 36px; object-fit: contain; }
 #brandSub { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .welcome-section { width: 100%; max-width: 1040px; min-height: min(780px, calc(100dvh - 140px)); padding: 8px 14px 30px; }
-.apresentacao-icon.app-logo { width: 110px; height: 110px; padding: 12px; margin-bottom: 18px; border-radius: 24px; background: #101e30; box-shadow: 0 12px 28px rgba(16,30,48,.22); }
-.apresentacao-icon.app-logo img { width: 100%; height: 100%; filter: none; }
 .status-badges { margin-bottom: 20px; }
 .welcome-section h2 { margin-bottom: 8px; }
 .welcome-section > p.fx-kicker { margin: 0 0 10px; }
@@ -260,7 +256,6 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 }
 @media (max-width: 760px) {
   .welcome-section { padding: 4px 0 24px; }
-  .apresentacao-icon.app-logo { width: 88px; height: 88px; border-radius: 20px; margin-bottom: 14px; }
   .status-badges { gap: 7px; }
   .status-pill { padding: 8px 10px; font-size: .75rem; }
   .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -320,3 +315,23 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* ============ 10. Marca oficial FLUXO ============ */
+/* Troca por tema: cada local tem a versão clara e a escura do ativo; só a do tema ativo aparece. */
+.fx-escuro { display: none !important; }
+:root[data-theme="dark"] .fx-claro { display: none !important; }
+:root[data-theme="dark"] .fx-escuro { display: block !important; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .fx-claro { display: none !important; }
+  :root:not([data-theme="light"]) .fx-escuro { display: block !important; }
+}
+/* Menu lateral: símbolo + palavra FLUXO + nome do usuário (recolhido: só o símbolo) */
+.sidebar-brand-icon.pgd-mark { width: 40px; height: 40px; flex: 0 0 40px; background: none; border-radius: 0; }
+.sidebar-brand-icon.pgd-mark img { width: 40px; height: 40px; object-fit: contain; }
+#brandName { display: block; line-height: 0; }
+#brandName .fx-wordmark { height: 19px; width: auto; }
+#brandSub { margin-top: 5px; }
+/* Início: marca institucional (símbolo, FLUXO, descrição e slogan) abrindo a leitura da página */
+.fx-home-marca { margin: 0 auto 22px; }
+.fx-home-marca img { width: min(380px, 82vw); height: auto; }
+@media (max-width: 760px) { .fx-home-marca img { width: min(300px, 86vw); } }

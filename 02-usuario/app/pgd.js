@@ -4235,6 +4235,9 @@ function navItems() {
   return base.filter(([v]) => (isTransversal() || SUBST) ? v !== 'minhas' && (!SUBST || !v.startsWith('coord-') || isTransversal()) : !v.startsWith('coord-'))
     .map(it => it[0] === 'solicitacoes' && !isTransversal() ? ['solicitacoes', 'Solicitações da coordenação', it[2], it[3]] : it);
 }
+// Marca oficial FLUXO (ativos em ../app/marca; o CSS exibe a versão do tema ativo)
+const FX_PALAVRA = '<img class="fx-wordmark fx-claro" src="../app/marca/fluxo-wordmark.svg" alt="FLUXO"><img class="fx-wordmark fx-escuro" src="../app/marca/fluxo-wordmark-dark.svg" alt="FLUXO">';
+const FX_MARCA_INICIO = '<div class="fx-home-marca"><img class="fx-claro" src="../app/marca/fluxo-logo-assinatura.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"><img class="fx-escuro" src="../app/marca/fluxo-logo-assinatura-dark.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"></div>';
 function renderNav() {
   const isSup = isTeam();
   const all = isSup ? teamTasks() : data.tasks;
@@ -4260,7 +4263,7 @@ function renderNav() {
     return `<li><a href="#${v}" class="nav-link${on ? ' active' : ''}" id="nav-${v}" data-view="${v}" title="${esc(label)}"${on ? ' aria-current="page"' : ''}>${icon}<span class="lbl">${label}</span>${b}</a></li>`;
   }).join('');
   const rq = cfg.mode === 'solicitante' ? reqMe() : null;
-  $('#brandName').innerHTML = 'FLUXO' + (PRESET && PRESET.teste ? ' <span class="teste-tag">TESTE</span>' : '');
+  $('#brandName').innerHTML = FX_PALAVRA + (PRESET && PRESET.teste ? ' <span class="teste-tag">TESTE</span>' : '');
   $('#brandName').title = 'FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · ' + (rq ? 'Solicitações' : cfg.mode === 'gestao' ? 'Gestão financeira' : cfg.mode === 'coordenacao' ? 'Coordenação' : isSup ? (SUBST ? 'Substituição da supervisão' : 'Supervisão') : 'Minhas demandas');
   if (isReader()) $('#brandSub').textContent = `${cfg.name || ''}${cfg.mode === 'coordenacao' && coordCtx ? ' · ' + coordCtx.nome : cfg.mode === 'gestao' ? ' · Área financeira' : ''}`;
   else $('#brandSub').textContent = rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição` : (window.SGPI_PERFIS && window.SGPI_PERFIS.ler() || {}).nome || supName()) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
@@ -4433,7 +4436,7 @@ function renderHome() {
     if (ss.length) extra += `<p class="banner info"><span>${I.away} Você está respondendo por ${ss.map(s => `<b>${esc(s.supervisor)}</b> (até ${fmtDate(ausOf(s.id).fim)})`).join(', ')}. Designe, altere prazos, escreva notas e responda às solicitações na tela Substituição.</span><button class="btn sm primary" data-act="go" data-view="substituicao">Abrir substituição</button></p>`;
   }
   $('#homeArea').innerHTML = `
-    <div class="apresentacao-icon app-logo" aria-hidden="true"><img src="../app/marca/fluxo-icon.svg" alt=""></div>
+    ${FX_MARCA_INICIO}
     <div class="status-badges">${pills.join('')}</div>
     <h2>Olá${who ? `, ${esc(who)}` : ''}! 👋</h2>
     <p class="fx-kicker">${isSup ? 'Veja como está o FLUXO da sua equipe.' : 'Veja como está o FLUXO das suas demandas.'}</p>

@@ -74,7 +74,7 @@ document.body.insertAdjacentHTML('afterbegin', `
   <aside class="sidebar" aria-label="Seções do painel">
     <div class="sidebar-tools">
       <div class="sidebar-brand">
-        <span class="sidebar-brand-icon pgd-mark" title="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos"><img src="../app/marca/fluxo-icon.svg" alt=""></span>
+        <span class="sidebar-brand-icon pgd-mark" title="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos"><img class="fx-claro" src="../app/marca/fluxo-icon.svg" alt=""><img class="fx-escuro" src="../app/marca/fluxo-icon-dark.svg" alt=""></span>
         <span class="sidebar-brand-text"><strong id="brandName">FLUXO</strong><small id="brandSub"></small></span>
       </div>
       <button class="sidebar-collapse" id="sidebarCollapse" type="button" aria-label="Recolher menu lateral" aria-expanded="true" title="Recolher menu lateral">
