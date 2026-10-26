@@ -384,24 +384,72 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 
 /* ---- Coluna da ilustração ---- */
 .fx-capa-arte { position: relative; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: clamp(8px, 1.4dvh, 18px); perspective: 1000px; }
-.fx-capa-palco { position: relative; isolation: isolate; width: min(100%, 740px); margin: 0 auto; transform: rotateX(var(--fx-rx)) rotateY(var(--fx-ry)); transform-style: preserve-3d; transition: transform .25s ease-out; will-change: transform; }
-.fx-capa-palco::before { content: ''; position: absolute; inset: 14% 15%; z-index: -1; border-radius: 50%; background: radial-gradient(circle, rgba(57,116,198,.17), rgba(230,188,121,.08) 42%, transparent 72%); filter: blur(18px); pointer-events: none; animation: fxHaloRespira 8s ease-in-out infinite; }
-.fx-capa-palco::after { content: ''; position: absolute; inset: 10% 24%; z-index: 0; border: 1px dashed rgba(210,164,82,.24); border-radius: 50%; pointer-events: none; animation: fxOrbita 44s linear infinite; }
-.fx-capa-imagem { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; filter: drop-shadow(0 18px 25px rgba(16,30,48,.11)); animation: fxArteFlutua 8s ease-in-out infinite; }
-.fx-capa-pulso { position: absolute; z-index: 2; width: 12px; height: 12px; border: 2px solid rgba(230,188,121,.8); border-radius: 50%; transform: translate(-50%,-50%); box-shadow: 0 0 0 0 rgba(230,188,121,.4); pointer-events: none; animation: fxNoPulso 3.6s ease-out infinite; }
-.fx-pulso-lista { left: 30%; top: 28%; }
-.fx-pulso-grafico { left: 72%; top: 33%; animation-delay: 1.2s; }
-.fx-pulso-aprovacao { left: 67%; top: 72%; animation-delay: 2.4s; }
-@keyframes fxArteFlutua { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-@keyframes fxOrbita { to { transform: rotate(360deg); } }
-@keyframes fxHaloRespira { 0%,100% { opacity: .55; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.05); } }
-@keyframes fxNoPulso { 0%,100% { box-shadow: 0 0 0 0 rgba(230,188,121,.4); opacity: .8; } 55% { box-shadow: 0 0 0 12px rgba(230,188,121,0); opacity: 1; } }
+.fx-capa-palco { position: relative; isolation: isolate; width: min(100%, 820px); margin: 0 auto; transform: rotateX(var(--fx-rx)) rotateY(var(--fx-ry)); transform-style: preserve-3d; transition: transform .25s ease-out; will-change: transform; }
+/* Ecossistema de gestão (vetor): cores do tema claro; o escuro troca as variáveis */
+.fx-capa { --fx-eco-card: #FFFFFF; --fx-eco-sub: #F1F5FB; --fx-eco-ink: #0B2852; --fx-eco-linha: rgba(11, 40, 82, .16); --fx-eco-barra: #DCE4F0; }
+:root[data-theme="dark"] .fx-capa { --fx-eco-card: #1E3350; --fx-eco-sub: #253D5C; --fx-eco-ink: #E2E8F0; --fx-eco-linha: rgba(226, 232, 240, .18); --fx-eco-barra: #34506F; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fx-capa { --fx-eco-card: #1E3350; --fx-eco-sub: #253D5C; --fx-eco-ink: #E2E8F0; --fx-eco-linha: rgba(226, 232, 240, .18); --fx-eco-barra: #34506F; } }
+.fx-capa-svg.fx-eco { display: block; width: 100%; height: auto; overflow: visible; }
+.fx-eco-card { fill: var(--fx-eco-card); stroke: var(--fx-eco-linha); stroke-width: 1; }
+.fx-eco-sub { fill: var(--fx-eco-sub); }
+.fx-eco-barra { fill: var(--fx-eco-barra); }
+.fx-eco-barra-ouro, .fx-eco-barras .fx-eco-barra-ouro { fill: url(#fxEcoOuro); }
+.fx-eco-pessoa { fill: var(--fx-eco-ink); }
+.fx-eco-pessoa.fx-eco-ouro { fill: url(#fxEcoOuro); }
+.fx-eco-traco-fino { fill: none; stroke: var(--fx-eco-linha); stroke-width: 2.5; stroke-linecap: round; }
+.fx-eco-tracejado { stroke-dasharray: 4 7; animation: fxEcoFlui 2.4s linear infinite; }
+.fx-eco-anel { fill: none; stroke: #E6BC79; stroke-width: 2; stroke-dasharray: 6 8; transform-box: fill-box; transform-origin: center; animation: fxEcoGira 16s linear infinite; }
+.fx-eco-ligacoes path { fill: none; stroke: var(--fx-eco-linha); stroke-width: 3; stroke-linecap: round; }
+.fx-eco-fluxo use { fill: none; stroke: url(#fxEcoOuro); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 10 22; animation: fxEcoFlui 1.8s linear infinite; }
+.fx-eco-engrenagem { fill: var(--fx-eco-ink); transform-box: fill-box; transform-origin: center; }
+.fx-eco-engrenagem.fx-eco-ouro { fill: url(#fxEcoOuro); }
+.fx-eco-engrenagem .fx-eco-furo { fill: var(--fx-eco-card); }
+.fx-eco-engrenagem .fx-eco-eixo { fill: #E6BC79; }
+.fx-eco-engrenagem.fx-eco-ouro .fx-eco-eixo { fill: var(--fx-eco-ink); }
+.fx-eco-gira { animation: fxEcoGira 10s linear infinite; }
+.fx-eco-gira-inversa { animation: fxEcoGira 6s linear infinite reverse; }
+.fx-capa.fx-ativa .fx-eco-gira { animation-duration: 5s; }
+.fx-capa.fx-ativa .fx-eco-gira-inversa { animation-duration: 3s; }
+.fx-eco-menu { fill: none; stroke: rgba(255, 255, 255, .45); stroke-width: 4; stroke-linecap: round; }
+.fx-eco-grafico { fill: none; stroke: url(#fxEcoOuro); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 200; stroke-dashoffset: 0; animation: fxEcoDesenha 2.4s var(--fx-ease) .5s backwards; }
+.fx-eco-ponto { fill: #E6BC79; stroke: var(--fx-eco-card); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: fxEcoPulso 2.4s ease-in-out infinite; }
+.fx-eco-rosca { fill: none; stroke: var(--fx-eco-ink); stroke-width: 7; opacity: .9; }
+.fx-eco-rosca-ouro { fill: none; stroke: #E6BC79; stroke-width: 7; stroke-dasharray: 38 95; stroke-linecap: round; transform-box: fill-box; transform-origin: center; animation: fxEcoGira 7s linear infinite; }
+.fx-eco-barras rect { fill: var(--fx-eco-ink); transform-box: fill-box; transform-origin: bottom; animation: fxEcoCresce 3.2s ease-in-out infinite; }
+.fx-eco-barras rect:nth-child(2) { animation-delay: .3s; } .fx-eco-barras rect:nth-child(3) { animation-delay: .6s; } .fx-eco-barras rect:nth-child(4) { animation-delay: .9s; }
+.fx-eco-barras-2 rect:not(.fx-eco-barra-ouro) { fill: #3265AF; opacity: .85; }
+.fx-eco-check { fill: none; stroke: url(#fxEcoOuro); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 50; stroke-dashoffset: 0; animation: fxEcoDesenha 1.2s var(--fx-ease) 1s backwards; }
+.fx-eco-check-2 { animation-delay: 1.4s; }
+.fx-eco-escudo { fill: var(--fx-eco-ink); }
+.fx-eco-tendencia { fill: none; stroke: url(#fxEcoOuro); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.fx-eco-etapa { fill: var(--fx-eco-card); stroke: var(--fx-eco-linha); stroke-width: 2.5; }
+.fx-eco-etapa.feita { fill: var(--fx-eco-ink); stroke: var(--fx-eco-ink); }
+.fx-eco-etapa.gate { stroke: #D2A452; stroke-width: 3; }
+.fx-eco-etapa.atual { fill: #3265AF; stroke: #3265AF; transform-box: fill-box; transform-origin: center; animation: fxEcoPulso 2.2s ease-in-out infinite; }
+.fx-eco-viajante { fill: #F7DA8C; animation: fxEcoViaja 4.5s ease-in-out infinite; }
+.fx-eco-halo { transform-box: fill-box; transform-origin: center; animation: fxEcoRespira 7s ease-in-out infinite; }
+.fx-eco-orbita { fill: none; stroke: rgba(210, 164, 82, .3); stroke-width: 1.5; stroke-dasharray: 3 10; transform-box: fill-box; transform-origin: center; animation: fxEcoGira 70s linear infinite; }
+.fx-eco-orbita-2 { stroke: rgba(57, 116, 198, .28); animation-duration: 46s; animation-direction: reverse; }
+.fx-eco-flutua { animation: fxEcoFlutua 6s ease-in-out infinite; }
+.fx-eco-no-pessoa { animation: fxEcoFlutua 5s ease-in-out infinite; }
+.fx-eco-atraso-1 { animation-delay: -1.5s; } .fx-eco-atraso-2 { animation-delay: -3s; } .fx-eco-atraso-3 { animation-delay: -4.5s; }
+.fx-eco-brilhos circle { fill: #E6BC79; transform-box: fill-box; transform-origin: center; animation: fxEcoBrilha 3.6s ease-in-out infinite; }
+.fx-eco-brilhos circle:nth-child(even) { fill: #5B92DD; animation-delay: -1.8s; }
+@keyframes fxEcoGira { to { transform: rotate(360deg); } }
+@keyframes fxEcoFlui { to { stroke-dashoffset: -64; } }
+@keyframes fxEcoDesenha { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
+@keyframes fxEcoPulso { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.28); } }
+@keyframes fxEcoCresce { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(.72); } }
+@keyframes fxEcoViaja { 0% { transform: translateX(0); } 50% { transform: translateX(202px); } 100% { transform: translateX(0); } }
+@keyframes fxEcoRespira { 0%, 100% { opacity: .7; transform: scale(.97); } 50% { opacity: 1; transform: scale(1.03); } }
+@keyframes fxEcoFlutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes fxEcoBrilha { 0%, 100% { opacity: .35; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.2); } }
 /* Etiquetas flutuantes com dados reais (como as etiquetas do mapa nas demais capas) */
 .fx-capa-chip { position: absolute; z-index: 3; transform: translate(-50%, -50%) translateZ(40px); display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 14px; border-radius: 999px; background: var(--fx-surface); color: var(--fx-ink-2); font-size: .82rem; font-weight: 600; white-space: nowrap; box-shadow: 0 10px 26px rgba(16, 30, 48, .16); border: 1px solid var(--fx-line); animation: fxChip 5s ease-in-out infinite; }
 .fx-capa-chip b { font-family: var(--fx-font-num); font-size: 1rem; font-weight: 800; color: var(--fx-ink); }
-.fx-chip-doc { left: 19%; top: 12%; }
-.fx-chip-gear { left: 72%; top: 10%; animation-delay: -1.6s; }
-.fx-chip-ok { left: 79%; top: 88%; animation-delay: -3.2s; }
+.fx-chip-doc { left: 19%; top: 38%; }
+.fx-chip-gear { left: 80%; top: 7%; animation-delay: -1.6s; }
+.fx-chip-ok { left: 81%; top: 93%; animation-delay: -3.2s; }
 .fx-chip-ok b { color: var(--fx-success); }
 @keyframes fxChip { 0%, 100% { margin-top: 0; } 50% { margin-top: -6px; } }
 /* Legenda no rodapé da ilustração */
@@ -430,13 +478,13 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
   .fx-capa-conteudo .fx-home-marca { width: min(300px, 100%); }
   .fx-capa-acoes { padding: 18px 14px; }
   .fx-capa-chip { font-size: .7rem; padding: 6px 9px; }
-  .fx-chip-doc { left: 18%; top: 12%; }
-  .fx-chip-gear { left: 72%; }
+  .fx-chip-doc { left: 20%; top: 36%; }
+  .fx-chip-gear { left: 76%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .fx-capa-aurora, .fx-capa-conteudo .primary-actions .cta::after { display: none; }
   .fx-capa-palco { transform: none; }
-  .fx-capa-palco::before, .fx-capa-palco::after, .fx-capa-imagem, .fx-capa-pulso, .fx-capa-chip, .fx-entrada .fx-capa-conteudo > *, .fx-entrada .fx-capa-arte { animation: none; }
+  .fx-capa-palco *, .fx-capa-chip, .fx-entrada .fx-capa-conteudo > *, .fx-entrada .fx-capa-arte { animation: none; }
 }
 
 /* Destaques do sistema na capa: trio de cartões leves (ícone dourado + título + complemento) */

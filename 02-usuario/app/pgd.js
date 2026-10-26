@@ -4268,7 +4268,114 @@ function navItems() {
 const FX_PALAVRA = '<img class="fx-wordmark fx-claro" src="../app/marca/fluxo-wordmark.svg" alt="FLUXO"><img class="fx-wordmark fx-escuro" src="../app/marca/fluxo-wordmark-dark.svg" alt="FLUXO">';
 const FX_MARCA_INICIO = '<div class="fx-home-marca"><img class="fx-claro" src="../app/marca/fluxo-logo-assinatura.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"><img class="fx-escuro" src="../app/marca/fluxo-logo-assinatura-dark.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"></div>';
 // Capa do Início: imagem preparada a partir da ilustração fornecida pelo usuário.
-const FX_CAPA_ARTE = '<img class="fx-capa-imagem" src="../app/marca/fluxo-capa-processos.png" alt="" width="1536" height="1024" decoding="async">';
+// Capa do Início: ecossistema de gestão (pessoas conectadas → processos em movimento → resultados monitorados).
+// Vetor animado por CSS (classes fx-eco-*); as cores seguem o tema pelas variáveis --fx-eco-*.
+function fxEcoPessoa(cx, cy, s, cls) {
+  return `<g class="fx-eco-pessoa ${cls || ''}"><circle cx="${cx}" cy="${cy - s * .42}" r="${s * .3}"/><path d="M${cx - s * .55} ${cy + s * .5}a${s * .55} ${s * .55} 0 0 1 ${s * 1.1} 0z"/></g>`;
+}
+function fxEcoEngrenagem(cx, cy, r, n, cls) {
+  const dentes = Array.from({ length:n }, (_, i) => `<rect x="${cx - r * .22}" y="${cy - r * 1.28}" width="${r * .44}" height="${r * .5}" rx="${r * .1}" transform="rotate(${i * 360 / n} ${cx} ${cy})"/>`).join('');
+  return `<g class="fx-eco-engrenagem ${cls}">${dentes}<circle cx="${cx}" cy="${cy}" r="${r}"/><circle cx="${cx}" cy="${cy}" r="${r * .42}" class="fx-eco-furo"/><circle cx="${cx}" cy="${cy}" r="${r * .16}" class="fx-eco-eixo"/></g>`;
+}
+const FX_CAPA_ARTE = `<svg class="fx-capa-svg fx-eco" viewBox="-34 -28 788 690" role="img" aria-label="Ecossistema de gestão: equipes conectadas, processos em movimento e resultados monitorados">
+  <defs>
+    <radialGradient id="fxEcoHalo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#3974C6" stop-opacity=".20"/><stop offset=".55" stop-color="#E6BC79" stop-opacity=".10"/><stop offset="1" stop-color="#3974C6" stop-opacity="0"/></radialGradient>
+    <linearGradient id="fxEcoOuro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B8862F"/><stop offset=".5" stop-color="#F7DA8C"/><stop offset="1" stop-color="#C6913A"/></linearGradient>
+    <linearGradient id="fxEcoAzul" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1A4A7E"/><stop offset="1" stop-color="#0B2852"/></linearGradient>
+    <filter id="fxEcoSombra" filterUnits="userSpaceOnUse" x="-60" y="-60" width="840" height="760"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0B2852" flood-opacity=".16"/></filter>
+  </defs>
+
+  <circle cx="360" cy="310" r="300" fill="url(#fxEcoHalo)" class="fx-eco-halo"/>
+  <circle cx="360" cy="310" r="262" class="fx-eco-orbita"/>
+  <circle cx="360" cy="310" r="196" class="fx-eco-orbita fx-eco-orbita-2"/>
+
+  <!-- Conexões: pessoas → painel, processos → painel, painel → workflow → resultados, governança → resultados -->
+  <g class="fx-eco-ligacoes">
+    <path id="fxEcoL1" d="M232 128C318 128 360 150 360 210"/>
+    <path id="fxEcoL2" d="M585 182C585 250 552 300 500 300"/>
+    <path id="fxEcoL3" d="M190 470C212 430 196 320 220 300"/>
+    <path id="fxEcoL4" d="M360 410V535"/>
+    <path id="fxEcoL5" d="M478 560C496 560 492 520 502 520"/>
+    <path id="fxEcoL6" d="M620 377V455"/>
+  </g>
+  <g class="fx-eco-fluxo">
+    <use href="#fxEcoL1"/><use href="#fxEcoL2" class="fx-eco-atraso-1"/><use href="#fxEcoL3" class="fx-eco-atraso-2"/>
+    <use href="#fxEcoL4" class="fx-eco-atraso-1"/><use href="#fxEcoL5" class="fx-eco-atraso-3"/><use href="#fxEcoL6" class="fx-eco-atraso-2"/>
+  </g>
+
+  <!-- Equipe conectada (cartão) -->
+  <g class="fx-eco-cartao fx-eco-flutua">
+    <rect x="40" y="62" width="192" height="132" rx="20" class="fx-eco-card" filter="url(#fxEcoSombra)"/>
+    <path d="M92 118H185" class="fx-eco-traco-fino"/>
+    ${fxEcoPessoa(90, 122, 34)}${fxEcoPessoa(186, 122, 34)}${fxEcoPessoa(138, 114, 44, 'fx-eco-ouro')}
+    <rect x="70" y="164" width="98" height="9" rx="4.5" class="fx-eco-barra"/><rect x="174" y="164" width="28" height="9" rx="4.5" class="fx-eco-barra-ouro"/>
+  </g>
+
+  <!-- Rede de pessoas (colaboração) -->
+  <g class="fx-eco-rede">
+    <path d="M118 488L58 420M118 488L62 568M118 488L196 572M58 420L196 572" class="fx-eco-traco-fino fx-eco-tracejado"/>
+    <g class="fx-eco-no-pessoa"><circle cx="58" cy="420" r="24" class="fx-eco-card" filter="url(#fxEcoSombra)"/>${fxEcoPessoa(58, 422, 22)}</g>
+    <g class="fx-eco-no-pessoa fx-eco-atraso-1"><circle cx="62" cy="568" r="22" class="fx-eco-card" filter="url(#fxEcoSombra)"/>${fxEcoPessoa(62, 570, 20)}</g>
+    <g class="fx-eco-no-pessoa fx-eco-atraso-2"><circle cx="196" cy="572" r="22" class="fx-eco-card" filter="url(#fxEcoSombra)"/>${fxEcoPessoa(196, 574, 20)}</g>
+    <circle cx="118" cy="488" r="36" class="fx-eco-card" filter="url(#fxEcoSombra)"/>
+    <circle cx="118" cy="488" r="36" class="fx-eco-anel"/>
+    ${fxEcoPessoa(118, 492, 34, 'fx-eco-ouro')}
+  </g>
+
+  <!-- Processos em movimento (engrenagens) -->
+  <g class="fx-eco-cartao fx-eco-flutua fx-eco-atraso-2">
+    <rect x="500" y="40" width="170" height="142" rx="20" class="fx-eco-card" filter="url(#fxEcoSombra)"/>
+    ${fxEcoEngrenagem(568, 108, 30, 9, 'fx-eco-gira')}
+    ${fxEcoEngrenagem(626, 140, 17, 7, 'fx-eco-gira-inversa fx-eco-ouro')}
+  </g>
+
+  <!-- Resultados monitorados (painel central) -->
+  <g class="fx-eco-painel">
+    <rect x="220" y="210" width="280" height="200" rx="22" class="fx-eco-card" filter="url(#fxEcoSombra)"/>
+    <path d="M242 210H272V410H242A22 22 0 0 1 220 388V232A22 22 0 0 1 242 210Z" fill="url(#fxEcoAzul)"/>
+    <path d="M234 236h20M234 262h20M234 288h20M234 314h20M234 340h20" class="fx-eco-menu"/>
+    <rect x="231" y="228" width="30" height="16" rx="5" fill="#E6BC79" opacity=".9"/>
+    <rect x="288" y="226" width="92" height="10" rx="5" fill="#3265AF"/><rect x="388" y="226" width="52" height="10" rx="5" class="fx-eco-barra"/>
+    <rect x="288" y="248" width="142" height="84" rx="12" class="fx-eco-sub"/>
+    <path d="M298 314C310 300 318 296 328 304S348 320 360 298S384 280 398 292S414 302 420 274" class="fx-eco-grafico"/>
+    <circle cx="420" cy="274" r="5" class="fx-eco-ponto"/>
+    <rect x="438" y="248" width="52" height="84" rx="12" class="fx-eco-sub"/>
+    <circle cx="464" cy="282" r="15" class="fx-eco-rosca"/>
+    <circle cx="464" cy="282" r="15" class="fx-eco-rosca-ouro"/>
+    <rect x="450" y="308" width="28" height="6" rx="3" class="fx-eco-barra"/><rect x="450" y="318" width="20" height="6" rx="3" class="fx-eco-barra"/>
+    <rect x="288" y="342" width="62" height="54" rx="12" class="fx-eco-sub"/>
+    <rect x="356" y="342" width="62" height="54" rx="12" class="fx-eco-sub"/>
+    <rect x="424" y="342" width="66" height="54" rx="12" class="fx-eco-sub"/>
+    <rect x="298" y="352" width="18" height="18" rx="5" fill="#3265AF" opacity=".85"/><rect x="298" y="378" width="40" height="6" rx="3" class="fx-eco-barra"/>
+    <g class="fx-eco-barras"><rect x="368" y="368" width="9" height="20" rx="3"/><rect x="382" y="360" width="9" height="28" rx="3"/><rect x="396" y="352" width="9" height="36" rx="3" class="fx-eco-barra-ouro"/></g>
+    <path d="M440 370l10 10 22-22" class="fx-eco-check"/>
+  </g>
+
+  <!-- Governança (escudo) -->
+  <g class="fx-eco-cartao fx-eco-flutua fx-eco-atraso-1">
+    <rect x="560" y="250" width="120" height="127" rx="20" class="fx-eco-card" filter="url(#fxEcoSombra)"/>
+    <path d="M620 276l30 11v24c0 23-13 37-30 44c-17-7-30-21-30-44v-24z" class="fx-eco-escudo"/>
+    <path d="M606 314l10 10 19-20" class="fx-eco-check fx-eco-check-2"/>
+  </g>
+
+  <!-- Resultados em alta -->
+  <g class="fx-eco-cartao fx-eco-flutua fx-eco-atraso-3">
+    <rect x="502" y="455" width="176" height="122" rx="20" class="fx-eco-card" filter="url(#fxEcoSombra)"/>
+    <g class="fx-eco-barras fx-eco-barras-2"><rect x="526" y="528" width="16" height="26" rx="4"/><rect x="550" y="514" width="16" height="40" rx="4"/><rect x="574" y="500" width="16" height="54" rx="4"/><rect x="598" y="482" width="16" height="72" rx="4" class="fx-eco-barra-ouro"/></g>
+    <path d="M524 506L556 492L580 498L640 470" class="fx-eco-tendencia"/><path d="M628 466L642 469L638 482" class="fx-eco-tendencia"/>
+    <rect x="526" y="561" width="72" height="7" rx="3.5" class="fx-eco-barra"/>
+  </g>
+
+  <!-- Workflow E1 → E08 (processo em movimento) -->
+  <g class="fx-eco-trilha">
+    <rect x="232" y="535" width="246" height="50" rx="25" class="fx-eco-card" filter="url(#fxEcoSombra)"/>
+    <path d="M254 560H456" class="fx-eco-traco-fino"/>
+    ${Array.from({ length:8 }, (_, i) => `<circle cx="${254 + i * 28.9}" cy="560" r="${i === 3 ? 8 : 6.5}" class="fx-eco-etapa${i < 3 ? ' feita' : i === 3 ? ' atual' : ''}${i === 2 || i === 4 ? ' gate' : ''}"/>`).join('')}
+    <circle cx="254" cy="560" r="3.5" class="fx-eco-viajante"/>
+  </g>
+
+  <g class="fx-eco-brilhos"><circle cx="300" cy="70" r="4"/><circle cx="470" cy="190" r="3"/><circle cx="690" cy="420" r="4"/><circle cx="30" cy="300" r="3"/><circle cx="250" cy="470" r="3"/><circle cx="430" cy="600" r="3.5"/></g>
+</svg>`;
 // Entrada em cascata só na primeira exibição da capa (a tela é redesenhada a cada sincronização)
 let fxCapaJaAnimada = false;
 const fxCapaEntrada = () => { if (fxCapaJaAnimada) return ''; fxCapaJaAnimada = true; return ' fx-entrada'; };
@@ -4513,9 +4620,6 @@ function renderHome() {
       <div class="fx-capa-arte">
         <div class="fx-capa-palco" aria-hidden="true">
           ${FX_CAPA_ARTE}
-          <span class="fx-capa-pulso fx-pulso-lista"></span>
-          <span class="fx-capa-pulso fx-pulso-grafico"></span>
-          <span class="fx-capa-pulso fx-pulso-aprovacao"></span>
           <span class="fx-capa-chip fx-chip-doc"><b>${open.length}</b> ${open.length === 1 ? 'em aberto' : 'em aberto'}</span>
           <span class="fx-capa-chip fx-chip-gear"><b>${wfAbertos}</b> ${wfAbertos === 1 ? 'projeto em fluxo' : 'projetos em fluxo'}</span>
           <span class="fx-capa-chip fx-chip-ok"><b>${doneMonth}</b> ${doneMonth === 1 ? 'concluída no mês' : 'concluídas no mês'}</span>

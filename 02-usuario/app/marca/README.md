@@ -34,7 +34,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | `fluxo-logo-completa.svg` / `fluxo-logo-dark.svg` | Símbolo + FLUXO + descrição institucional | Área institucional do login (versão escura) e materiais |
 | `fluxo-logo-assinatura.svg` / `fluxo-logo-assinatura-dark.svg` | Logo completa + "Segue o FLUXO ✌️" (composição da prancha) | Topo da tela Início |
 | `fluxo-favicon.svg` | Símbolo sobre quadrado branco arredondado (legível em abas claras e escuras) | Favicon de todas as páginas |
-| `fluxo-capa-processos.png` | Ilustração de processos preparada a partir da imagem anexada pelo usuário, com fundo transparente | Capa do Início, nos temas claro e escuro |
+| `fluxo-capa-processos.png` | Ilustração de processos preparada a partir da imagem anexada pelo usuário, com fundo transparente | Reserva. A capa do Início passou a usar o vetor do ecossistema (`FX_CAPA_ARTE` em `../pgd.js`) |
 | `gerar-marca.js` | Gerador de todos os SVGs a partir de uma única geometria | Para ajustar a marca: altere o script e rode `node gerar-marca.js .` nesta pasta |
 
 ## Aplicação nas telas
@@ -44,7 +44,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | Menu lateral expandido | Sem cartão: símbolo + palavra FLUXO + "Processos Integrados · CSC" alinhados, com um filete dourado separando do menu. O botão de recolher é um círculo discreto na borda do menu |
 | Barra do topo direito | Nome do usuário conectado (dinâmico) | Sair |
 | Menu lateral recolhido | Só o símbolo, centralizado; o botão de abrir continua na borda |
-| Início (analista e supervisão) | Capa de largura total. À esquerda: logo completa com descrição e slogan, saudação, resumo, três cartões de destaque e a área "Comece por aqui". À direita: a imagem de processos com etiquetas de números reais. Os cartões de indicador vêm abaixo |
+| Início (analista e supervisão) | Capa de largura total. À esquerda: logo completa com descrição e slogan, saudação, resumo, três cartões de destaque e a área "Comece por aqui". À direita: o ecossistema de gestão (vetor animado) com etiquetas de números reais. Os cartões de indicador vêm abaixo |
 | Login: área institucional | Logo completa (versão escura) no topo esquerdo; "Segue o FLUXO ✌️" com FLUXO em dourado animado. Efeitos: rede com pulsos dourados, nós pulsando, aurora e luz que segue o cursor |
 | Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO". Cartão de vidro com borda viva (dourado ↔ azul) e reflexo no botão Entrar. Abaixo: "FLUXO · Sua gestão no ritmo certo." e "Elaborado: Processos Integrados". Com "reduzir animações", os movimentos param |
 | Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
@@ -59,7 +59,13 @@ Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.
 
 A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda:** logo completa como título, saudação, resumo e três cartões de destaque (ícone dourado, título e complemento): "Demandas e projetos em um só lugar" (na supervisão, "Equipe e demandas em um só lugar"), "Workflow E1 a E08 com governança" e "Indicadores no ritmo certo" (na supervisão, "Indicadores da área no ritmo certo"). Depois vem a área tracejada "Comece por aqui". Ela tem a mesma largura dos cartões de destaque (até 620 px, variável `--fx-capa-col`), alinhada à esquerda da coluna, sem avançar sobre a ilustração. Os botões são compactos para caberem numa linha e quebram só em telas menores. **À direita:** a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês). O estado da pasta fica no rodapé do menu; avisos de ausência continuam aparecendo na capa. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
 
-A imagem da capa foi preparada com a ferramenta de edição de imagem a partir do primeiro anexo do usuário, preservando sua composição: tarefas, painel central, gráfico, engrenagem e aprovação conectados. O fundo externo foi removido com transparência real; os cartões e o painel dentro da arte continuam opacos. O arquivo fica em `fluxo-capa-processos.png` e é inserido pelo motor em `../pgd.js` (`FX_CAPA_ARTE`). A área visual cresce até 740 px de largura sem distorção. As três etiquetas sobre a imagem continuam como elementos HTML com valores reais do sistema. A imagem e suas etiquetas são decorativas para leitores de tela; os indicadores acessíveis estão no conteúdo da página.
+**Ecossistema de gestão.** A ilustração é um vetor que segue a linguagem da marca (azul-marinho, dourado, linhas conectadas, profundidade suave) e reúne três ideias:
+
+- **Pessoas e equipes conectadas:** o cartão da equipe e uma rede de pessoas ligadas.
+- **Processos em movimento:** as engrenagens girando e a trilha do Workflow E1 → E08, com a etapa atual pulsando e os gates E3 e E5 com aro dourado.
+- **Resultados monitorados:** o painel central (gráfico, rosca e barras), o escudo de governança e o cartão de resultados em alta.
+
+Linhas com pulsos dourados ligam tudo ao painel, com halo e órbitas ao fundo. O vetor fica em `../pgd.js` (`FX_CAPA_ARTE`, com `fxEcoPessoa` e `fxEcoEngrenagem`) e o estilo em `../fluxo.css` (classes `fx-eco-*`). As cores vêm das variáveis `--fx-eco-*`, então a arte acompanha os temas claro e escuro. Ocupa a coluna direita até 820 px. As três etiquetas por cima continuam em HTML, com valores reais do sistema. A arte é decorativa (`aria-hidden`); os indicadores acessíveis estão no conteúdo da página.
 
 **Efeitos**
 
@@ -71,8 +77,9 @@ A imagem da capa foi preparada com a ferramenta de edição de imagem a partir d
 | Inclinação 3D | A ilustração inclina em perspectiva conforme a posição do mouse |
 | Entrada em cascata | Marca, estados, saudação e ações sobem em sequência. Só na primeira exibição, para não repetir a cada sincronização |
 | Etiquetas flutuantes | Os números da ilustração flutuam suavemente, em ritmos diferentes |
-| Órbita e pulsos | Um anel discreto gira atrás da arte; três pontos dourados pulsam nas conexões |
-| Movimento da arte | A imagem flutua alguns pixels e recebe um halo que respira lentamente |
+| Órbitas e halo | Duas órbitas tracejadas giram em sentidos opostos; o halo azul e dourado respira ao fundo |
+| Conexões vivas | Pulsos dourados percorrem as linhas entre equipes, processos, painel e resultados |
+| Ecossistema em movimento | Engrenagens girando (mais rápidas com o mouse), cartões flutuando, gráfico se desenhando, rosca girando, barras oscilando, escudo com check e trilha do Workflow com a etapa atual pulsando |
 | Botão principal | Um reflexo de luz percorre "Nova demanda" de tempos em tempos |
 
 **Boas práticas**
