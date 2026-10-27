@@ -32,7 +32,8 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 | `fluxo-wordmark.svg` / `fluxo-wordmark-dark.svg` | Palavra FLUXO com o X dourado | Menu lateral, ao lado do símbolo |
 | `fluxo-logo-horizontal.svg` / `fluxo-logo-horizontal-dark.svg` | Símbolo + FLUXO | Cartão de acesso do login |
 | `fluxo-logo-completa.svg` / `fluxo-logo-dark.svg` | Símbolo + FLUXO + descrição institucional | Área institucional do login (versão escura) e materiais |
-| `fluxo-logo-assinatura.svg` / `fluxo-logo-assinatura-dark.svg` | Logo completa + "Segue o FLUXO ✌️" (composição da prancha) | Topo da tela Início |
+| `fluxo-logo-inicio.png` / `fluxo-logo-inicio-dark.png` | Logo completa em alta qualidade (faixas acetinadas, F orgânico, descrição e "Segue o FLUXO ✌️"), feita a partir da arte oficial enviada, com fundo transparente. A versão escura clareia o azul-marinho e mantém o dourado | Topo da tela Início |
+| `fluxo-logo-assinatura.svg` / `fluxo-logo-assinatura-dark.svg` | Logo completa + "Segue o FLUXO ✌️" em vetor (composição da prancha) | Reserva (materiais e usos em vetor) |
 | `fluxo-favicon.svg` | Símbolo sobre quadrado branco arredondado (legível em abas claras e escuras) | Favicon de todas as páginas |
 | `fluxo-capa-processos.png` | Ilustração de processos preparada a partir da imagem anexada pelo usuário, com fundo transparente | Reserva. A capa do Início passou a usar o vetor do ecossistema (`FX_CAPA_ARTE` em `../pgd.js`) |
 | `gerar-marca.js` | Gerador de todos os SVGs a partir de uma única geometria | Para ajustar a marca: altere o script e rode `node gerar-marca.js .` nesta pasta |

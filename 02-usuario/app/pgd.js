@@ -4266,7 +4266,7 @@ function navItems() {
 }
 // Marca oficial FLUXO (ativos em ../app/marca; o CSS exibe a versão do tema ativo)
 const FX_PALAVRA = '<img class="fx-wordmark fx-claro" src="../app/marca/fluxo-wordmark.svg" alt="FLUXO"><img class="fx-wordmark fx-escuro" src="../app/marca/fluxo-wordmark-dark.svg" alt="FLUXO">';
-const FX_MARCA_INICIO = '<div class="fx-home-marca"><img class="fx-claro" src="../app/marca/fluxo-logo-assinatura.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"><img class="fx-escuro" src="../app/marca/fluxo-logo-assinatura-dark.svg" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO"></div>';
+const FX_MARCA_INICIO = '<div class="fx-home-marca"><img class="fx-claro" src="../app/marca/fluxo-logo-inicio.png" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO" width="1279" height="460" decoding="async"><img class="fx-escuro" src="../app/marca/fluxo-logo-inicio-dark.png" alt="FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · Segue o FLUXO" width="1279" height="460" decoding="async"></div>';
 // Capa do Início: imagem preparada a partir da ilustração fornecida pelo usuário.
 // Capa do Início: ecossistema de gestão (pessoas conectadas → processos em movimento → resultados monitorados).
 // Vetor animado por CSS (classes fx-eco-*); as cores seguem o tema pelas variáveis --fx-eco-*.
