@@ -10,7 +10,7 @@ O **FLUXO** é a nova marca do antigo SGPI, que é construído sobre o motor do 
 - o formato dos arquivos JSON;
 - as regras de negócio.
 
-A identidade visual está detalhada em [02-usuario/app/marca/README.md](02-usuario/app/marca/README.md).
+Este README é a **documentação única** do projeto: sistema, marca, banco, Workflow, testes e publicação no S3 da AWS. A identidade visual está na [seção 16](#16-identidade-fluxo-e-design-system).
 
 ## Sumário
 
@@ -32,6 +32,8 @@ A identidade visual está detalhada em [02-usuario/app/marca/README.md](02-usuar
 16. [Identidade FLUXO e design system](#16-identidade-fluxo-e-design-system)
 17. [Relatório de testes do rebranding](#17-relatório-de-testes-do-rebranding)
 18. [Pendências e decisões](#18-pendências-e-decisões)
+19. [Apêndice A · Engenharia reversa do PGD](#19-apêndice-a--engenharia-reversa-do-pgd)
+20. [Apêndice B · Roteiro de teste do PGD](#20-apêndice-b--roteiro-de-teste-do-pgd)
 
 ---
 
@@ -59,48 +61,43 @@ Sobre o PGD, o FLUXO acrescenta:
 
 ## 2. Estrutura do projeto
 
-As pastas seguem a ordem de uso do sistema (0. publicação → 1. login → 2. painel do usuário → 3. banco). A publicação na AWS é feita pela pasta `00-Deploy_S3`, que gera o pacote só com o que o navegador usa (veja a [seção 11](#11-publicação-no-s3-da-aws)).
+O projeto segue o padrão dos projetos na AWS: na raiz ficam só as pastas do sistema, na ordem de uso (1. login → 2. painel do usuário → 3. banco), a página de entrada, a página de erro e esta documentação.
 
 ```text
 SGPI/
-├── index.html                      redireciona para 01-login
-├── README.md                       esta documentação
-│
-├── 00-Deploy_S3/                   0. PUBLICAÇÃO NA AWS (S3 + CloudFront)
-│   ├── gerar-pacote.js             monta e confere a pasta site/ (o conteúdo do bucket)
-│   ├── publicar.ps1                gera o pacote, envia ao S3 e limpa o cache do CloudFront
-│   ├── infra/                      CloudFormation: bucket privado, CloudFront HTTPS e cabeçalhos de segurança
-│   ├── paginas/404.html            página de erro com a marca
-│   └── README.md                   passo a passo da primeira publicação, atualização e rollback
-│
 ├── 01-login/                       1. LOGIN E DIRECIONAMENTO
-│   ├── index.html                  tela de entrada FLUXO (usuário, senha, mostrar/ocultar)
-│   └── perfis.js                   perfis, credenciais, sessão e preset de cada painel
-│
 ├── 02-usuario/                     2. PAINEL DO USUÁRIO
-│   ├── analista/index.html         entrada do analista (confere a sessão e monta o preset)
-│   ├── supervisor/index.html       entrada da supervisão
-│   └── app/                        motor comum aos dois painéis
-│       ├── pgd.css                 estrutura visual do motor (layout e componentes)
-│       ├── workflow.css            estilo original da seção Workflow (escopo .sgpi-wf), com cores em tokens
-│       ├── fluxo.css               design system FLUXO: tokens, temas, componentes (carregado por último)
-│       ├── pgd-markup.js           marcação: menu, telas e diálogos
-│       ├── workflow.js             motor do Workflow: etapas, critérios, gates, status
-│       ├── pgd.js                  motor: dados, pasta, sincronização, telas e Workflow
-│       ├── marca/                  identidade FLUXO: logotipos SVG, favicon, guia e capturas
-│       └── vendor/                 fontawesome/ (ícones) e inter/ (fonte Inter, OFL)
-│
 ├── 03-database-onedrive/           3. BANCO EM PASTA DO ONEDRIVE
-│   ├── README.md                   formato dos arquivos do banco
-│   ├── Processos Integrados/       modelo da pasta a subir no OneDrive (com dados de teste)
-│   └── docs/
-│       ├── Engenharia reversa — Painel de Demandas da Equipe (OneDrive).md
-│       └── pgd/                    material do pacote de teste do PGD
-│           ├── LEIA-ME - comece por aqui.txt
-│           ├── Roteiro de teste.txt
-│           └── estrutura.json      organograma da área financeira
-│
-└── _legado/                        versões anteriores; não é usado pelo sistema
+├── index.html                      entrada do site: redireciona para 01-login
+├── error.html                      página de erro (documento de erro do S3 / CloudFront)
+└── README.md                       documentação única do projeto
+```
+
+Por dentro:
+
+```text
+01-login/
+├── index.html                      tela de entrada FLUXO (usuário, senha, mostrar/ocultar)
+└── perfis.js                       perfis, credenciais, sessão e preset de cada painel
+
+02-usuario/
+├── analista/index.html             entrada do analista (confere a sessão e monta o preset)
+├── supervisor/index.html           entrada da supervisão
+└── app/                            motor comum aos dois painéis
+    ├── pgd.css                     estrutura visual do motor (layout e componentes)
+    ├── workflow.css                estilo original da seção Workflow (escopo .sgpi-wf), com cores em tokens
+    ├── fluxo.css                   design system FLUXO: tokens, temas, componentes (carregado por último)
+    ├── pgd-markup.js               marcação: menu, telas e diálogos
+    ├── workflow.js                 motor do Workflow: etapas, critérios, gates, status
+    ├── base-workflow.js            pacote da base de projetos (gerado por gerar-base.js)
+    ├── pgd.js                      motor: dados, pasta, sincronização, telas e Workflow
+    ├── marca/                      identidade FLUXO: logotipos, favicon, gerador e capturas
+    └── vendor/                     fontawesome/ (ícones) e inter/ (fonte Inter, OFL)
+
+03-database-onedrive/
+├── Processos Integrados/           modelo da pasta a subir no OneDrive (com dados de teste)
+├── base-workflow/                  matriz de projetos por analista + gerador (gerar-base.js)
+└── estrutura.json                  organograma da área financeira (referência do PGD)
 ```
 
 ### O que cada arquivo faz
@@ -110,7 +107,7 @@ SGPI/
 | `01-login/perfis.js` | Lista de perfis (id, nome, papel, subpasta, apelidos de login, senha); `autenticar()` confere usuário e senha; `entrar()`/`ler()`/`sair()` cuidam da sessão; `preset()` gera a configuração do painel de cada perfil. |
 | `01-login/index.html` | Tela de entrada FLUXO. Tem uma área institucional (marca, "Segue o FLUXO ✌️" e mensagem) e um cartão de acesso (usuário, senha com mostrar/ocultar e erros acessíveis). Com usuário e senha corretos, grava a sessão e redireciona para o painel do papel da pessoa. |
 | `02-usuario/app/fluxo.css` | Design system FLUXO: tokens de cor, tipografia, forma e movimento para os temas escuro (padrão), claro e automático, mais o estilo do menu lateral, botões, campos, modais, Início e Workflow. Liga os tokens do motor e do Workflow aos tokens FLUXO. |
-| `02-usuario/app/marca/` | Logotipos (horizontal, símbolo, versões escura, clara e monocromática), ícone de aplicativo, favicon, guia da marca (`README.md`) e capturas de tela reais. |
+| `02-usuario/app/marca/` | Logotipos (horizontal, símbolo, versões escura e clara), favicon, gerador `gerar-marca.js` e capturas de tela reais. O guia da marca está na [seção 16](#16-identidade-fluxo-e-design-system). |
 | `02-usuario/*/index.html` | Lê a sessão. Sem sessão, ou com sessão de outro papel, volta ao login. Com sessão válida, define `window.PAINEL_PRESET` e carrega o motor. |
 | `02-usuario/app/pgd-markup.js` | Insere no `<body>` a marcação do painel: menu lateral, uma `<section class="view">` por tela (incluindo `view-workflow` e `view-wf-e1` a `view-wf-e8`) e os `<dialog>` (demanda, atribuição…). |
 | `02-usuario/app/workflow.js` | Define `window.SGPI_WORKFLOW`: as 8 etapas com os critérios e o motor de status do SGPI original (status da etapa, encadeamento, gate, etapa atual, situação). Não acessa tela nem arquivo. |
@@ -118,15 +115,12 @@ SGPI/
 | `02-usuario/app/pgd.js` | O motor do PGD, que é um único bloco `(() => { … })()`. Os blocos estão marcados com comentários `/* ===== … ===== */`. O módulo Workflow está no bloco "Workflow (Projetos)". |
 | `02-usuario/app/vendor/fontawesome/` | Font Awesome Free (ícones do Workflow original), com a licença. |
 | `03-database-onedrive/Processos Integrados/` | Modelo da pasta com uma subpasta por analista, já com os dados de teste do PGD. |
+| `index.html` | Entrada do site (documento de índice do S3): redireciona para `01-login/index.html`. |
+| `error.html` | Página de erro com a marca (documento de erro do S3 e resposta de erro do CloudFront). Usa caminhos absolutos, porque pode abrir em qualquer endereço. |
 
-### O que há na pasta `_legado`
+### Versões anteriores
 
-| Conteúdo | Origem |
-| --- | --- |
-| `admin/`, `backend/`, `frontend/`, `database/`, `docs/`, `shared/`, `analista/`, `supervisor/`, `index.html`, `README.md` | Versão 3.0 anterior (SQL, React, portal admin), substituída por este projeto |
-| `PGD - Pacote de teste/` | Pacote do PGD já remanejado: a base de Processos Integrados virou `03-database-onedrive/Processos Integrados`; os painéis HTML viraram o motor em `02-usuario/app`; os guias e o organograma foram para `03-database-onedrive/docs/pgd`. As coordenações e a gestão são de outras áreas e ficaram só no legado. |
-
-Tudo em `_legado` pode ser apagado quando você quiser. Os arquivos que estavam no git continuam também no commit `af190a8`.
+As versões anteriores (pasta `_legado`: versão 3.0 com SQL e React, e o pacote de teste original do PGD com coordenações e gestão) foram retiradas da estrutura e continuam no histórico do Git (commit `af190a8` e anteriores a esta organização).
 
 ---
 
@@ -382,7 +376,7 @@ Enquanto o analista não sincroniza, a supervisão vê o projeto já com os pró
 
 ## 7. Banco de dados: a pasta do OneDrive
 
-O "banco" é a pasta `Processos Integrados`, sincronizada pelo OneDrive. O modelo está em `03-database-onedrive/Processos Integrados/` e o detalhe dos formatos em [03-database-onedrive/README.md](03-database-onedrive/README.md).
+O "banco" é a pasta `Processos Integrados`, sincronizada pelo OneDrive. O modelo está em `03-database-onedrive/Processos Integrados/`. O painel lê e grava os arquivos pela File System Access API do Edge e do Chrome; quem envia e baixa os arquivos é o cliente do OneDrive instalado no Windows.
 
 ```text
 Processos Integrados/                ← a supervisão conecta esta
@@ -397,7 +391,28 @@ Processos Integrados/                ← a supervisão conecta esta
 └── _Compartilhadas/                 demandas compartilhadas entre analistas (criada pelo uso)
 ```
 
-Pastas que começam com `_`, `.` ou `~` não são lidas como analistas.
+Pastas que começam com `_`, `.` ou `~` não são lidas como analistas. Cada arquivo tem um único autor, então duas pessoas nunca gravam o mesmo JSON.
+
+### Como usar o modelo e compartilhar
+
+1. Suba `Processos Integrados/` para o OneDrive ou o SharePoint da área.
+2. Compartilhe:
+
+   | Quem | Acesso |
+   | --- | --- |
+   | Juliana Batista (supervisão) | A pasta inteira, com edição. |
+   | Cada analista | A própria subpasta (`demandas.json`, backups diários e anexos) e `_Compartilhadas`, com edição. |
+   | Coordenação | Pode exibir (vem da pasta da coordenação, nas duas coordenações). |
+   | Coordenadores e supervisores das outras células | Só a subpasta `_Solicitações`, com edição. Cada solicitante grava o próprio arquivo (ex.: `sup-emerson.json`, `coord-cf.json`); a supervisão designa, define o prazo e responde em `_respostas.json`. |
+   | Modo ausência da supervisão | Os dois coordenadores: as subpastas dos analistas, com edição. Os analistas que podem substituir: a pasta inteira, com edição. O painel só libera essas funções no período ativado em `_Supervisao/ausencia.json`. |
+
+3. Cada pessoa sincroniza a pasta no computador e conecta no painel:
+   - analista: em **Pasta e backup**, a própria subpasta;
+   - supervisão: em **Pastas e ajustes**, a pasta `Processos Integrados`.
+
+A célula Processos Integrados (Juliana Batista, com José Victor, Viviane Cunha, Filipe Messias e Juliana Santos) é transversal: atende a Coordenação Contábil Fiscal e a Coordenação de Finanças e Tesouraria e aparece no painel das duas. Cada demanda indica a supervisão atendida. O organograma completo da área financeira fica em `03-database-onedrive/estrutura.json` (o motor usa a mesma estrutura, embutida em `pgd.js`).
+
+O modelo vem com os dados de teste do PGD. Para produção, apague os `demandas.json` e `atribuidas.json` e mantenha só as subpastas.
 
 ### `demandas.json`: o arquivo do analista
 
@@ -434,6 +449,7 @@ Pastas que começam com `_`, `.` ou `~` não são lidas como analistas.
 | `tasks[].updatedAt` | Decide qual versão vence quando duas cópias são mescladas. |
 | `deleted` | "Lápides": registram as exclusões para que uma demanda apagada não volte por outra cópia. Valem por 120 dias. |
 | `recebidas` | Ids de demandas e ações da supervisão já aplicadas, para nada ser aplicado duas vezes. |
+| `tasks[].codigo`, `tasks[].responsavel` | Opcionais, vindos da base de projetos: código exibido (ex.: `FM-0001`) e pessoa ou área indicada na matriz. Arquivos sem eles continuam válidos. |
 
 ### `atribuidas.json`: a caixa de entrada da supervisão
 
@@ -452,6 +468,97 @@ Pastas que começam com `_`, `.` ou `~` não são lidas como analistas.
 - **`acoes`** são as mudanças em demandas que o analista já recebeu. Os tipos do PGD são `editar`, `nota`, `cancelar`, `transferir` e outros. O FLUXO acrescenta o tipo **`workflow`**, que traz E1 ou E2; o analista ignora ações `workflow` de outras etapas.
 - O analista primeiro importa as demandas novas e depois aplica as ações. Por isso uma ação de E1/E2 enviada logo depois da atribuição também chega.
 - Itens já recebidos e muito antigos são limpos na próxima gravação da supervisão.
+
+### Base de projetos do Workflow (`03-database-onedrive/base-workflow/`)
+
+Esta pasta guarda a base de projetos de cada analista (Matriz de Evolução por Demanda) e o gerador que transforma essa base em demandas do Workflow dentro do `demandas.json` do analista.
+
+| Arquivo | Conteúdo |
+| --- | --- |
+| `filipe.messias.json` | Base de Filipe Messias: 10 projetos (FM-0001 a FM-0010). É o primeiro perfil montado e serve de modelo para os demais. |
+| `gerar-base.js` | Converte as bases em demandas do tipo **Projeto**. Grava em `Processos Integrados/<pasta>/demandas.json` e no pacote do painel, `02-usuario/app/base-workflow.js`. |
+
+#### Estrutura de uma base
+
+```json
+{
+  "titular_conjunto": "Filipe Messias",
+  "perfil": "filipe.messias",
+  "pasta": "Filipe Messias",
+  "data_base": "2026-10-26",
+  "origem": "Matriz de Evolução por Demanda",
+  "projetos": [
+    {
+      "id": "FM-0004",
+      "projeto": "Lumen",
+      "atividade": "Revisão e Consolidação do Modelo CBS",
+      "responsavel": "Lucas de Albuquerque",
+      "etapas": { "E1": "Concluído", "E2": "Concluído", "E3": "Concluído", "E4": "Em andamento", "E5": "Não iniciado", "E6": "Não iniciado", "E7": "Não iniciado", "E08": "Não iniciado" },
+      "etapa_atual": "E4 — Execução",
+      "percentual_fluxo": 37.5,
+      "dias": 89,
+      "situacao": "Em andamento",
+      "bloqueios": [],
+      "gates": ["E5"]
+    }
+  ]
+}
+```
+
+**Campos de identificação da base**
+
+- **`perfil` e `pasta`:** o login do analista e o nome da subpasta dele em `Processos Integrados/`.
+- **`data_base`:** a data em que a matriz foi levantada. Os `dias` de cada projeto contam a partir dela.
+
+**Campos de cada projeto**
+
+| Campo | Uso no sistema |
+| --- | --- |
+| `id` | Código exibido no Workflow (coluna ID). Na demanda, vira o campo `codigo`. |
+| `projeto` | Coluna Projeto (campo `category` da demanda). |
+| `atividade` | Coluna Atividade (título da demanda). |
+| `responsavel` | Coluna Responsável da matriz. Preserva a pessoa ou área indicada; quando vazio, a matriz mostra o analista. |
+| `etapas` | Status de cada etapa: `Concluído`, `Em andamento`, `Não iniciado`, `Bloqueado` ou `N/A` (só E6). |
+| `etapa_atual`, `percentual_fluxo`, `situacao`, `gates`, `bloqueios`, `dias` | Usados só para conferência. O sistema calcula esses valores sozinho a partir dos critérios. |
+| `concluido_em` (opcional) | Data real de conclusão (`AAAA-MM-DD`). Sem ela, a conclusão fica registrada na `data_base`. |
+
+#### Como o gerador monta cada projeto
+
+O status nunca é digitado. O motor do Workflow o deriva dos 49 critérios, então o gerador grava os critérios de cada etapa:
+
+| Status na base | Critérios gravados |
+| --- | --- |
+| Concluído | Todos `✔ Concluído`. Na E6, `aplicavel: "Sim"`. Na E08, `resultadoHypercare: "✅ Estável — Demanda Encerrada"`. |
+| Em andamento | A primeira metade `✔ Concluído`, o próximo `🔄 Em andamento` e o restante `⏳ Pendente`. Na E08, `resultadoHypercare: "🔄 Em Estabilização"`. |
+| Não iniciado | A etapa fica sem registro (todos pendentes). |
+| Bloqueado | O primeiro critério `⛔ Bloqueado`. |
+
+Antes de gravar, o gerador carrega o motor oficial (`02-usuario/app/workflow.js`) e confere, projeto a projeto, se o status das 8 etapas, a etapa atual, o % do fluxo, a situação, os gates, os bloqueios e os dias batem com a base. Se algum valor não bater, nada é gravado.
+
+Cada projeto entra com id fixo (`wf-fm-0001`, …). Rodar o gerador de novo atualiza os mesmos projetos, sem duplicar, e mantém as outras demandas do arquivo.
+
+#### Como usar
+
+1. Na pasta `base-workflow`, rode `node gerar-base.js`. O gerador:
+   - confere todas as bases;
+   - grava cada uma no `demandas.json` da pasta do analista;
+   - atualiza o pacote `02-usuario/app/base-workflow.js`.
+
+   Com o nome de um arquivo (`node gerar-base.js filipe.messias.json`), só aquela pasta é gravada, mas o pacote continua reunindo todas as bases.
+2. Ao entrar no FLUXO, o analista já vê os projetos no **Workflow (Projetos)**, mesmo sem a pasta conectada:
+   - em **Base de projetos**: ID, Projeto, Atividade, Situação e Fluxo;
+   - na **Matriz de Evolução por Demanda**: as 8 etapas, o responsável, a etapa atual, os dias e os gates.
+
+   O painel só acrescenta os projetos que ainda não estão no navegador e que o analista não excluiu. Edições feitas no painel não são sobrescritas.
+3. Ao conectar a pasta em **Pasta e backup**, os projetos seguem a sincronização normal. Têm o mesmo id do `demandas.json`, então não duplicam.
+
+#### Próximos perfis
+
+Para cada analista:
+
+1. Copie `filipe.messias.json` com o nome do login (por exemplo, `jose.victor.json`).
+2. Ajuste `titular_conjunto`, `perfil`, `pasta` e os projetos.
+3. Rode o gerador.
 
 ---
 
@@ -553,25 +660,98 @@ Os dados locais ficam só neste navegador e neste computador. O backup em JSON (
 | 7 | Analista | Tentar a E6 antes da E5: aparece travada. |
 | 8 | Supervisão | Atualizar: o projeto aparece na E4 e o ajuste pendente some. |
 
-O roteiro de teste completo do PGD (dia a dia e modo ausência) está em `03-database-onedrive/docs/pgd/Roteiro de teste.txt`.
+O roteiro de teste completo do PGD (dia a dia e modo ausência) está no [Apêndice B](#20-apêndice-b--roteiro-de-teste-do-pgd).
 
 ---
 
 ## 11. Publicação no S3 da AWS
 
-O FLUXO é um site estático: os caminhos são relativos e não há CDN nem API externa. A publicação fica toda na pasta `00-Deploy_S3`; o guia completo está em [00-Deploy_S3/README.md](00-Deploy_S3/README.md).
+O FLUXO é um site estático: HTML, CSS e JavaScript com caminhos relativos, sem servidor, sem CDN e sem API externa. A estrutura do projeto já é a do bucket:
 
-| Passo | Comando |
+| No bucket | Conteúdo |
 | --- | --- |
-| 1. Criar bucket privado + CloudFront (uma vez) | `aws cloudformation deploy --stack-name fluxo --template-file 00-Deploy_S3/infra/fluxo-s3-cloudfront.yaml --parameter-overrides NomeDoBucket=<nome> --region sa-east-1` |
-| 2. Publicar (a cada atualização) | `.\00-Deploy_S3\publicar.ps1 -Bucket <nome> -DistribuicaoId <id>` |
-| Só gerar o pacote | `node 00-Deploy_S3/gerar-pacote.js` (cria `00-Deploy_S3/site/`, fora do Git) |
+| `index.html` | Documento de índice. |
+| `error.html` | Documento de erro. |
+| `01-login/` | Login. |
+| `02-usuario/` | Painéis e motor. |
 
-Pontos importantes:
+**O que não vai para o bucket:**
 
-- **HTTPS é obrigatório.** A File System Access API só funciona em contexto seguro, e o endpoint de site do S3 é só HTTP; por isso o bucket fica privado atrás do CloudFront.
-- **Os dados não vão para a AWS.** `03-database-onedrive/`, `_legado/`, documentação e capturas ficam fora do pacote; os dados continuam no OneDrive de cada pessoa.
-- **O pacote é conferido antes de publicar:** toda referência de página, CSS e JS precisa existir e todo JS precisa ter sintaxe válida, senão nada é enviado.
+| Item | Motivo |
+| --- | --- |
+| `03-database-onedrive/` | É o modelo da pasta do OneDrive, com os dados da equipe. Os dados ficam no OneDrive de cada pessoa, e o bucket só entrega as telas. |
+| `README.md` | É documentação. |
+| `02-usuario/app/marca/capturas/` | São imagens de documentação, com cerca de 12 MB. |
+
+### Por que precisa de HTTPS (CloudFront)
+
+A conexão com a pasta do OneDrive (File System Access API) só funciona em **HTTPS**, e o endpoint de "hospedagem de site estático" do S3 é só HTTP. Sem HTTPS, o FLUXO até abre, mas não conecta a pasta. Por isso o padrão é **bucket privado + CloudFront**.
+
+### 1. Bucket S3 (uma vez)
+
+1. No S3, crie o bucket (ex.: `fluxo-processos-integrados`) na região **sa-east-1 (São Paulo)**.
+2. Mantenha **Bloquear todo o acesso público** ligado.
+3. Se a equipe usa hospedagem de site estático, em Propriedades → **Hospedagem de site estático**, configure:
+   - documento de índice: `index.html`;
+   - documento de erro: `error.html`.
+
+### 2. CloudFront com HTTPS (uma vez)
+
+1. Crie uma distribuição com o bucket como origem, usando **Origin Access Control (OAC)**. Aceite a política de bucket que o CloudFront sugerir.
+2. Configure a distribuição:
+
+   | Configuração | Valor |
+   | --- | --- |
+   | Viewer protocol policy | **Redirect HTTP to HTTPS** |
+   | Default root object | `index.html` |
+   | Cache policy | CachingOptimized |
+   | Response headers policy | SecurityHeadersPolicy (gerenciada) |
+
+3. Em **Error pages**, crie duas respostas personalizadas:
+   - 403 → `/error.html`, código 404;
+   - 404 → `/error.html`, código 404.
+
+   Com OAC, o S3 responde 403 para um arquivo inexistente, e as duas respostas mostram a página de erro do FLUXO.
+4. Domínio próprio (opcional):
+   - emita o certificado no ACM, **em us-east-1**;
+   - informe o domínio em *Alternate domain names*;
+   - crie o CNAME no DNS apontando para o endereço `*.cloudfront.net`.
+
+### 3. Enviar os arquivos (a cada atualização)
+
+**Pelo AWS CLI**, na raiz do projeto, depois de rodar `aws configure`:
+
+```powershell
+aws s3 sync . s3://fluxo-processos-integrados --delete --cache-control "no-cache" `
+  --exclude ".git/*" --exclude "03-database-onedrive/*" --exclude "README.md" `
+  --exclude "02-usuario/app/marca/capturas/*" --exclude "02-usuario/app/marca/gerar-marca.js"
+aws cloudfront create-invalidation --distribution-id <ID-DA-DISTRIBUICAO> --paths "/*"
+```
+
+- O `no-cache` faz o navegador conferir a versão a cada abertura (o S3 responde "não mudou" quando o arquivo é o mesmo), então a atualização chega na hora para todos.
+- O `--delete` remove do bucket o que saiu do projeto.
+- A invalidação limpa o cache do CloudFront.
+
+**Pelo console**, em vez do CLI:
+1. Abra o bucket → **Carregar**.
+2. Arraste `index.html`, `error.html`, `01-login/` e `02-usuario/`. Pode deixar `marca/capturas/` de fora.
+3. Envie.
+4. No CloudFront, crie uma invalidação `/*`.
+
+### 4. Conferência depois de publicar
+
+- [ ] `https://<endereço>/` abre o login.
+- [ ] Entrar com um analista e com a supervisão abre o painel certo.
+- [ ] Em Pasta e backup (ou Pastas e ajustes), o botão de conectar a pasta funciona. Se não funcionar, o site não está em HTTPS.
+- [ ] Um endereço inexistente, como `/teste`, mostra a página de erro do FLUXO.
+
+### Voltar uma versão
+
+Volte o código no Git (`git checkout <commit>`) e envie de novo. Se o bucket tiver versionamento ligado, também dá para restaurar arquivos pelo console, em "Mostrar versões".
+
+### Custo
+
+Para uma equipe pequena, são centavos de dólar por mês: alguns MB no S3, e o nível gratuito do CloudFront cobre 1 TB de transferência por mês.
 
 ---
 
@@ -603,6 +783,7 @@ Pontos importantes:
 | Relógio | O `updatedAt` vem do relógio de cada máquina. Mantenha a hora do Windows sincronizada. |
 | Conflito do OneDrive | Se o OneDrive criar uma cópia como `demandas-NOMEDOPC.json`, o painel ignora o arquivo. Recupere pela importação de JSON em Pasta e backup. |
 | Backups | A pasta `backups/` ganha um arquivo por dia de uso e precisa de limpeza periódica. |
+| Publicação na AWS | Qualquer pessoa com o link consegue ler o `perfis.js`, inclusive as senhas, porque o login é só de tela. Divulgue o link só para a equipe; se a empresa exigir, restrinja o CloudFront à rede corporativa com o AWS WAF (lista de IPs), sem mudar o sistema. Nunca envie `03-database-onedrive/` ao bucket. |
 
 ---
 
@@ -617,7 +798,7 @@ Pontos importantes:
    - em seguida Colaborador: leitura e gravação (`pull`, `push`, `processActions`) e Supervisor (`scanTeam`, `writeAssigned`);
    - por fim Workflow (Projetos) e Navegação.
 5. **Veja os dados ao vivo:** com o painel aberto, pressione `F12` → **Application**. Observe o Local Storage e o IndexedDB enquanto usa a tela. Depois abra os JSON na pasta.
-6. **Aprofunde a arquitetura:** leia `03-database-onedrive/docs/Engenharia reversa — Painel de Demandas da Equipe (OneDrive).md`.
+6. **Aprofunde a arquitetura:** leia o [Apêndice A](#19-apêndice-a--engenharia-reversa-do-pgd), a engenharia reversa do painel original.
 
 ---
 
@@ -638,7 +819,7 @@ Pontos importantes:
 
 ## 16. Identidade FLUXO e design system
 
-O guia completo da marca está em [02-usuario/app/marca/README.md](02-usuario/app/marca/README.md). Resumo:
+**FLUXO** · Plataforma Integrada de Gestão de Demandas e Processos. **Slogan:** Segue o FLUXO ✌️. **Assinatura:** Sua gestão no ritmo certo. A referência oficial é a prancha de marca enviada em 26/10/2026. Resumo:
 
 - **Marca oficial (prancha de 26/10/2026), reconstruída em vetor:**
   - **Símbolo:** um "F" de duas faixas azul-marinho com borda dourada, nós dourados e haste.
@@ -672,6 +853,118 @@ O guia completo da marca está em [02-usuario/app/marca/README.md](02-usuario/ap
   As 8 etapas, os 49 critérios, os gates, o encadeamento, as evidências e os campos de E5, E6 e E08 não mudaram.
 - **Movimento:** transições de 160 a 220 ms. Com `prefers-reduced-motion`, as animações são desligadas.
 
+### Elementos da marca
+
+- **Símbolo:** um "F" formado por duas faixas azul-marinho com acabamento acetinado e borda dourada na parte de baixo.
+  - A faixa de cima é mais curta, com a ponta esquerda curvada, e termina num nó dourado.
+  - A faixa do meio também termina num nó dourado. Ela desce e forma a haste do F, que acaba num ponto dourado.
+- **Palavra FLUXO:** letras geométricas e robustas em azul-marinho. O **X** é formado por um chevron dourado (›) e um azul (‹).
+- **Descrição institucional:** "Plataforma Integrada de Gestão de Demandas e Processos", abaixo da palavra, com a mesma largura dela.
+- **Slogan:** "Segue o FLUXO ✌️", alinhado à direita e precedido de uma linha dourada.
+
+A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso aparece igual em qualquer computador, mesmo como imagem.
+
+### Paleta (da prancha)
+
+| Cor | Valor | Significado | Uso na interface |
+| --- | --- | --- | --- |
+| Azul-marinho | `#0B2852` (símbolo: degradê `#071F45` → `#1A4A7E`) | Confiança, estratégia, solidez | Marca, títulos, fundo do tema escuro (`#101E30`) |
+| Azul slate | `#4B6C9A` | Tecnologia, integração, inteligência | Referência da marca. Na interface, o azul operacional dos botões é `#3265AF`, mais saturado para manter o contraste |
+| Dourado | degradê `#B8862F` → `#F7DA8C` → `#C6913A` (sólido `#E6BC79`) | Resultados, evolução, valor | X da marca, nós do símbolo, linha do slogan, item ativo do menu. Uso moderado: não é cor de botões nem de cartões |
+
+### Arquivos
+
+| Arquivo | Conteúdo | Onde é usado |
+| --- | --- | --- |
+| `fluxo-icon.svg` / `fluxo-icon-dark.svg` | Símbolo isolado (fundo claro / fundo escuro) | Menu lateral, inclusive recolhido |
+| `fluxo-wordmark.svg` / `fluxo-wordmark-dark.svg` | Palavra FLUXO com o X dourado | Menu lateral, ao lado do símbolo |
+| `fluxo-logo-horizontal.svg` / `fluxo-logo-horizontal-dark.svg` | Símbolo + FLUXO | Cartão de acesso do login |
+| `fluxo-logo-completa.svg` / `fluxo-logo-dark.svg` | Símbolo + FLUXO + descrição institucional | Área institucional do login (versão escura) e materiais |
+| `fluxo-logo-inicio.png` / `fluxo-logo-inicio-dark.png` | Logo completa em alta qualidade (faixas acetinadas, F orgânico, descrição e "Segue o FLUXO ✌️"), feita a partir da arte oficial enviada, com fundo transparente. A versão escura clareia o azul-marinho e mantém o dourado | Topo da tela Início |
+| `fluxo-logo-assinatura.svg` / `fluxo-logo-assinatura-dark.svg` | Logo completa + "Segue o FLUXO ✌️" em vetor (composição da prancha) | Reserva (materiais e usos em vetor) |
+| `fluxo-favicon.svg` | Símbolo sobre quadrado branco arredondado (legível em abas claras e escuras) | Favicon de todas as páginas |
+| `fluxo-capa-processos.png` | Ilustração de processos preparada a partir da imagem anexada pelo usuário, com fundo transparente | Reserva. A capa do Início passou a usar o vetor do ecossistema (`FX_CAPA_ARTE` em `02-usuario/app/pgd.js`) |
+| `gerar-marca.js` | Gerador de todos os SVGs a partir de uma única geometria | Para ajustar a marca: altere o script e rode `node gerar-marca.js .` na pasta `02-usuario/app/marca` |
+
+### Aplicação nas telas
+
+| Local | Versão da marca |
+| --- | --- |
+| Menu lateral expandido | Sem cartão: símbolo + palavra FLUXO + "Processos Integrados · CSC" alinhados, com um filete dourado separando do menu. O botão de recolher é um círculo discreto na borda do menu |
+| Barra do topo direito | Nome do usuário conectado (dinâmico) | Sair |
+| Menu lateral recolhido | Só o símbolo, centralizado; o botão de abrir continua na borda |
+| Início (analista e supervisão) | Capa de largura total. À esquerda: logo completa com descrição e slogan, saudação, resumo, três cartões de destaque e a área "Comece por aqui". À direita: o ecossistema de gestão (vetor animado) com etiquetas de números reais. Os cartões de indicador vêm abaixo |
+| Login: área institucional | Logo completa (versão escura) no topo esquerdo; "Segue o FLUXO ✌️" com FLUXO em dourado animado. Efeitos: rede com pulsos dourados, nós pulsando, aurora e luz que segue o cursor |
+| Login: cartão de acesso | Símbolo + FLUXO, acima de "Acesse o FLUXO". Cartão de vidro com borda viva (dourado ↔ azul) e reflexo no botão Entrar. Abaixo: "FLUXO · Sua gestão no ritmo certo." e "Elaborado: Processos Integrados". Com "reduzir animações", os movimentos param |
+| Telas internas (Tarefas, Workflow, Indicadores, Validação, Ausência, Pasta e backup, Dashboard) | Marca compacta do menu lateral; a logo completa não se repete |
+| Aba do navegador | `fluxo-favicon.svg` |
+
+Cada local carrega a versão clara e a escura do ativo. A regra `.fx-claro` / `.fx-escuro` em `02-usuario/app/fluxo.css` mostra a do tema ativo. Os caminhos dos ativos ficam centralizados:
+- no motor: constantes `FX_PALAVRA` e `FX_MARCA_INICIO` em `02-usuario/app/pgd.js`;
+- no menu: símbolo em `02-usuario/app/pgd-markup.js`;
+- no login: em `01-login/index.html`.
+
+### Ilustração da capa do Início
+
+A capa ocupa toda a largura do painel e segue o padrão de capa do CSC (ideia principal à esquerda, ilustração à direita). **À esquerda:** logo completa como título, saudação, resumo e três cartões de destaque (ícone dourado, título e complemento): "Demandas e projetos em um só lugar" (na supervisão, "Equipe e demandas em um só lugar"), "Workflow E1 a E08 com governança" e "Indicadores no ritmo certo" (na supervisão, "Indicadores da área no ritmo certo"). Depois vem a área tracejada "Comece por aqui". Ela tem a mesma largura dos cartões de destaque (até 620 px, variável `--fx-capa-col`), alinhada à esquerda da coluna, sem avançar sobre a ilustração. Os botões são compactos para caberem numa linha e quebram só em telas menores. **À direita:** a ilustração com três etiquetas de números reais (em aberto, projetos em fluxo, concluídas no mês). O estado da pasta fica no rodapé do menu; avisos de ausência continuam aparecendo na capa. No HTML, o conteúdo vem primeiro, então leitores de tela e o celular leem a marca e a saudação antes da ilustração, que é decorativa (`aria-hidden`).
+
+**Ecossistema de gestão.** A ilustração é um vetor que segue a linguagem da marca (azul-marinho, dourado, linhas conectadas, profundidade suave) e reúne três ideias:
+
+- **Pessoas e equipes conectadas:** o cartão da equipe e uma rede de pessoas ligadas.
+- **Processos em movimento:** as engrenagens girando e a trilha do Workflow E1 → E08, com a etapa atual pulsando e os gates E3 e E5 com aro dourado.
+- **Resultados monitorados:** o painel central (gráfico, rosca e barras), o escudo de governança e o cartão de resultados em alta.
+
+Linhas com pulsos dourados ligam tudo ao painel, com halo e órbitas ao fundo. O vetor fica em `02-usuario/app/pgd.js` (`FX_CAPA_ARTE`, com `fxEcoPessoa` e `fxEcoEngrenagem`) e o estilo em `02-usuario/app/fluxo.css` (classes `fx-eco-*`). As cores vêm das variáveis `--fx-eco-*`, então a arte acompanha os temas claro e escuro. Ocupa a coluna direita até 820 px. As três etiquetas por cima continuam em HTML, com valores reais do sistema. A arte é decorativa (`aria-hidden`); os indicadores acessíveis estão no conteúdo da página.
+
+**Efeitos**
+
+| Efeito | Como funciona |
+| --- | --- |
+| Borda viva | Degradê dourado ↔ azul girando em volta da capa |
+| Aurora | Brilhos azul e dourado desfocados se movendo devagar ao fundo |
+| Luz do cursor | Brilho suave que acompanha o mouse sobre a capa |
+| Inclinação 3D | A ilustração inclina em perspectiva conforme a posição do mouse |
+| Entrada em cascata | Marca, estados, saudação e ações sobem em sequência. Só na primeira exibição, para não repetir a cada sincronização |
+| Etiquetas flutuantes | Os números da ilustração flutuam suavemente, em ritmos diferentes |
+| Órbitas e halo | Duas órbitas tracejadas giram em sentidos opostos; o halo azul e dourado respira ao fundo |
+| Conexões vivas | Pulsos dourados percorrem as linhas entre equipes, processos, painel e resultados |
+| Ecossistema em movimento | Engrenagens girando (mais rápidas com o mouse), cartões flutuando, gráfico se desenhando, rosca girando, barras oscilando, escudo com check e trilha do Workflow com a etapa atual pulsando |
+| Botão principal | Um reflexo de luz percorre "Nova demanda" de tempos em tempos |
+
+**Boas práticas**
+
+- O estado normal é sempre visível: as animações só aplicam o estado inicial durante a entrada. Se uma animação não rodar, nada fica escondido.
+- Os efeitos que seguem o mouse ficam desligados em telas de toque (`pointer: fine`). Com "reduzir animações" (`prefers-reduced-motion`), os movimentos param e a ilustração aparece completa.
+- A transparência permite que a imagem acompanhe as superfícies dos temas claro e escuro sem um retângulo branco ao redor.
+
+**Responsividade**
+
+| Largura | Layout |
+| --- | --- |
+| ≥ 1600 px | Duas colunas iguais; a ilustração ocupa a largura disponível até seu limite proporcional, e a capa cresce conforme o conteúdo |
+| 1361–1599 px | Duas colunas (conteúdo 1,1 : ilustração 0,9), botões compactos para caberem numa linha |
+| 1101–1360 px (notebook) | Duas colunas, logo até 420 px |
+| ≤ 1100 px (tablet) | Uma coluna centralizada, com a ilustração abaixo do conteúdo (até 600 px) |
+| ≤ 560 px (celular) | Logo até 300 px, etiquetas menores e botões na largura total, para facilitar o toque |
+
+### Diferenças conhecidas em relação à prancha
+
+- **Haste do símbolo:** a prancha tem uma curva mais orgânica, que se alarga para baixo. O vetor usa traço de espessura constante, para continuar nítido em 16–40 px.
+- **Descrição institucional:** usa a fonte do sistema (Segoe UI no Windows), ajustada à largura da palavra FLUXO. Na prancha, a fonte é um sans-serif semelhante.
+
+### Capturas (`02-usuario/app/marca/capturas/`)
+
+Geradas no Microsoft Edge (1440 × 900; celular 390 px), com o sistema rodando:
+
+- `00-comparacao-referencia.png`: prancha oficial × ativos implementados.
+- `01-login.png`, `02-login-celular.png`, `12-login-erro.png`.
+- `03-inicio-claro.png`, `04-inicio-escuro.png`, `08-inicio-celular.png`.
+- `05-menu-recolhido.png`.
+- `06-supervisao-inicio-claro.png`, `07-supervisao-inicio-escuro.png`.
+- `09-workflow-claro.png`, `10-tarefas-escuro.png`, `11-indicadores-claro.png`.
+- `13-inicio-notebook.png`, `14-inicio-tablet.png`, `15-inicio-fullhd.png`: capa em 1280 px, 820 px e 1920 px.
+- `16-menu-altura-total.png`, `17-menu-tela-baixa.png`: menu lateral na altura da tela (1440 × 900) e em tela baixa (1366 × 640).
+
 ### Arquivos alterados no rebranding
 
 | Arquivo | O que mudou |
@@ -682,7 +975,7 @@ O guia completo da marca está em [02-usuario/app/marca/README.md](02-usuario/ap
 | `02-usuario/app/workflow.css` | Cores fixas trocadas por tokens `--fx-*`. As regras não mudaram. |
 | `02-usuario/app/pgd-markup.js` | Símbolo FLUXO no menu e rótulo do botão Sair, para o modo recolhido. |
 | `02-usuario/app/pgd.js` | Só textos e marca: nome FLUXO no menu, aba, relatórios e apresentação; saudação e assinatura no Início; mensagens de confirmação e estados vazios; tema escuro como padrão de primeiro acesso. O "Seu FLUXO está atualizado." só aparece se a sincronização terminar sem erro. |
-| `02-usuario/app/marca/` | **Novo**: logotipos, favicon, guia da marca e capturas. |
+| `02-usuario/app/marca/` | **Novo**: logotipos, favicon, gerador e capturas. |
 | `02-usuario/app/vendor/inter/` | **Novo**: fonte Inter com a licença. |
 | `index.html`, `README.md` | Título, favicon e documentação. |
 
@@ -716,7 +1009,7 @@ São **57 verificações, todas aprovadas** (atualizado com a marca oficial). El
 
 - **Console:** login, Início, Workflow, E4, E08, Tarefas, Indicadores, Pasta e backup, E1 da supervisão e Dashboard não registraram nenhum erro.
 - **Console:** sem erros também em Validação, Ausência e E3, e todos os ativos de marca referenciados no código existem.
-- **Capturas** em `02-usuario/app/marca/capturas/`, com o registro em `marca/VALIDACAO-2026-10-26.md`:
+- **Capturas** em `02-usuario/app/marca/capturas/` (registro na validação da marca, abaixo):
   - comparação com a prancha oficial;
   - login (desktop, celular e com erro);
   - Início do analista (claro, escuro e celular);
@@ -727,6 +1020,25 @@ São **57 verificações, todas aprovadas** (atualizado com a marca oficial). El
   - filtros das etapas cortados;
   - rótulo "Sair" vazando no menu recolhido;
   - cartão do login transbordando no celular.
+
+### Validação da marca oficial (26/10/2026)
+
+#### Comparação com a referência
+
+Prancha oficial × ativos implementados, lado a lado: [`capturas/00-comparacao-referencia.png`](02-usuario/app/marca/capturas/00-comparacao-referencia.png).
+
+| Verificação | Resultado |
+| --- | --- |
+| O símbolo corresponde à prancha (F com duas faixas azul-marinho, borda dourada, nós dourados e haste com ponto dourado)? | Sim. A haste usa traço uniforme em vez da curva orgânica (ver "Diferenças conhecidas" na seção 16). |
+| A palavra FLUXO aparece, em letras geométricas robustas e azul-marinho? | Sim, desenhada em vetor. |
+| O X está destacado em dourado? | Sim: chevron dourado (›) e azul (‹). |
+| Proporções preservadas (símbolo à esquerda, palavra, descrição na largura da palavra, slogan à direita com linha dourada)? | Sim. |
+| Descrição institucional correta? | "Plataforma Integrada de Gestão de Demandas e Processos". |
+| Slogan correto? | "Segue o FLUXO ✌️". |
+| Legível no Início? | Sim, nos temas claro e escuro (capturas 03 e 04). |
+| Adequada ao menu lateral? | Sim: símbolo + FLUXO + usuário, e recolhido só o símbolo (capturas 03 e 05). |
+| Favicon corresponde ao símbolo? | Sim (`fluxo-favicon.svg`). |
+| Versão para tema escuro? | Sim: `*-dark.svg`, trocadas automaticamente pelo tema. |
 
 ### O que não foi testado
 
@@ -741,6 +1053,457 @@ São **57 verificações, todas aprovadas** (atualizado com a marca oficial). El
 | --- | --- |
 | Segurança do login | Continua sendo só controle de tela: senha `1234` escrita no `perfis.js`. O rebranding não mexeu nisso de propósito. Para uma autenticação corporativa de verdade, seria preciso entrar com a conta Microsoft (Entra ID). A proteção real dos dados continua sendo a permissão na pasta do OneDrive. |
 | Nomes internos `pgd`/`sgpi` | Mantidos para não quebrar dados, sessões e pastas já conectadas. Renomear exigiria um plano de migração das chaves do navegador. |
-| Pasta `_legado` | Contém as versões anteriores e o pacote de teste do PGD. Pode ser apagada quando quiser. |
-| Tamanho das capturas | Cerca de 4 MB em PNG. Ficam fora do pacote do S3 (o `gerar-pacote.js` não as inclui), porque são só documentação. |
+| Tamanho das capturas | Cerca de 12 MB em PNG em `02-usuario/app/marca/capturas/`. São só documentação e ficam fora do envio ao S3 (veja a seção 11). |
 | Telas herdadas do PGD que não são do Analista nem da Supervisão (Coordenação, Gestão, Solicitante) | Recebem os tokens e a marca automaticamente, mas não foram revisadas uma a uma, porque esses perfis não estão no login do FLUXO. |
+
+---
+
+## 19. Apêndice A · Engenharia reversa do PGD
+
+Análise do painel original (um único HTML com o preset da supervisora), feita em 21/10/2026, que serviu de base para o motor `02-usuario/app/pgd.js`. Os nomes de função citados continuam válidos no motor.
+
+### 1. Visão geral
+
+O painel é um único arquivo HTML (CSS e JavaScript embutidos, sem servidor, sem banco de dados e sem bibliotecas externas) que usa uma pasta sincronizada do OneDrive como "banco de dados compartilhado". Cada pessoa abre o arquivo no Edge ou no Chrome, o navegador ganha permissão para ler e gravar numa pasta local, e o próprio cliente do OneDrive se encarrega de levar esses arquivos para a nuvem e para os outros computadores.
+
+O mesmo código atende dois perfis:
+
+- **Colaborador (analista):** cadastra, edita e conclui as próprias demandas. Grava tudo em `demandas.json` na sua subpasta e importa as demandas que a supervisão lhe atribuir.
+- **Supervisor:** lê as subpastas de todos os analistas, mostra indicadores consolidados e atribui demandas. Nunca altera o `demandas.json` de ninguém; grava apenas `atribuidas.json` na pasta do analista.
+
+O arquivo que você enviou é a cópia "pré-configurada" da supervisora Juliana. Isso vem de uma única linha antes do script principal:
+
+```javascript
+window.PAINEL_PRESET = {"mode": "supervisor", "nome": "Juliana", "rotulo": "Supervisora Juliana", "titulo": "Painel da supervisora Juliana", "pastaArea": "Painel Demandas - Área"};
+```
+
+Com esse preset, a tela inicial esconde o cartão "Sou colaborador", troca os textos e sugere a pasta `Painel Demandas - Área`. As cópias dos analistas provavelmente têm um preset com `mode: "colaborador"` e `pasta: "<nome da subpasta>"`, que ativa uma checagem de nome da pasta escolhida.
+
+### 2. Tecnologias e APIs usadas
+
+Tudo é recurso nativo do navegador; não há React, jQuery, Node, Python nem chamada de rede. A peça central é a **File System Access API**, que só existe no Chrome e no Edge (por isso o aviso "Use o Microsoft Edge ou o Google Chrome").
+
+| Tecnologia | Onde aparece no código | Para que serve |
+| --- | --- | --- |
+| HTML5 + `<dialog>` | `#taskDialog`, `#viewDialog`, `#assignDialog`, `#askDialog` | Janelas modais nativas (`showModal()`, `close()`), sem biblioteca de modal |
+| CSS com variáveis (`:root`) | `--ink`, `--accent`, `--st-atr`… | Tema claro/escuro, cores por situação; `prefers-color-scheme` + atributo `data-theme` |
+| CSS Grid / media queries | `.app`, `.task`, `@media (max-width:760px)` | Layout em trilho lateral; no celular o menu vira barra inferior |
+| JavaScript puro (ES2020+) | IIFE `(() => { 'use strict'; … })()` | Toda a lógica, isolada do escopo global |
+| **File System Access API** | `showDirectoryPicker`, `getFileHandle`, `getDirectoryHandle`, `createWritable`, `queryPermission`, `requestPermission`, `dir.values()` | Ler e gravar arquivos reais numa pasta do computador (a pasta do OneDrive) |
+| **IndexedDB** | objeto `idb`, banco `painelEquipe`, store `kv` | Guardar o "handle" (a referência) da pasta entre sessões |
+| localStorage | objeto `ls`, chaves `painelEquipe:<caminho>:…` | Configuração, cópia local das demandas, cache da equipe, pontos de restauração |
+| Blob + `URL.createObjectURL` | `triggerDownload()` | Baixar backup JSON e exportar CSV sem servidor |
+| `crypto.randomUUID` | `uid()` | ID único de cada demanda e nota |
+| `setInterval` + `visibilitychange` | `startPolling()` | Reler a pasta a cada 30 s e ao voltar para a aba |
+| Evento `storage` | `window.addEventListener('storage', …)` | Sincronizar duas abas com o mesmo arquivo aberto |
+| Drag and drop HTML5 | `dragstart`/`drop` em `#taskArea` | Mover cartões entre colunas no modo Quadro |
+| `Intl` / `toLocaleDateString('pt-BR')` | `fmtDate`, `fmtDue`, `longToday` | Datas em português sem biblioteca |
+| SVG inline | constante `I` | Ícones desenhados no próprio código |
+
+Duas ideias de arquitetura sustentam o resto: o **OneDrive faz o papel de servidor** (a sincronização é dele, não do painel) e cada colaborador é **dono exclusivo** do próprio arquivo, o que evita que duas pessoas gravem o mesmo JSON.
+
+### 3. Como funciona a conexão com o OneDrive
+
+O painel **não conversa com o OneDrive**: não há Microsoft Graph, login, token nem URL da Microsoft no código. Ele grava arquivos numa pasta comum do disco, e essa pasta por acaso está dentro do OneDrive sincronizado (ex.: `C:\Users\filipe\OneDrive - Eletrobras\Painel Demandas - Área\Victor`). Quem envia o arquivo para a nuvem e baixa nos outros computadores é o cliente de sincronização do OneDrive instalado no Windows.
+
+&#91;embedded content: conexão com o OneDrive · 2 computadores, 2 arquivos\]
+
+Cada arquivo tem um só autor: o analista escreve `demandas.json`, a supervisora escreve `atribuidas.json`, e o OneDrive apenas copia os dois entre as máquinas.
+
+#### 3.1 Passo a passo da conexão
+
+1. **Escolha da pasta.** `pickFolder()` chama `window.showDirectoryPicker({ id, mode:'readwrite' })`. O Windows abre o seletor de pastas e o navegador devolve um `FileSystemDirectoryHandle`, um objeto que representa a pasta.
+2. **Checagem de pasta errada.** Antes de aceitar, o painel inspeciona a pasta: o colaborador é avisado se ela tiver subpastas com `demandas.json` (seria a pasta da área); o supervisor é avisado se ela tiver um `demandas.json` próprio (seria a pasta de um analista). Com preset `pasta`, o nome também é conferido.
+3. **Guardar a referência.** O handle é salvo no IndexedDB (`idb.set(DIR_KEY, h)`). Só o IndexedDB consegue guardar esse tipo de objeto; o localStorage aceita apenas texto.
+4. **Primeira leitura.** `afterConnect()` inicia o polling e chama `pull(true)` (colaborador) ou `scanTeam()` (supervisor).
+5. **Reabertura do painel.** Em `restoreDir()`, o handle volta do IndexedDB e o painel pergunta `queryPermission()`. Na maioria das vezes o Chrome/Edge responde `prompt`: a permissão de escrita não sobrevive ao fechamento da aba. O painel entra no estado `conn = 'prompt'` e mostra o banner "Reativar pasta".
+6. **Reativação.** O clique chama `requestPermission()`. Essa chamada exige um gesto do usuário (por isso precisa de um botão) e, ao ser aceita, `conn` vira `'ok'` e a sincronização recomeça.
+
+#### 3.2 Os três estados de conexão
+
+| `conn` | Significado | O que o usuário vê |
+| --- | --- | --- |
+| `off` | Nenhuma pasta guardada ou navegador sem suporte | Banner azul "Escolher pasta"; colaborador trabalha só no navegador |
+| `prompt` | Pasta conhecida, mas sem permissão nesta sessão | Banner âmbar "Reativar pasta"; alterações ficam no localStorage e vão para a pasta ao reativar |
+| `ok` | Leitura e gravação liberadas | Ponto verde "Sincronizado às HH:MM" no rodapé do menu |
+
+Qualquer erro `NotAllowedError` ou `SecurityError` durante uma leitura/gravação devolve o painel para `prompt` (`setSyncError`). Outros erros viram `sync.state = 'error'` com a mensagem na tela.
+
+#### 3.3 Por que a latência é "segundos a minutos"
+
+O caminho de uma alteração tem dois saltos independentes: o painel grava no disco local em menos de um segundo, mas a chegada ao computador da supervisora depende do OneDrive enviar e baixar o arquivo, mais o próximo ciclo de leitura do painel dela (30 s por padrão, configurável para 15, 60 ou 120 s). O texto do diálogo de atribuição reconhece isso ao dizer "em até 30 segundos se já estiver aberto".
+
+### 4. Estrutura de pastas e formato dos arquivos
+
+A pasta da área tem uma subpasta por analista, e cada subpasta tem no máximo dois arquivos de dados com donos diferentes: `demandas.json` (do analista) e `atribuidas.json` (da supervisão).
+
+```text
+Painel Demandas - Área/              ← a supervisora conecta esta
+├── Victor/                          ← o analista conecta esta
+│   ├── demandas.json                ← escrito SÓ pelo painel do Victor
+│   ├── atribuidas.json              ← escrito SÓ pelo painel da supervisão
+│   └── backups/
+│       ├── demandas-2026-10-20.json ← cópia do dia (sobrescrita a cada gravação)
+│       └── demandas-2026-10-21.json
+├── Viviane/
+│   └── …
+└── _arquivo/                        ← ignorada (começa com _ . ou ~)
+```
+
+O supervisor ignora subpastas cujo nome começa com ponto, sublinhado ou til, e também a pasta `backups`. O nome exibido vem do campo `colaborador` dentro do JSON, não do nome da pasta; o nome da pasta (`m.key`) é usado como identificador interno.
+
+#### 4.1 `demandas.json` (gerado por `filePayload()`)
+
+```json
+{
+  "app": "painel-demandas-equipe",
+  "version": 2,
+  "colaborador": "Victor",
+  "atualizadoEm": "2026-10-21T14:12:00.000Z",
+  "updatedAt": 1792591920000,
+  "totalTasks": 1,
+  "tasks": [
+    {
+      "id": "6f1c…",
+      "title": "Conciliar conta 2110131000",
+      "notes": "Detalhes, links",
+      "status": "em_andamento",
+      "priority": "alta",
+      "due": "2026-10-24",
+      "category": "Fiscal",
+      "createdAt": 1792400000000,
+      "updatedAt": 1792591920000,
+      "completedAt": null,
+      "log": [{ "id": "…", "text": "Enviei e-mail ao estoque", "at": 1792590000000, "by": "Victor" }],
+      "assignedBy": "Juliana",
+      "assignedAt": 1792300000000
+    }
+  ],
+  "deleted": { "a9d2…": 1792500000000 },
+  "recebidas": ["6f1c…"]
+}
+```
+
+| Campo | Função |
+| --- | --- |
+| `tasks[].status` | Só `nao_iniciado`, `em_andamento` ou `concluido` são gravados; "atrasado" é calculado na tela |
+| `tasks[].updatedAt` | Carimbo (milissegundos) que decide qual versão vence na mesclagem |
+| `tasks[].log` | Notas de andamento, até 300 por demanda e 2.000 caracteres cada |
+| `deleted` | "Lápides": ID excluído → momento da exclusão; impede que a demanda ressuscite vinda de outra cópia. Apagadas após 120 dias |
+| `recebidas` | IDs de atribuições já importadas; impede importar a mesma atribuição duas vezes |
+
+#### 4.2 `atribuidas.json` (gerado por `writeAssigned()`)
+
+```json
+{
+  "app": "painel-demandas-equipe",
+  "tipo": "atribuidas",
+  "supervisor": "Juliana",
+  "atualizadoEm": "2026-10-21T14:12:00.000Z",
+  "tasks": [
+    { "id": "6f1c…", "title": "…", "notes": "…", "priority": "media", "category": "Fiscal",
+      "due": "2026-10-24", "createdAt": 1792300000000, "updatedAt": 1792300000000,
+      "assignedBy": "Juliana", "assignedAt": 1792300000000 }
+  ]
+}
+```
+
+Esse arquivo funciona como uma **caixa de entrada**: a supervisora coloca demandas nele, o painel do analista as copia para o próprio `demandas.json` e registra o ID em `recebidas`. Itens já recebidos e com mais de 90 dias são limpos na próxima gravação da supervisão.
+
+### 5. Fluxo do colaborador: gravar e ler
+
+Toda alteração do analista segue o caminho `commit()` → localStorage imediato → gravação na pasta 700 ms depois. A tela nunca espera o disco.
+
+#### 5.1 Quando o analista altera algo
+
+```javascript
+function commit() { saveLocal(); autoSnapshot(); schedulePush(); renderAll(); }
+```
+
+1. `saveLocal()` grava o objeto `data` inteiro no localStorage (`…:dados`).
+2. `autoSnapshot()` cria um ponto de restauração se o último tiver mais de 10 minutos.
+3. `schedulePush()` agenda `push()` para 700 ms depois (debounce: várias edições rápidas viram uma única gravação).
+4. `renderAll()` redesenha a tela.
+
+#### 5.2 O que `push()` faz
+
+1. Se já há uma gravação em curso (`writing`), marca `pendingPush` e sai; ao terminar, grava de novo.
+2. **Relê o arquivo antes de gravar.** Se o `lastModified` do `demandas.json` mudou desde a última leitura (o mesmo analista editou em outro computador e o OneDrive trouxe a versão), faz a mesclagem primeiro.
+3. Gera o JSON com `filePayload()` e grava com `fileHandle.createWritable()` → `write()` → `close()`. O navegador escreve num arquivo temporário e só troca pelo definitivo no `close()`, o que reduz o risco de o OneDrive pegar um arquivo pela metade.
+4. Guarda o novo `lastModified` em `sync.lastModified`.
+5. Grava a cópia do dia em `backups/demandas-AAAA-MM-DD.json` (falha aqui é ignorada).
+
+#### 5.3 O que `pull()` faz (a cada 30 s, ao voltar para a aba e ao conectar)
+
+1. Lê `demandas.json` (`readOwnFile`).
+2. Lê `atribuidas.json` (`readAssigned`). Se mudou, primeiro incorpora `recebidas` e `deleted` do arquivo próprio (para não reimportar algo já recebido em outra máquina) e depois chama `importAssigned()`, que cria as demandas novas com status "Não iniciado" e marca o ID como recebido.
+3. Se nada mudou (mesmo `lastModified`, nenhuma atribuição nova), para aqui. Isso deixa o polling barato.
+4. Mescla o conteúdo local com o do arquivo (`mergeData`). Se o resultado difere do que está na tela, salva localmente e redesenha.
+5. Avisa "Juliana atribuiu 1 nova demanda para você" quando houver importação.
+6. Se o resultado difere do arquivo (ou o arquivo não existe, ou o nome do colaborador mudou), chama `push()` para gravar a versão mesclada.
+
+#### 5.4 Trabalho offline
+
+Sem permissão (`prompt`) ou sem pasta (`off`), `push()` e `pull()` simplesmente não rodam; tudo continua no localStorage. Ao reativar, `pull(true)` mescla o que ficou local com o que está no arquivo e grava o resultado. Nada se perde, desde que o mesmo navegador seja usado.
+
+### 6. Fluxo do supervisor: ler a equipe e atribuir
+
+O painel da Juliana é quase só leitura: varre as subpastas a cada 30 s, recarrega apenas os arquivos cujo `lastModified` mudou e grava somente em `atribuidas.json`.
+
+#### 6.1 `scanTeam()` — a varredura
+
+1. Percorre `dir.values()` (as entradas da pasta da área), ignorando arquivos, `backups` e nomes iniciados por `.`, `_` ou `~`.
+2. Para cada subpasta, reaproveita o registro anterior do cache (`team.members`) e lê `atribuidas.json` se ele mudou.
+3. Lê `demandas.json` só se o `lastModified` mudou; extrai `tasks`, `recebidas`, o nome (`colaborador`) e `updatedAt`.
+4. Classifica a subpasta: `ok` (lida), `nofile` (sem `demandas.json` ainda) ou `error`. Um `SyntaxError` é tratado como "arquivo em gravação ou corrompido" e repetido no ciclo seguinte.
+5. Ordena por nome, salva o cache no localStorage (`…:equipe`) e redesenha só se algo mudou.
+
+O cache é o que permite mostrar números mesmo no estado `prompt`, com o aviso "os números abaixo são da última leitura".
+
+#### 6.2 Atribuir uma demanda (`saveAssign` → `writeAssigned`)
+
+1. Monta a demanda com um ID novo (`uid()`), `assignedBy = 'Juliana'` e `assignedAt = agora`.
+2. `writeAssigned()` abre a subpasta do analista, lê o `atribuidas.json` atual, descarta itens já recebidos com mais de 90 dias, acrescenta o novo e regrava o arquivo inteiro.
+3. Força nova leitura (`m.assignedLM = null; scanTeam()`).
+
+#### 6.3 Demandas "aguardando receber"
+
+`pendingOf(m)` compara `atribuidas.json` com `recebidas` + IDs em `tasks` do analista. O que foi enviado e ainda não aparece no arquivo dele é exibido com a etiqueta âmbar "Aguardando o analista receber". Assim que o painel do analista importa e grava, o ID entra em `recebidas`, e a etiqueta some na próxima varredura.
+
+#### 6.4 Cancelar envio
+
+`cancelAssign()` só existe para demandas pendentes: regrava `atribuidas.json` sem aquele ID. Se o analista já tiver aberto o painel e importado antes do cancelamento chegar pelo OneDrive, a demanda continua com ele (o próprio diálogo avisa isso).
+
+#### 6.5 Exportações
+
+- **CSV** (`exportCSV`): separador `;`, BOM `\ufeff` para o Excel reconhecer UTF-8, uma linha por demanda com colaborador, situação efetiva, dias para o prazo e última nota.
+- **JSON consolidado**: lista de colaboradores com pasta, nome, data de atualização e tarefas.
+
+### 7. Mesclagem e resolução de conflitos
+
+A regra é "a versão mais recente de cada demanda vence" (last-write-wins por item), com lápides para exclusões. Ela está toda em `mergeData(a, b)`:
+
+```javascript
+function mergeData(a, b) {
+  const deleted = { ...a.deleted };
+  for (const [k, v] of Object.entries(b.deleted || {})) deleted[k] = Math.max(deleted[k] || 0, v);
+  const map = new Map();
+  [...a.tasks, ...b.tasks].forEach(t => { const c = map.get(t.id); if (!c || t.updatedAt > c.updatedAt) map.set(t.id, t); });
+  const tasks = [...map.values()].filter(t => !(deleted[t.id] >= t.updatedAt));
+  // lápides com mais de 120 dias são descartadas
+  const recebidas = [...new Set([...(a.recebidas || []), ...(b.recebidas || [])])];
+  return { tasks, deleted, recebidas };
+}
+```
+
+1. **Lápides:** une as duas listas de exclusões, ficando com o horário mais recente de cada ID.
+2. **Demandas:** para cada ID, fica a cópia com maior `updatedAt`. A demanda inteira vence, não campo a campo: se você mudar o prazo no notebook e a prioridade no desktop antes de sincronizar, a edição mais recente sobrescreve a outra.
+3. **Exclusão vence edição antiga:** uma demanda some se a lápide for igual ou mais nova que a última edição. Se alguém editar depois de excluir, a demanda volta (é assim que o "Desfazer" funciona: atualiza o `updatedAt` e apaga a lápide).
+4. **Recebidas:** é uma união simples (conjunto que só cresce).
+
+Para saber se algo mudou sem comparar tudo, o painel usa uma assinatura barata:
+
+```javascript
+const sig = d => JSON.stringify([d.tasks.map(t => t.id + ':' + t.updatedAt).sort(), Object.keys(d.deleted).sort(), (d.recebidas || []).slice().sort()]);
+```
+
+Duas cópias com a mesma assinatura são tratadas como iguais. Por isso **todo ponto que altera uma demanda precisa atualizar `updatedAt`**; caso contrário a mudança não se propaga.
+
+A normalização (`normTask`/`normalizeData`) roda em tudo que vem de arquivo: descarta demandas sem título, corta textos nos limites (título 300, descrição 5.000, categoria 60), troca status inválido por "Não iniciado", valida datas `AAAA-MM-DD` e regenera IDs duplicados. É a defesa contra JSON editado à mão ou corrompido.
+
+### 8. Armazenamento local no navegador
+
+Todas as chaves começam com `painelEquipe:` + `location.pathname`, ou seja, o caminho do arquivo HTML. Duas cópias do painel em locais diferentes do disco têm configurações independentes; mover ou renomear o arquivo faz o painel "esquecer" tudo e voltar à tela inicial.
+
+| Chave (sufixo) | Onde | Conteúdo |
+| --- | --- | --- |
+| `:config` | localStorage | Perfil (`mode`), nome, tema, janela "perto de vencer" (`dueSoonDays`, padrão 3), intervalo de leitura (`pollSec`, padrão 30) |
+| `:dados` | localStorage | Cópia completa das demandas do colaborador + `savedAt`, `lastDownloadAt` |
+| `:equipe` | localStorage | Cache do supervisor: membros, tarefas, `lastModified` de cada arquivo |
+| `:pontos` | localStorage | Até 20 pontos de restauração (um a cada 10 min de uso e antes de importar/restaurar) |
+| `:ui` | localStorage | Aba atual, ordenação, modo lista/quadro, "mostrar concluídas" |
+| `:pasta` | IndexedDB `painelEquipe` / store `kv` | O `FileSystemDirectoryHandle` da pasta |
+| `:v1importado` | localStorage | Marca que a oferta de importar o painel pessoal antigo já foi feita |
+| `painelDemandas.v1` | localStorage (chave fixa) | Dados de uma versão anterior, pessoal, do painel; oferecidos para importação |
+
+Os pontos de restauração ficam só neste navegador. Se o localStorage encher, `setSnaps` descarta os mais antigos até caber; se o navegador bloquear o armazenamento, aparece o banner vermelho e a pasta continua recebendo as gravações.
+
+### 9. Regras de negócio e indicadores
+
+"Atrasado" nunca é gravado: é calculado a cada desenho a partir do prazo e da data de hoje do computador.
+
+```javascript
+const eff = t => t.status === 'concluido' ? 'concluido' : (t.due && diffDays(t.due) < 0 ? 'atrasado' : t.status);
+const isSoon = t => t.status !== 'concluido' && t.due && diffDays(t.due) >= 0 && diffDays(t.due) <= cfg.dueSoonDays;
+const isNoDate = t => t.status !== 'concluido' && !t.due;
+```
+
+| Regra | Definição |
+| --- | --- |
+| Situação efetiva (`eff`) | Concluído; senão Atrasado se o prazo já passou; senão o status gravado |
+| Perto de vencer (`isSoon`) | Em aberto e vence de hoje até N dias (N = 1 a 15, padrão 3) |
+| Sem data (`isNoDate`) | Em aberto e sem prazo |
+| Grupos da lista | Atrasadas · Vencem hoje · Próximos 7 dias · Mais adiante · Sem data · Concluídas (recolhida por padrão) |
+| Ordenação padrão | Prazo ascendente (sem prazo vai para o fim), depois prioridade Alta > Média > Baixa |
+| Desatualizado | Analista sem gravar há 7 dias ou mais aparece em âmbar na tabela do supervisor |
+| Virada do dia | Um `setInterval` de 60 s detecta mudança de data e redesenha, para os atrasos aparecerem sem recarregar |
+
+As datas usam `parseISO` com construtor local (`new Date(y, m-1, d)`), evitando o erro clássico de fuso em que `2026-10-21` vira dia 20 em Recife (UTC−3).
+
+**Indicadores (aba Visão da área / Indicadores):** quatro cartões por situação com percentual; barra empilhada de composição; três painéis de atenção (Atrasadas, Perto de vencer, Sem data, até 6 itens cada); régua de prazos dos próximos 14 dias com uma coluna inicial de "Vencidas". O supervisor vê ainda a tabela por colaborador (em aberto, atrasadas, perto de vencer, sem data, concluídas, progresso, última atualização). O colaborador vê a tabela por categoria e o ritmo (concluídas e criadas nos últimos 7 dias, abertas sem alteração há mais de 14 dias). Clicar num cartão ou linha leva à lista já filtrada (`goFiltered`).
+
+### 10. Interface: renderização, eventos e tema
+
+A interface é "estado → HTML em texto": cada função `render*` monta uma string com template literals e substitui o `innerHTML` da área. Não há DOM virtual; a tela inteira da aba é refeita a cada mudança, o que é simples e rápido para algumas centenas de demandas.
+
+- **Ordem de desenho:** `renderAll()` → `renderNav()` (menu e contadores) → `renderSyncBits()` (ponto de status e banner) → `renderView()` (a aba atual).
+- **Abas por perfil:** colaborador = Tarefas, Indicadores, Pasta e backup; supervisor = Visão da área, Demandas, Pastas e ajustes (constante `NAVS`). Seções não usadas ficam `hidden`.
+- **Segurança contra injeção:** todo texto vindo de arquivo passa por `esc()`, que troca `& < > " '` por entidades HTML. É o que impede um título como `<img onerror=…>` de executar código.
+- **Delegação de eventos:** um único `document.addEventListener('click')` lê o atributo `data-act` do botão clicado e despacha num `switch` (`pick`, `reconnect`, `toggle`, `edit`, `assign`, `export-csv`…). Botões criados depois funcionam sem novos listeners. Cliques dentro de `<dialog>` são ignorados por esse despachante e tratados pelos listeners próprios do diálogo.
+- **Identificação da linha:** cada linha carrega `data-id` (colaborador) ou `data-ref="<pasta>|<id>"` (supervisor), para saber de quem é a demanda.
+- **Atalhos:** `N` nova demanda (colaborador), `/` foca a busca, `Ctrl+Enter` salva o diálogo ou adiciona nota.
+- **Tema:** o botão alterna auto → claro → escuro gravando `data-theme` no `<html>`; no modo auto valem as cores de `@media (prefers-color-scheme: dark)`.
+- **Responsivo:** abaixo de 760 px o menu lateral vira barra fixa no rodapé e as linhas viram duas fileiras; `env(safe-area-inset-bottom)` respeita o recorte do iPhone.
+- **Acessibilidade:** `aria-current`, `aria-pressed`, `aria-expanded`, `role="status"` no toast, classe `.sr` para textos só de leitor de tela e `prefers-reduced-motion`.
+
+### 11. Limitações, riscos e pontos de atenção
+
+O desenho é robusto para uma equipe pequena com um supervisor, porque ninguém grava o arquivo de outra pessoa. Os riscos que restam vêm do navegador, do relógio das máquinas e do próprio OneDrive.
+
+| Ponto | Por que acontece | O que fazer |
+| --- | --- | --- |
+| Pedir "Reativar pasta" a cada abertura | Chrome/Edge não mantêm a permissão de escrita entre sessões por padrão | Versões recentes oferecem "Permitir em todas as visitas" no próprio aviso de permissão; vale testar na máquina corporativa |
+| Só Edge/Chrome no computador | `showDirectoryPicker` não existe no Firefox, Safari nem em celulares | No celular o layout funciona, mas sem pasta: dados ficam só no aparelho |
+| Mover ou renomear o HTML | As chaves usam `location.pathname`; o painel volta à configuração inicial | Guardar o arquivo num local fixo; os dados da pasta não se perdem, basta reconectar |
+| Conflito de cópia do OneDrive | Se o mesmo analista gravar em dois PCs antes da sincronização, o OneDrive pode criar `demandas-NOMEDOPC.json` | O painel ignora essa cópia; recuperar manualmente pelo "Importar JSON" com "Mesclar" |
+| Vitória da demanda inteira | A mesclagem compara `updatedAt` por demanda, não por campo | Em edições simultâneas em dois PCs, uma das duas se perde |
+| Relógio errado | `updatedAt` vem do relógio de cada máquina | Um PC adiantado "vence" sempre; manter sincronização de horário ativa |
+| Atualização em segundo plano | O polling pausa com a aba oculta (`document.hidden`) | Os números se atualizam ao voltar para a aba |
+| Lápides expiram em 120 dias | Uma cópia local muito antiga pode ressuscitar uma demanda excluída | Raro; acontece só com navegador parado por meses |
+| Pasta `backups` cresce sem limite | Um arquivo por dia de uso, nunca apagado | Limpeza manual periódica ou rotina de retenção |
+| `recebidas` só cresce | Nenhuma limpeza desse vetor | Irrelevante até milhares de atribuições |
+| Sem autenticação | Nome do colaborador e `assignedBy` são texto livre; quem acessa a pasta lê e edita os JSON | A segurança real é a permissão da pasta no OneDrive/SharePoint |
+| Cancelamento com corrida | O analista pode importar antes de o cancelamento sincronizar | O diálogo já avisa; combinar por fora quando isso acontecer |
+
+Um detalhe útil: aberto como arquivo local (`file://`), o Chrome trata todas as páginas locais como a mesma origem para localStorage e IndexedDB. Usar o caminho do arquivo como prefixo das chaves é o que impede a cópia da Juliana e a de um analista no mesmo PC de se misturarem.
+
+### 12. Mapa de funções e roteiro de estudo
+
+O script segue a ordem dos comentários `/* ===== … ===== */`; ler nessa ordem reconstrói o sistema de baixo para cima.
+
+| Bloco | Funções principais | Papel |
+| --- | --- | --- |
+| Constantes e utilidades | `NS`, `FILE`, `ASSIGN_FILE`, `uid`, `parseISO`, `diffDays`, `esc`, `ls` | Nomes de arquivos, datas locais, escape de HTML, acesso seguro ao localStorage |
+| Estado | `cfg`, `normTask`, `normalizeData`, `mergeData`, `sig`, `data`, `team`, `pendingOf`, `teamTasks` | Modelo de dados e regras de mesclagem |
+| Regras de situação | `eff`, `isSoon`, `isNoDate`, `cmpDue` | Atrasado, perto de vencer, sem data |
+| IndexedDB | `idb.open/get/set/del` | Persistir o handle da pasta |
+| Pasta: conexão | `restoreDir`, `reconnect`, `pickFolder`, `afterConnect`, `startPolling` | Ciclo de vida da permissão e do polling |
+| Colaborador: leitura e gravação | `readOwnFile`, `readAssigned`, `importAssigned`, `filePayload`, `pull`, `push`, `setSyncError` | Sincronização com a pasta |
+| Supervisor: leitura | `scanTeam` | Varredura das subpastas |
+| Supervisor: atribuição | `writeAssigned`, `openAssign`, `saveAssign`, `cancelAssign` | Caixa de entrada `atribuidas.json` |
+| Colaborador: ações | `commit`, `upsertTask`, `toggleDone`, `deleteTask`, `replaceAll`, `snapshot`, `importFile` | Edição local e pontos de restauração |
+| Diálogos e avisos | `ask`, `toast`, `openDialog`, `saveDialog`, `addNote`, `openView` | Modais e notificações |
+| Renderização | `renderTasks`, `renderBackup`, `renderIndicators`, `renderSupList`, `renderSources`, `exportCSV` | Telas de cada aba |
+| Navegação | `renderNav`, `renderSyncBits`, `setView`, `goFiltered`, `renderAll` | Menu, banner, troca de aba |
+| Configuração inicial | `showSetup`, `startAs`, `offerV1Import`, `resetProfile` | Primeira execução e troca de perfil |
+| Eventos e início | `bind`, bloco final | Liga tudo e decide entre setup e app |
+
+#### Roteiro sugerido para estudar
+
+1. Abra o painel no Edge, pressione `F12` e vá em **Application**. Veja as chaves em *Local Storage* e o banco `painelEquipe` em *IndexedDB* enquanto usa a tela.
+2. Crie uma pasta de teste com duas subpastas (`Ana`, `Bruno`) fora do OneDrive. Abra duas cópias do HTML em caminhos diferentes, uma como colaborador e outra como supervisor, e observe os JSON sendo criados.
+3. Atribua uma demanda pelo supervisor e acompanhe: `atribuidas.json` aparece → o colaborador importa → o ID entra em `recebidas` → a etiqueta "Aguardando" some.
+4. No Console, coloque um `console.log` dentro de `mergeData` e edite a mesma demanda nas duas máquinas para ver a regra do `updatedAt` agindo.
+5. Só então repita com a pasta do OneDrive para sentir a latência da sincronização.
+
+#### Onde mexer para mudanças comuns
+
+- **Novo campo na demanda:** `normTask` (normalização), `openDialog`/`saveDialog` (formulário), `metaHTML` (exibição), `exportCSV` (coluna). Lembre de atualizar `updatedAt`.
+- **Novo status:** `STATUS_LABEL`, `STATUS_COLOR`, a lista aceita em `normTask`, as `<option>` de `#fStatus` e as colunas de `boardHTML`.
+- **Outro preset de colaborador:** copie o arquivo e troque a linha `window.PAINEL_PRESET` por `{"mode":"colaborador","nome":"Victor","pasta":"Victor", …}`.
+
+---
+
+## 20. Apêndice B · Roteiro de teste do PGD
+
+Roteiro herdado do pacote de teste do PGD (dois dias: uso do dia a dia e modo ausência). Os itens de coordenadores e gestão valem para os perfis do PGD que não estão no login do FLUXO.
+
+```text
+PGD - ROTEIRO DE TESTE
+
+Sugestão: dois dias. No primeiro, o uso do dia a dia. No segundo, o modo ausência, que envolve todos ao mesmo tempo.
+Marque o que funcionou e anote o que estranhou.
+
+=====================================================================
+DIA 1 - USO DO DIA A DIA
+=====================================================================
+
+ANALISTAS DE PROCESSOS INTEGRADOS (José Victor, Viviane, Filipe, Juliana Santos)
+[ ] Conectar a sua subpasta e a pasta _Compartilhadas.
+[ ] Criar uma demanda com prazo, tipo, assunto e "Supervisão atendida".
+[ ] Criar uma demanda recorrente (ex.: mensal) e concluir: a próxima ocorrência é criada sozinha.
+[ ] Registrar uma nota de andamento com um print colado (Ctrl+V) e um anexo.
+[ ] Criar uma demanda compartilhada com um colega: ela vai para a caixa de Validação dele.
+[ ] Aceitar ou recusar um convite que chegou na sua Validação.
+[ ] Abrir uma demanda sua e usar "Transferir ou compartilhar" com um colega. Ela só sai da sua lista quando ele aceitar.
+[ ] Ver os Indicadores e gerar o relatório em PDF e em Excel (tela Tarefas, botão Relatório).
+
+JULIANA (supervisão de Processos Integrados)
+[ ] Conectar a pasta Processos Integrados e ver a equipe em Demandas.
+[ ] Atribuir uma demanda a um analista e outra a dois analistas (vira compartilhada).
+[ ] Marcar uma demanda como estratégica. Conferir no painel do analista que o prazo ficou travado.
+[ ] Mudar o prazo de uma estratégica: o painel pede justificativa.
+[ ] Escrever notas na conversa de uma demanda e ver a confirmação de leitura.
+[ ] Ver as telas das coordenações (Contábil Fiscal, Finanças e Tesouraria) e classificar a supervisão atendida.
+[ ] Responder às solicitações das coordenações: designar uma e recusar outra com motivo.
+[ ] Ver o registro de pedidos de apoio (em Solicitações, depois que um coordenador pedir).
+[ ] Dashboard: filtros por mês, analista e tipo; exportar o PowerPoint.
+
+COORDENADORES (Philippe e Angela)
+[ ] Conectar a pasta da coordenação e, na tela Supervisões, a pasta Processos Integrados.
+[ ] Ver os cartões das supervisões e as demandas de cada uma.
+[ ] Enviar uma solicitação a uma supervisão e outra a Processos Integrados. Acompanhar a resposta em Solicitações.
+[ ] Abrir uma demanda de uma supervisão (ex.: Tributos Estaduais) e clicar em "Solicitar apoio de Processos Integrados".
+    Conferir depois a resposta da Juliana.
+[ ] Dashboard da coordenação e exportação do PowerPoint.
+
+GESTÃO (opcional)
+[ ] Conectar a raiz e ver todas as supervisões, o Dashboard e o PowerPoint.
+
+=====================================================================
+DIA 2 - MODO AUSÊNCIA
+=====================================================================
+
+1. JULIANA ativa a ausência (tela Ausências)
+[ ] Motivo, primeiro e último dia, e um substituto da equipe.
+[ ] Revisar o direcionamento sugerido de cada demanda (Philippe, Angela, as duas ou só o substituto),
+    mudar pelo menos uma linha e confirmar com "De acordo, ativar".
+
+2. ANALISTAS
+[ ] Todos: ver o aviso de ausência da supervisão no Início.
+[ ] Substituto: abrir "Substituição" no menu, conectar a pasta Processos Integrados, designar uma demanda,
+    escrever uma nota, transferir uma demanda entre colegas e responder a uma solicitação.
+    Conferir que não existe o botão de cancelar, só "Indicar cancelamento". Voltar com "Minhas demandas".
+[ ] Um analista: registrar a própria ausência (tela Ausência), com a passagem das demandas que vencem no período:
+    manter, pedir nova data, transferir ou compartilhar.
+
+3. COORDENADORES
+[ ] Abrir a tela Substituição (aparece só durante a ausência).
+[ ] Designar uma demanda a um analista de Processos Integrados.
+[ ] Escrever uma nota numa demanda direcionada a você.
+[ ] Tentar mudar o prazo de uma demanda estratégica (deve estar travado).
+[ ] Indicar o cancelamento de uma demanda.
+[ ] Conferir que o coordenador só vê e age nas demandas direcionadas a ele.
+
+4. JULIANA volta
+[ ] Ausências: aprovar ou manter o pedido de nova data deixado na passagem do analista.
+[ ] Encerrar a ausência ("Voltei: encerrar a ausência agora").
+[ ] Início: ler o resumo do período e o registro do que a coordenação e o substituto fizeram.
+[ ] Validar ou manter o cancelamento indicado.
+[ ] Conferir que a tela Substituição sumiu do painel dos coordenadores e do substituto.
+
+=====================================================================
+COMO REPORTAR
+=====================================================================
+Para cada problema: quem é você no teste (painel), o que fez, o que esperava e o que aconteceu, com um print.
+```

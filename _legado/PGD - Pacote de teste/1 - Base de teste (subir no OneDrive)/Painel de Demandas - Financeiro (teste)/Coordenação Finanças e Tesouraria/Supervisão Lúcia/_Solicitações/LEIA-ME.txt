@@ -1,5 +1,0 @@
-﻿SOLICITAÇÕES À SUPERVISÃO LÚCIA
-
-A coordenação pede demandas a esta supervisão por aqui, com título e descrição.
-O coordenador grava só o próprio arquivo; a supervisão designa a equipe, define o prazo e responde em _respostas.json.
-Compartilhar com: o coordenador desta supervisão (pode editar) - apenas esta subpasta.
