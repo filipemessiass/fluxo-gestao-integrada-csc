@@ -41,7 +41,7 @@ A palavra FLUXO é desenhada como vetor (não é texto em fonte). Por isso apare
 
 | Local | Versão da marca |
 | --- | --- |
-| Menu lateral expandido | Sem cartão: símbolo + palavra FLUXO + "Processos Integrados · CSC" alinhados, com um filete dourado separando do menu. O botão de recolher é um círculo discreto na borda do menu |
+| Menu lateral expandido | Sem cartão: símbolo + palavra FLUXO + ✌️ (que acena de tempos em tempos; "Processos Integrados · CSC" fica no título ao passar o mouse), com um filete dourado separando do menu. O botão de recolher é um círculo discreto na borda do menu |
 | Barra do topo direito | Nome do usuário conectado (dinâmico) | Sair |
 | Menu lateral recolhido | Só o símbolo, centralizado; o botão de abrir continua na borda |
 | Início (analista e supervisão) | Capa de largura total. À esquerda: logo completa com descrição e slogan, saudação, resumo, três cartões de destaque e a área "Comece por aqui". À direita: o ecossistema de gestão (vetor animado) com etiquetas de números reais. Os cartões de indicador vêm abaixo |

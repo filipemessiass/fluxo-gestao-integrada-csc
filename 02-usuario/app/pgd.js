@@ -4430,7 +4430,8 @@ function renderNav() {
   $('#brandName').title = 'FLUXO · Plataforma Integrada de Gestão de Demandas e Processos · ' + (rq ? 'Solicitações' : cfg.mode === 'gestao' ? 'Gestão financeira' : cfg.mode === 'coordenacao' ? 'Coordenação' : isSup ? (SUBST ? 'Substituição da supervisão' : 'Supervisão') : 'Minhas demandas');
   const fxUsuario = isReader() ? `${cfg.name || ''}${cfg.mode === 'coordenacao' && coordCtx ? ' · ' + coordCtx.nome : cfg.mode === 'gestao' ? ' · Área financeira' : ''}`
     : rq && cfg.mode === 'solicitante' ? `${rq.nome} · ${rq.papel === 'coordenacao' ? 'Coordenação' : 'Supervisão'}` : isSup ? (SUBST ? `${actor().nome} · substituição` : (window.SGPI_PERFIS && window.SGPI_PERFIS.ler() || {}).nome || supName()) : `${cfg.name || 'Colaborador'}${MULTI && wsCur() ? ' · ' + wsCur().label : supCtx ? ' · ' + supTitle(supCtx) : ''}`;
-  $('#brandSub').textContent = 'Processos Integrados · CSC';
+  $('#brandSub').textContent = '✌️';
+  $('#brandSub').title = 'Segue o FLUXO · Processos Integrados · CSC';
   $('#fxUserName').textContent = fxUsuario;
   $('#fxUserName').title = fxUsuario;
   document.title = (late ? `(${late}) ` : '') + 'FLUXO · ' + (isSup ? 'Supervisão' : 'Analista');
@@ -4628,7 +4629,7 @@ function renderHome() {
     </section>
     ${extra ? `<div class="home-extra">${extra}</div>` : ''}
     <div class="feature-grid">${cards}</div>
-    <p class="fx-assinatura">FLUXO · Sua gestão no ritmo certo.</p>`;
+    <p class="fx-assinatura"><span class="fx-assinatura-marca">${FX_PALAVRA}</span><span class="fx-assinatura-sep" aria-hidden="true"></span><span class="fx-assinatura-texto">Sua gestão no <b>ritmo certo</b>.</span></p>`;
 }
 function bindSidebarToggle() {
   const key = NS + ':menuRecolhido', btn = $('#sidebarCollapse');
