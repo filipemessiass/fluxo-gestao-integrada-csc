@@ -59,12 +59,19 @@ Sobre o PGD, o FLUXO acrescenta:
 
 ## 2. Estrutura do projeto
 
-As pastas seguem a ordem de uso do sistema (1. login → 2. painel do usuário → 3. banco). A raiz pode ser enviada para um bucket S3 como está.
+As pastas seguem a ordem de uso do sistema (0. publicação → 1. login → 2. painel do usuário → 3. banco). A publicação na AWS é feita pela pasta `00-Deploy_S3`, que gera o pacote só com o que o navegador usa (veja a [seção 11](#11-publicação-no-s3-da-aws)).
 
 ```text
 SGPI/
 ├── index.html                      redireciona para 01-login
 ├── README.md                       esta documentação
+│
+├── 00-Deploy_S3/                   0. PUBLICAÇÃO NA AWS (S3 + CloudFront)
+│   ├── gerar-pacote.js             monta e confere a pasta site/ (o conteúdo do bucket)
+│   ├── publicar.ps1                gera o pacote, envia ao S3 e limpa o cache do CloudFront
+│   ├── infra/                      CloudFormation: bucket privado, CloudFront HTTPS e cabeçalhos de segurança
+│   ├── paginas/404.html            página de erro com a marca
+│   └── README.md                   passo a passo da primeira publicação, atualização e rollback
 │
 ├── 01-login/                       1. LOGIN E DIRECIONAMENTO
 │   ├── index.html                  tela de entrada FLUXO (usuário, senha, mostrar/ocultar)
@@ -552,12 +559,19 @@ O roteiro de teste completo do PGD (dia a dia e modo ausência) está em `03-dat
 
 ## 11. Publicação no S3 da AWS
 
-A estrutura já é a de um site estático.
+O FLUXO é um site estático: os caminhos são relativos e não há CDN nem API externa. A publicação fica toda na pasta `00-Deploy_S3`; o guia completo está em [00-Deploy_S3/README.md](00-Deploy_S3/README.md).
 
-1. Crie um bucket e envie a raiz do projeto (`index.html`, `01-login/` e `02-usuario/`). As pastas `03-database-onedrive/` e `_legado/` não precisam ir para o bucket.
-2. Configure `index.html` como documento de índice.
-3. **Publique por trás do CloudFront com HTTPS.** A File System Access API só funciona em contexto seguro (HTTPS), e o endpoint de site do S3 é só HTTP.
-4. Os dados continuam no OneDrive de cada pessoa. O bucket só entrega as páginas.
+| Passo | Comando |
+| --- | --- |
+| 1. Criar bucket privado + CloudFront (uma vez) | `aws cloudformation deploy --stack-name fluxo --template-file 00-Deploy_S3/infra/fluxo-s3-cloudfront.yaml --parameter-overrides NomeDoBucket=<nome> --region sa-east-1` |
+| 2. Publicar (a cada atualização) | `.\00-Deploy_S3\publicar.ps1 -Bucket <nome> -DistribuicaoId <id>` |
+| Só gerar o pacote | `node 00-Deploy_S3/gerar-pacote.js` (cria `00-Deploy_S3/site/`, fora do Git) |
+
+Pontos importantes:
+
+- **HTTPS é obrigatório.** A File System Access API só funciona em contexto seguro, e o endpoint de site do S3 é só HTTP; por isso o bucket fica privado atrás do CloudFront.
+- **Os dados não vão para a AWS.** `03-database-onedrive/`, `_legado/`, documentação e capturas ficam fora do pacote; os dados continuam no OneDrive de cada pessoa.
+- **O pacote é conferido antes de publicar:** toda referência de página, CSS e JS precisa existir e todo JS precisa ter sintaxe válida, senão nada é enviado.
 
 ---
 
@@ -728,5 +742,5 @@ São **57 verificações, todas aprovadas** (atualizado com a marca oficial). El
 | Segurança do login | Continua sendo só controle de tela: senha `1234` escrita no `perfis.js`. O rebranding não mexeu nisso de propósito. Para uma autenticação corporativa de verdade, seria preciso entrar com a conta Microsoft (Entra ID). A proteção real dos dados continua sendo a permissão na pasta do OneDrive. |
 | Nomes internos `pgd`/`sgpi` | Mantidos para não quebrar dados, sessões e pastas já conectadas. Renomear exigiria um plano de migração das chaves do navegador. |
 | Pasta `_legado` | Contém as versões anteriores e o pacote de teste do PGD. Pode ser apagada quando quiser. |
-| Tamanho das capturas | Cerca de 4 MB em PNG. Podem ser removidas do bucket S3, porque são só documentação. |
+| Tamanho das capturas | Cerca de 4 MB em PNG. Ficam fora do pacote do S3 (o `gerar-pacote.js` não as inclui), porque são só documentação. |
 | Telas herdadas do PGD que não são do Analista nem da Supervisão (Coordenação, Gestão, Solicitante) | Recebem os tokens e a marca automaticamente, mas não foram revisadas uma a uma, porque esses perfis não estão no login do FLUXO. |
