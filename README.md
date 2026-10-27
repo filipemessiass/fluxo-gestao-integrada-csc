@@ -88,6 +88,7 @@ Por dentro:
     ├── workflow.css                estilo original da seção Workflow (escopo .sgpi-wf), com cores em tokens
     ├── fluxo.css                   design system FLUXO: tokens, temas, componentes (carregado por último)
     ├── pgd-markup.js               marcação: menu, telas e diálogos
+    ├── conexao.js                  configuração da conexão com o OneDrive (PAINEL_CONEXAO: links, pastas, retenção)
     ├── workflow.js                 motor do Workflow: etapas, critérios, gates, status
     ├── base-workflow.js            pacote da base de projetos (gerado por gerar-base.js)
     ├── pgd.js                      motor: dados, pasta, sincronização, telas e Workflow
@@ -595,7 +596,7 @@ O painel **não conversa com o OneDrive**. Não há login da Microsoft, Microsof
 | --- | --- | --- |
 | `off` | Nenhuma pasta conectada | Cartão "Nenhuma pasta conectada". O painel funciona e guarda tudo no navegador. Não aparece aviso pedindo a pasta. |
 | `prompt` | A pasta já foi escolhida, mas o navegador pede a permissão de novo (acontece ao reabrir) | Aviso "Reativar pasta". Um clique em qualquer lugar da tela confirma. |
-| `ok` | Leitura e gravação liberadas | "Sincronizado às HH:MM". |
+| `ok` | Leitura e gravação liberadas | "Gravado na pasta às HH:MM" (analista) ou "Atualizado às HH:MM" (supervisão). |
 
 A referência à pasta (o "handle") fica salva no IndexedDB. Por isso, ao reabrir o painel, basta reativar, sem escolher a pasta de novo.
 
@@ -625,7 +626,151 @@ A cada 30 segundos, o painel da supervisão percorre as subpastas dos analistas.
 
 ### Latência
 
-Uma alteração leva de segundos a minutos para aparecer no outro computador. O tempo é a sincronização do OneDrive mais o próximo ciclo de leitura do painel. Esse ciclo é de 30 segundos por padrão e pode ser ajustado para 15, 60 ou 120 segundos.
+Uma alteração leva de segundos a minutos para aparecer no outro computador. O tempo é a sincronização do OneDrive mais o próximo ciclo de leitura do painel. Esse ciclo é de 30 segundos por padrão e pode ser ajustado para 15, 60 ou 120 segundos. O indicador "Gravado na pasta" mede só o caminho painel → disco; o caminho disco → nuvem é do OneDrive.
+
+### Configuração da conexão (`02-usuario/app/conexao.js`)
+
+A conexão com o OneDrive é descrita num único bloco, `window.PAINEL_CONEXAO`, que é **igual para todas as pessoas**. O que muda por pessoa é o perfil (`PAINEL_PRESET`), montado pelo login em `01-login/perfis.js`.
+
+Os links entram **só** como configuração, validação e botões "Abrir no OneDrive" (`<a target="_blank" rel="noopener">`). O código nunca abre um link para ler ou gravar dados. Um link web do OneDrive não pode ser aberto como pasta pelo navegador: a pessoa sempre escolhe a pasta sincronizada no seletor do Windows.
+
+| Campo | O que é | Situação hoje |
+| --- | --- | --- |
+| `tipo` | `onedrive-business` (pasta no OneDrive de alguém, compartilhada com edição) ou `sharepoint-biblioteca` (biblioteca de um site do SharePoint/Teams) | **A informar** (vazio: o assistente mostra os dois caminhos) |
+| `tenant` | Organização no endereço, ex.: `empresa` em `empresa-my.sharepoint.com` | **A informar** |
+| `organizacao` | Nome como aparece no Windows: `OneDrive - <organizacao>` | **A informar** |
+| `area.nome` | Pasta que a supervisão conecta | `Processos Integrados` |
+| `area.linkWeb` | Link da pasta da área | **A informar** |
+| `area.caminhoLocalProvavel` | Caminho exato no Windows (opcional) | Vazio: o painel monta o provável |
+| `membros[]` | `pasta`, `nome`, `linkWeb`, `ativo` de cada analista | 4 analistas do login; links **a informar** |
+| `orientacoes.manterNoDispositivo` | Mostra a dica "Sempre manter neste dispositivo" | `true` |
+| `orientacoes.retencaoBackupsDias` | Apaga `backups/demandas-AAAA-MM-DD.json` com mais de N dias (0 = não limpar) | `30` |
+
+**Validação ao abrir o painel.** O painel confere:
+- os tipos dos campos;
+- se os nomes estão preenchidos e não usam `/ \ : * ? " < > |`;
+- se os links são `https://` de domínio Microsoft;
+- se os links são da mesma organização.
+
+Um problema vira um aviso vermelho no topo do painel, explicando o campo, e o painel continua funcionando.
+
+**Como transformar um link em configuração.** O painel interpreta os links sozinho (`interpretarLink` em `pgd.js`). As regras:
+
+| Formato do link | Tipo | O que o painel extrai |
+| --- | --- | --- |
+| `https://<tenant>-my.sharepoint.com/personal/<usuario>/Documents/<caminho>` | OneDrive corporativo, link direto | tenant, dono, caminho e nome da pasta |
+| `https://<tenant>-my.sharepoint.com/:f:/g/personal/<usuario>/<token>` | OneDrive corporativo, link de compartilhamento | tenant e dono. O nome da pasta **não está na URL**: use o nome informado. |
+| `https://<tenant>.sharepoint.com/sites/<site>/<Biblioteca>/<caminho>` | Biblioteca do SharePoint/Teams | site, biblioteca, caminho e pasta |
+| `https://<tenant>.sharepoint.com/:f:/s/<site>/<token>` | Compartilhamento do SharePoint | site. A pasta não está na URL. |
+| `...onedrive.aspx?id=<caminho>` ou `AllItems.aspx?id=<caminho>` | Visualização web | caminho decodificado do parâmetro `id` |
+| `https://onedrive.live.com/...` ou `https://1drv.ms/...` | OneDrive **pessoal** | Recusado: não é o ambiente corporativo. |
+| `https://teams.microsoft.com/...` | Teams | Aviso: abra a pasta no SharePoint e copie o link de lá. |
+
+Para preencher, cole cada link no campo `linkWeb` correspondente e informe `tipo`, `tenant` e `organizacao`. O Mapa de conexão, na tela **Pastas e ajustes** da supervisão, mostra na hora como cada link foi interpretado.
+
+### Mapa de conexão
+
+Estado atual: nenhum link foi enviado ainda, então nenhum campo de link foi inventado. Os nomes de pasta vêm do login (`perfis.js`) e da base no OneDrive.
+
+| Pessoa | Papel | Link web | Tipo | Dono/site | Pasta esperada (`dir.name`) | Caminho local provável | Permissão necessária |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Juliana Batista | Supervisão | a informar | a informar | a informar | `Processos Integrados` | `C:\Users\<usuário>\OneDrive - <organização>\Processos Integrados` (provável) | Edição na pasta inteira (grava `atribuidas.json` em cada subpasta) |
+| José Victor | Analista | a informar | a informar | a informar | `José Victor` | `C:\Users\<usuário>\OneDrive - <organização>\José Victor` (provável) | Edição na própria subpasta e em `_Compartilhadas` |
+| Viviane Cunha | Analista | a informar | a informar | a informar | `Viviane Cunha` | `C:\Users\<usuário>\OneDrive - <organização>\Viviane Cunha` (provável) | Edição na própria subpasta e em `_Compartilhadas` |
+| Filipe Messias | Analista | a informar | a informar | a informar | `Filipe Messias` | `C:\Users\<usuário>\OneDrive - <organização>\Filipe Messias` (provável) | Edição na própria subpasta e em `_Compartilhadas` |
+| Juliana Santos | Analista | a informar | a informar | a informar | `Juliana Santos` | `C:\Users\<usuário>\OneDrive - <organização>\Juliana Santos` (provável) | Edição na própria subpasta e em `_Compartilhadas` |
+
+O caminho depende de como a pasta é compartilhada:
+- **Atalho do OneDrive:** `C:\Users\<usuário>\OneDrive - <organização>\<pasta>`, com o atalho na raiz do OneDrive de quem adicionou.
+- **Biblioteca sincronizada:** `C:\Users\<usuário>\<organização>\<Site> - <Biblioteca>\Processos Integrados\<pasta>`.
+
+### Guia de instalação por pessoa
+
+Vale para todos (Edge ou Chrome, no computador):
+
+1. **Abrir no navegador.** Abra o FLUXO pelo endereço publicado e entre com seu usuário. Abra também o link da sua pasta no OneDrive. No painel, o botão "Abrir no OneDrive" aparece assim que o link for configurado.
+2. **Trazer a pasta para o computador:**
+   - pasta compartilhada no OneDrive: em **Compartilhados**, selecione a pasta e escolha **Adicionar atalho a Meus arquivos**;
+   - biblioteca do SharePoint/Teams: clique em **Sincronizar**.
+3. **Sempre manter neste dispositivo.** No Explorador de Arquivos, clique com o botão direito na pasta e escolha essa opção. Assim o painel lê os arquivos mesmo sem internet.
+4. **Conectar no painel.** Escolha a pasta da tabela abaixo. O painel avisa se o nome for outro e mostra o nome esperado e o caminho provável.
+5. **Permitir em todas as visitas.** No aviso de permissão do Edge ou do Chrome, escolha essa opção para não precisar reativar a pasta a cada abertura.
+
+| Pessoa | Login | Tela do painel | Pasta a escolher | Caminho esperado (provável) |
+| --- | --- | --- | --- | --- |
+| Juliana Batista | `juliana.batista` | Pastas e ajustes | `Processos Integrados` (a pasta da área) | `...\OneDrive - <organização>\Processos Integrados` |
+| José Victor | `jose.victor` | Pasta e backup | `José Victor` | `...\OneDrive - <organização>\José Victor` |
+| Viviane Cunha | `viviane.cunha` | Pasta e backup | `Viviane Cunha` | `...\OneDrive - <organização>\Viviane Cunha` |
+| Filipe Messias | `filipe.messias` | Pasta e backup | `Filipe Messias` | `...\OneDrive - <organização>\Filipe Messias` |
+| Juliana Santos | `juliana.santos` | Pasta e backup | `Juliana Santos` | `...\OneDrive - <organização>\Juliana Santos` |
+
+**Analistas:** depois de conectar a própria pasta, conectem também `_Compartilhadas`, em Pasta e backup.
+
+**Para recuperar uma versão anterior:** abra a pasta no OneDrive web, clique com o botão direito em `demandas.json` e use **Histórico de versões**.
+
+### Mudanças na conexão (changelog)
+
+| Item | Função alterada ou criada | O que mudou e por quê |
+| --- | --- | --- |
+| Configuração | `conexao.js` (novo), `validarConexao`, `CONEXAO_CHECK`, `renderSyncBits` | Um bloco único de configuração para todos, validado ao abrir. Erro vira aviso, sem travar. |
+| Fase 1 | `interpretarLink` (novo) | Lê links do OneDrive, do SharePoint e do Teams sem acessar a rede, para montar o Mapa e validar a configuração. |
+| 7.1 | `pickFolder`, `confirmarPastaDiferente` (novo), `minhaPasta`, `conexaoArea`, `caminhoProvavel` | A supervisão também confere o nome da pasta da área. O aviso mostra o nome esperado, o caminho provável e o botão "Abrir no OneDrive". As checagens anteriores (pasta da área × pasta de analista) foram mantidas. |
+| 7.2 | `scanTeam`, `conferenciaEquipe` (novo), `renderSources` | "Subpastas encontradas" virou "Conferência da equipe": esperada e encontrada, esperada e não encontrada, encontrada e não cadastrada. Uma subpasta sem `demandas.json` mostra o nome cadastrado. |
+| 7.3 | `linkOneDrive` (novo), `renderBackup`, `renderSources`, `AJUDA_VERSOES` | Botões "Abrir pasta no OneDrive" (por perfil e por membro) e a dica do Histórico de versões. |
+| 7.4 | `assistenteConexao` (novo), `renderBackup`, `renderSources` | Assistente da primeira conexão. No FLUXO, a tela inicial é o login, por isso o assistente fica na tela da pasta, sem pasta conectada. |
+| 7.5 | `renderSyncBits`, `renderBackup`, `TEXTO_NUVEM` | "Sincronizado às HH:MM" virou "Gravado na pasta às HH:MM", com a explicação de que o envio à nuvem é do OneDrive. O destaque em âmbar de quem passa de `STALE_DAYS` foi mantido. |
+| 7.6 | `listarConflitos`, `mesclarConflito` (novos), `pull`, `scanTeam`, `renderSyncBits` | Detecta `demandas-<PC>.json`. O analista vê o aviso "Mesclar cópia", que usa o `mergeData` existente e grava. A supervisão vê o aviso por membro. A cópia nunca é apagada pelo painel. Antes, a cópia era ignorada. |
+| 7.7 | `scanTeam`, `listarConflitos`, `IGNORAR_RE` | `*.crswap`, `~$*` e nomes ocultos são ignorados. |
+| 7.8 | `explicarErro` (novo), `setSyncError`, `scanTeam` | Mensagens diferentes para arquivo em gravação, somente online sem internet, sem permissão de edição e pasta inexistente. Um membro com erro espera 30 s, 60 s e depois 120 s, sem atrasar os demais. |
+| 7.9 | `renderSyncBits`, `renderBackup`, `renderSources`, `DICA_PERMISSAO` | O aviso de reativação explica o "Permitir em todas as visitas". A permissão não é contornada. |
+| 7.10 | `limparBackups` (novo), `push` | Retenção de 30 dias, uma vez por dia, só para `demandas-AAAA-MM-DD.json` dentro de `backups/`. Falha na limpeza é silenciosa. Com `retencaoBackupsDias: 0`, a limpeza desliga. |
+| 7.11 | `01-login/perfis.js` (`preset`), `analista/index.html`, `supervisor/index.html` | Em vez de um HTML por pessoa, o FLUXO mantém o login com as duas páginas de painel. É a estrutura publicada no S3, e cada pessoa recebe o próprio `PAINEL_PRESET` ao entrar. O preset do analista ganhou `rotulo` e `pastaArea`, como pede a especificação. Credenciais e sessão não mudaram. |
+| 7.12 | — | Modo B (Microsoft Graph) não implementado: não foi informado um `clientId` registrado no Azure AD da empresa. |
+
+**O que não mudou:**
+- os nomes dos arquivos de dados (`demandas.json`, `atribuidas.json`, `backups/demandas-AAAA-MM-DD.json`);
+- o formato dos JSON, que segue lendo arquivos `version: 2`;
+- a regra do autor único;
+- o `esc()` em todo texto vindo de arquivo ou de configuração;
+- o `updatedAt` em toda alteração;
+- as chaves do navegador;
+- nenhuma chamada de rede foi acrescentada.
+
+### Testes da conexão
+
+O teste ponta a ponta usa a File System Access API simulada sobre pastas reais do disco. Ele rodou duas vezes:
+- numa pasta temporária, **fora do OneDrive**;
+- numa pasta **dentro do OneDrive** deste computador, que é uma conta pessoal.
+
+Resultado: **35 verificações aprovadas nas duas bancadas**. A regressão geral (63 verificações) também passou.
+
+| Critério | Resultado |
+| --- | --- |
+| 1. Mapa de Conexão completo, sem campos inventados | OK. Os nomes vêm do login e da base; links, tipo, tenant e organização estão marcados como pendentes. |
+| 2. Cada perfil abre com textos e pasta corretos | OK. O analista vê o assistente com a própria subpasta; a supervisão, com `Processos Integrados` e o Mapa. |
+| 3. Pasta com nome errado avisa; nome certo conecta direto | OK, no analista e na supervisão. |
+| 4. Esperados, ausentes e não cadastrados | OK. |
+| 5. Ida e volta analista ⇄ supervisão | OK. A demanda do analista aparece na supervisão; a atribuição sai de "Aguardando receber" 1 para 0 depois que o analista importa. |
+| 6. Cópia `demandas-NOTEBOOK.json` | OK. O aviso aparece, a mesclagem mantém a versão mais recente e a demanda nova, e a cópia não é apagada. |
+| 7. `.crswap` e `~$` | OK. Não viram membros nem geram erro. |
+| 8. JSON antigo `version: 2` | OK. É lido sem perda e não é reescrito pela supervisão. |
+| 9. Nenhuma chamada de rede | OK. Não há `fetch`, `XMLHttpRequest`, `WebSocket`, `EventSource` nem `sendBeacon` no código, e nenhuma chamada durante os testes. |
+| 10. `<script>` e `<img onerror>` nos títulos | OK. Aparecem como texto, nada é executado. |
+| 11. Bancada fora e dentro do OneDrive | OK nas duas, pelo teste automatizado. Falta o teste manual num OneDrive **corporativo**, com dois computadores (ver pendências). |
+
+Também testados: interpretação de 7 formatos de link, validação de uma configuração com erros, explicações de erro, espera crescente de 30 s e retenção de 30 dias (apaga só os backups antigos com o nome certo).
+
+### Pendências da conexão
+
+| Pendência | O que falta |
+| --- | --- |
+| Links do OneDrive/SharePoint | O link da pasta da área e o de cada subpasta, para preencher `area.linkWeb` e `membros[].linkWeb`. |
+| Tipo de armazenamento | Pasta compartilhada no OneDrive corporativo ou biblioteca do SharePoint/Teams (`tipo`). |
+| Nome da organização no Windows | O texto depois de "OneDrive - " no Explorador (`organizacao`), para o caminho deixar de ser "provável". |
+| Tenant | Sai do próprio link; confirmar quando os links chegarem. |
+| Links opacos | Para links de compartilhamento (`:f:/g/` ou `:f:/s/`), confirmar o nome exato de cada pasta, que não aparece na URL. |
+| Teste com dois computadores | Validar no OneDrive corporativo: a latência real e o "Permitir em todas as visitas" na máquina da empresa. |
+| Modo B (Microsoft Graph) | Só com um `clientId` do Azure AD da empresa e consentimento do administrador. |
 
 ---
 
@@ -776,6 +921,7 @@ Para uma equipe pequena, são centavos de dólar por mês: alguns MB no S3, e o 
 | Mudar uma regra de gate | `workflow.js`, função `bloqueio()`. |
 | Mudar a tela do Workflow | `pgd.js`, bloco "Workflow (Projetos)": `renderWorkflow` (tracker), `renderWfEtapa` (telas das etapas), `wfGravar` (gravação) e `wfMenuHTML` (grupo do menu). O estilo fica em `workflow.css`. |
 | Mudar o menu | `pgd.js`, constante `NAVS`. |
+| Informar os links do OneDrive, o tipo de armazenamento ou a retenção de backups | `02-usuario/app/conexao.js` (veja a seção 8). |
 | Mudar a marcação de uma tela ou diálogo | `02-usuario/app/pgd-markup.js`. |
 | Mudar cores, fontes ou temas | `02-usuario/app/fluxo.css`: altere os tokens `--fx-*`. Eles alimentam o motor (`pgd.css`) e o Workflow (`workflow.css`). |
 | Trocar o logotipo | `02-usuario/app/marca/` (arquivos SVG) e o símbolo embutido no menu, em `pgd-markup.js` (`sidebar-brand-icon`). |
@@ -792,8 +938,8 @@ Para uma equipe pequena, são centavos de dólar por mês: alguns MB no S3, e o 
 | Permissão da pasta | O navegador pode pedir para reativar a pasta a cada abertura. As versões recentes oferecem "Permitir em todas as visitas". |
 | Edição simultânea | Se a mesma demanda for editada em dois computadores antes da sincronização, vence a edição mais recente da demanda inteira. |
 | Relógio | O `updatedAt` vem do relógio de cada máquina. Mantenha a hora do Windows sincronizada. |
-| Conflito do OneDrive | Se o OneDrive criar uma cópia como `demandas-NOMEDOPC.json`, o painel ignora o arquivo. Recupere pela importação de JSON em Pasta e backup. |
-| Backups | A pasta `backups/` ganha um arquivo por dia de uso e precisa de limpeza periódica. |
+| Conflito do OneDrive | Se o OneDrive criar uma cópia como `demandas-NOMEDOPC.json`, o painel do analista mostra o aviso "Mesclar cópia" e a supervisão vê o aviso no membro. Depois de mesclar e conferir, apague a cópia da pasta. |
+| Backups | A pasta `backups/` ganha um arquivo por dia de uso. Os com mais de 30 dias são apagados automaticamente (`retencaoBackupsDias` em `conexao.js`; 0 desliga). |
 | Publicação na AWS | Qualquer pessoa com o link consegue ler o `perfis.js`, inclusive as senhas, porque o login é só de tela. Divulgue o link só para a equipe; se a empresa exigir, restrinja o CloudFront à rede corporativa com o AWS WAF (lista de IPs), sem mudar o sistema. Nunca envie `03-database-onedrive/` ao bucket. |
 
 ---

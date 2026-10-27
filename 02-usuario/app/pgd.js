@@ -758,6 +758,211 @@ const safeName = s => {
 };
 const fmtSize = b => b >= 1048576 ? `${(b / 1048576).toLocaleString('pt-BR', { maximumFractionDigits:1 })} MB` : `${Math.max(1, Math.round(b / 1024))} KB`;
 
+/* ================= Conexão com o OneDrive: configuração, links e diagnóstico ================= */
+// A configuração (PAINEL_CONEXAO, em conexao.js) é igual para todos. Os links só identificam, validam e abrem
+// a pasta no navegador: o código nunca os lê. Os dados passam pela pasta que o OneDrive sincroniza no disco.
+const NOME_INVALIDO = /[\/\\:*?"<>|]/;
+const HOST_MS = /(^|\.)sharepoint\.com$|^onedrive\.live\.com$|^1drv\.ms$|^teams\.microsoft\.com$/i;
+// Lê um link do OneDrive, SharePoint ou Teams e diz o que ele indica. Só interpreta o texto da URL, sem acessar a rede.
+function interpretarLink(url) {
+  const out = { url:String(url || '').trim(), valido:false, tipo:'', rotulo:'', tenant:'', dono:'', site:'', biblioteca:'', caminho:'', pasta:'', opaco:false, pessoal:false };
+  if (!out.url) return out;
+  let u; try { u = new URL(out.url); } catch (e) { out.rotulo = 'link inválido'; return out; }
+  if (u.protocol !== 'https:' || !HOST_MS.test(u.hostname)) { out.rotulo = 'não é um link https do OneDrive, do SharePoint ou do Teams'; return out; }
+  out.valido = true;
+  const dec = s => { try { return decodeURIComponent(s); } catch (e) { return s; } };
+  const host = u.hostname.toLowerCase(), partes = u.pathname.split('/').filter(Boolean).map(dec);
+  const ten = host.match(/^([a-z0-9-]+?)(-my)?\.sharepoint\.com$/);
+  if (ten) out.tenant = ten[1];
+  const fim = arr => { out.caminho = arr.join('/'); out.pasta = arr.length ? arr[arr.length - 1] : ''; };
+  if (host === 'onedrive.live.com' || host === '1drv.ms') { out.tipo = 'onedrive-pessoal'; out.pessoal = true; out.opaco = host === '1drv.ms'; out.rotulo = 'OneDrive pessoal (conta Microsoft), fora do ambiente corporativo'; return out; }
+  if (host === 'teams.microsoft.com') { out.tipo = 'teams'; out.opaco = true; out.rotulo = 'link do Teams: abra a pasta no SharePoint e copie o link de lá'; return out; }
+  // Link de compartilhamento: /:f:/g/personal/<usuário>/<token> (OneDrive) ou /:f:/s/<site>/<token> (SharePoint). O nome da pasta não vem na URL.
+  if (/^:[a-z]:$/i.test(partes[0] || '')) {
+    out.opaco = true;
+    if (partes[1] === 'g' && partes[2] === 'personal') { out.tipo = 'onedrive-business'; out.dono = partes[3] || ''; out.rotulo = 'OneDrive corporativo, link de compartilhamento'; }
+    else { out.tipo = 'sharepoint-biblioteca'; out.site = partes[1] === 's' ? (partes[2] || '') : ''; out.rotulo = 'SharePoint, link de compartilhamento'; }
+    return out;
+  }
+  // Visualização web (onedrive.aspx?id=… ou AllItems.aspx?id=…): o caminho vem no parâmetro id
+  const id = u.searchParams.get('id') || u.searchParams.get('RootFolder');
+  const cam = id ? id.split('/').filter(Boolean) : partes;
+  const util = p => !/\.aspx$/i.test(p) && p !== 'Forms' && p !== '_layouts' && !/^\d+$/.test(p);
+  if (cam[0] === 'personal') {
+    out.tipo = 'onedrive-business'; out.dono = cam[1] || ''; out.rotulo = id ? 'OneDrive corporativo, visualização web' : 'OneDrive corporativo, link direto';
+    const resto = cam.slice(2).filter(util); if (/^Documen/i.test(resto[0] || '')) resto.shift(); fim(resto); return out;
+  }
+  if (cam[0] === 'sites' || cam[0] === 'teams') {
+    out.tipo = 'sharepoint-biblioteca'; out.site = cam[1] || ''; out.biblioteca = cam[2] || ''; out.rotulo = id ? 'biblioteca do SharePoint, visualização web' : 'biblioteca do SharePoint/Teams';
+    fim(cam.slice(3).filter(util)); return out;
+  }
+  out.rotulo = 'link da Microsoft em formato não reconhecido'; return out;
+}
+// Confere a configuração ao abrir o painel. Erros viram um aviso na tela; o painel continua funcionando.
+function validarConexao(c) {
+  const erros = [], avisos = [];
+  if (!c) return { erros, avisos };
+  const texto = (v, campo) => { if (typeof v !== 'string' || !v.trim()) erros.push(`${campo} não pode ficar vazio.`); };
+  const pasta = (v, campo) => { texto(v, campo); if (typeof v === 'string' && NOME_INVALIDO.test(v)) erros.push(`${campo} (“${v}”) tem caractere que o Windows não aceita em nome de pasta: / \\ : * ? " < > |.`); };
+  const link = (v, campo) => {
+    if (v == null || v === '') return;
+    const l = interpretarLink(v);
+    if (!l.valido) erros.push(`${campo}: ${l.rotulo}.`);
+    else if (l.pessoal) erros.push(`${campo}: ${l.rotulo}. Use o OneDrive ou o SharePoint da empresa.`);
+    else if (l.tipo === 'teams') avisos.push(`${campo}: ${l.rotulo}.`);
+  };
+  if (c.versao !== 1) erros.push('versao deve ser 1.');
+  if (!['', 'onedrive-business', 'sharepoint-biblioteca'].includes(c.tipo == null ? '' : c.tipo)) erros.push('tipo deve ser "onedrive-business" ou "sharepoint-biblioteca".');
+  ['tenant', 'organizacao'].forEach(k => { if (c[k] != null && typeof c[k] !== 'string') erros.push(`${k} deve ser texto.`); });
+  if (!c.area || typeof c.area !== 'object') erros.push('area está faltando.');
+  else { pasta(c.area.nome, 'area.nome'); link(c.area.linkWeb, 'area.linkWeb'); }
+  if (!Array.isArray(c.membros)) erros.push('membros deve ser uma lista.');
+  else c.membros.forEach((m, i) => {
+    const r = `membros[${i}]`;
+    if (!m || typeof m !== 'object') { erros.push(`${r} é inválido.`); return; }
+    pasta(m.pasta, r + '.pasta'); texto(m.nome, r + '.nome'); link(m.linkWeb, r + '.linkWeb');
+    if (m.ativo != null && typeof m.ativo !== 'boolean') erros.push(`${r}.ativo deve ser true ou false.`);
+  });
+  const ret = c.orientacoes && c.orientacoes.retencaoBackupsDias;
+  if (ret != null && !(Number.isInteger(ret) && ret >= 0)) erros.push('orientacoes.retencaoBackupsDias deve ser um número inteiro (0 = não limpar).');
+  // Pasta da área e subpastas precisam estar na mesma organização
+  const links = [c.area && c.area.linkWeb, ...(Array.isArray(c.membros) ? c.membros.map(m => m && m.linkWeb) : [])].filter(Boolean).map(interpretarLink).filter(l => l.valido);
+  const tenants = new Set(links.map(l => l.tenant).filter(Boolean));
+  if (tenants.size > 1) erros.push(`Os links são de organizações diferentes (${[...tenants].join(', ')}): a pasta da área e as subpastas precisam estar no mesmo OneDrive/SharePoint.`);
+  if (c.tenant && tenants.size && !tenants.has(String(c.tenant).toLowerCase())) avisos.push(`tenant (“${c.tenant}”) não é o mesmo dos links (${[...tenants].join(', ')}).`);
+  return { erros, avisos };
+}
+const CONEXAO = (window.PAINEL_CONEXAO && typeof window.PAINEL_CONEXAO === 'object') ? window.PAINEL_CONEXAO : null;
+const CONEXAO_CHECK = validarConexao(CONEXAO);
+const linkOk = v => { const l = interpretarLink(v); return l.valido && !l.pessoal ? l.url : ''; };
+const conexaoArea = () => (CONEXAO && CONEXAO.area && typeof CONEXAO.area.nome === 'string' && CONEXAO.area.nome.trim()) || (PRESET && PRESET.pastaArea) || '';
+const minhaPasta = () => MULTI ? (wsCur() || {}).pasta : PRESET && PRESET.pasta;
+const membroDe = p => (p && CONEXAO && Array.isArray(CONEXAO.membros) && CONEXAO.membros.find(m => m && normName(m.pasta) === normName(p))) || null;
+// Caminho provável da pasta no Windows (o exato depende do usuário do Windows e do nome da organização)
+function caminhoProvavel(sub) {
+  const c = CONEXAO || {}, org = String(c.organizacao || '').trim() || '<sua organização>', area = conexaoArea() || '<pasta da área>';
+  const exato = c.area && typeof c.area.caminhoLocalProvavel === 'string' && c.area.caminhoLocalProvavel.trim();
+  if (exato) return sub ? exato.replace(/\\+$/, '') + '\\' + sub : exato;
+  if (c.tipo === 'sharepoint-biblioteca') {
+    const l = interpretarLink(c.area && c.area.linkWeb);
+    const base = `C:\\Users\\<seu usuário>\\${org}\\${l.site || '<site>'} - ${l.biblioteca || '<biblioteca>'}\\${(l.caminho || area).replace(/\//g, '\\')}`;
+    return sub ? base + '\\' + sub : base;
+  }
+  // OneDrive corporativo: o atalho "Adicionar atalho a Meus arquivos" fica na raiz do OneDrive de quem adicionou
+  return `C:\\Users\\<seu usuário>\\OneDrive - ${org}\\${sub || area}`;
+}
+// Explica um erro de leitura ou gravação em linguagem de quem usa o painel
+function explicarErro(e) {
+  const n = e && e.name;
+  if (n === 'SyntaxError') return 'O arquivo está sendo gravado ou está corrompido. O painel tenta de novo sozinho.';
+  if (n === 'NotFoundError') return 'A pasta não foi encontrada: ela pode ter sido renomeada, movida ou retirada da sincronização do OneDrive. Use “Trocar pasta” e escolha a pasta de novo.';
+  if (n === 'NotReadableError') return 'O arquivo não pôde ser lido. Se ele está “somente online” e o computador está sem internet, o Windows não consegue baixá-lo: no Explorador, clique com o botão direito na pasta e escolha “Sempre manter neste dispositivo”.';
+  if (n === 'NoModificationAllowedError' || n === 'InvalidModificationError') return 'Sem permissão para gravar na pasta. Confira no OneDrive se a pasta está compartilhada com você com permissão de edição (“Pode editar”).';
+  if (n === 'NotAllowedError' || n === 'SecurityError') return 'O acesso à pasta foi negado. Reative a pasta; se continuar, confira no OneDrive se ela está compartilhada com você com permissão de edição.';
+  if (n === 'QuotaExceededError') return 'Não há espaço livre no disco para gravar o arquivo.';
+  return e ? `${e.name}: ${e.message}` : 'erro desconhecido';
+}
+const ESPERAS = [30, 60, 120];   // segundos entre novas tentativas de ler a pasta de um membro com erro
+// Arquivos temporários do navegador e do Office, e ocultos: nunca são dados
+const IGNORAR_RE = /\.crswap$|^~\$|^\./i;
+// Cópia de conflito do OneDrive (ex.: demandas-NOTEBOOK.json); backups diários ficam em backups/ e têm data no nome
+const CONFLITO_RE = /^demandas-(?!\d{4}-\d{2}-\d{2}\.json$).+\.json$/i;
+const CONFLITO_KEY = NS + ':conflitosMesclados';
+async function listarConflitos(h) {
+  const out = [];
+  try { for await (const e of h.values()) if (e.kind === 'file' && !IGNORAR_RE.test(e.name) && CONFLITO_RE.test(e.name)) out.push(e.name); }
+  catch (e) { /* pasta indisponível: o erro aparece na leitura principal */ }
+  return out.sort();
+}
+// Junta a cópia de conflito com as demandas do painel (mesma regra da sincronização) e grava. A cópia não é apagada.
+async function mesclarConflito(nome) {
+  if (conn !== 'ok' || !dir || !CONFLITO_RE.test(String(nome || ''))) return;
+  let inc;
+  try { const d = await readJSON(dir, nome); inc = d ? normalizeData(d) : null; }
+  catch (e) { toast('Não foi possível ler a cópia: ' + explicarErro(e), 'erro'); return; }
+  if (!inc) { toast('A cópia de conflito está vazia.', 'erro'); return; }
+  snapshot('Antes de mesclar a cópia de conflito');
+  Object.assign(data, mergeData(data, inc));
+  dedupeSeries(data);
+  const feitos = ls.get(CONFLITO_KEY, {}) || {}; feitos[nome] = Date.now(); ls.set(CONFLITO_KEY, feitos);
+  commit();
+  toast(`Cópia “${nome}” mesclada. Confira as demandas e depois apague esse arquivo da pasta.`);
+}
+// Retenção dos backups diários: apaga só backups/demandas-AAAA-MM-DD.json mais antigos que o limite, uma vez por dia
+const retencaoDias = () => { const n = Number(CONEXAO && CONEXAO.orientacoes && CONEXAO.orientacoes.retencaoBackupsDias); return Number.isInteger(n) && n > 0 ? n : 0; };
+let backupsLimposEm = null;
+async function limparBackups(bk) {
+  const dias = retencaoDias();
+  if (!dias || backupsLimposEm === todayISO()) return;
+  backupsLimposEm = todayISO();
+  try {
+    const limite = isoOf(new Date(Date.now() - dias * 86400000)), velhos = [];
+    for await (const e of bk.values()) { const m = e.kind === 'file' && e.name.match(/^demandas-(\d{4}-\d{2}-\d{2})\.json$/); if (m && m[1] < limite) velhos.push(e.name); }
+    for (const n of velhos) { try { await bk.removeEntry(n); } catch (e) { /* tenta no próximo dia */ } }
+  } catch (e) { /* a limpeza é opcional */ }
+}
+const DICA_PERMISSAO = 'Dica: no aviso de permissão do Edge ou do Chrome, escolha “Permitir em todas as visitas” para não precisar reativar a cada abertura.';
+const TEXTO_NUVEM = '“Gravado na pasta” quer dizer que o arquivo foi salvo neste computador. Quem envia para a nuvem e leva para os outros computadores é o OneDrive: no Explorador de Arquivos, o ícone ao lado do arquivo mostra setas enquanto envia e um ✓ verde quando está em dia. Com o OneDrive pausado ou fechado, os outros continuam vendo a versão anterior.';
+const AJUDA_VERSOES = `<p class="muted">Para recuperar uma versão anterior, abra a pasta no OneDrive web, clique com o botão direito em <b>${FILE}</b> e use <b>Histórico de versões</b>.</p>`;
+// Botão que abre a pasta no OneDrive web, em nova aba (o link nunca é lido pelo código)
+const linkOneDrive = (url, rotulo, cls) => { const u = linkOk(url); return u ? `<a class="btn ${cls || ''}" href="${esc(u)}" target="_blank" rel="noopener">${I.folder} ${esc(rotulo || 'Abrir no OneDrive')}</a>` : ''; };
+// Assistente da primeira conexão: link, atalho ou sincronização, "Sempre manter", caminho provável e pasta a escolher
+function assistenteConexao(sub) {
+  const c = CONEXAO || {}, area = conexaoArea() || 'da área', link = sub ? (membroDe(sub) || {}).linkWeb : c.area && c.area.linkWeb;
+  const passo = c.tipo === 'sharepoint-biblioteca' ? 'No navegador, abra a biblioteca do SharePoint/Teams e clique em <b>Sincronizar</b>. A pasta passa a aparecer no Explorador de Arquivos.'
+    : c.tipo === 'onedrive-business' ? 'No OneDrive web, abra <b>Compartilhados</b>, selecione a pasta e escolha <b>Adicionar atalho a Meus arquivos</b>. O atalho aparece na raiz do seu OneDrive, no Explorador de Arquivos.'
+    : 'Se a pasta foi compartilhada pelo OneDrive, use <b>Adicionar atalho a Meus arquivos</b>; se ela está numa biblioteca do SharePoint/Teams, use <b>Sincronizar</b>. A pasta passa a aparecer no Explorador de Arquivos.';
+  const nome = sub || area;
+  return `<ol class="fx-assist">
+    <li>${linkOk(link) ? `Abra a pasta no navegador: ${linkOneDrive(link, 'Abrir no OneDrive', 'sm')}` : `Abra a pasta <b>${esc(nome)}</b> no OneDrive pelo link que você recebeu.`}</li>
+    <li>${passo}</li>
+    ${c.orientacoes && c.orientacoes.manterNoDispositivo === false ? '' : '<li>No Explorador, clique com o botão direito na pasta e escolha <b>Sempre manter neste dispositivo</b>. Assim o painel lê os arquivos mesmo sem internet.</li>'}
+    <li>Confira onde a pasta ficou no computador. O caminho provável é <code>${esc(caminhoProvavel(sub))}</code>.</li>
+    <li>Clique no botão abaixo e escolha a pasta <b>${esc(nome)}</b>${sub ? ', a sua subpasta' : ', a pasta da área, com uma subpasta por analista'}. ${DICA_PERMISSAO}</li>
+  </ol>`;
+}
+// Pasta escolhida com outro nome: mostra o nome esperado, o caminho provável e o link da pasta
+async function confirmarPastaDiferente(h, esperado, sub, motivo) {
+  const link = linkOk(sub ? (membroDe(sub) || {}).linkWeb : CONEXAO && CONEXAO.area && CONEXAO.area.linkWeb);
+  for (;;) {
+    const r = await ask({ title:'Pasta com outro nome', message:`Você escolheu “${h.name}”, mas a pasta esperada é “${esperado}”. ${motivo}. Caminho provável no computador: ${caminhoProvavel(sub)}`,
+      buttons:[...(link ? [{ label:'Abrir no OneDrive', value:'link', cls:'ghost' }] : []), { label:'Usar mesmo assim', value:'usar', cls:'ghost' }, { label:'Escolher outra', value:'outra', cls:'primary' }] });
+    if (r === 'link') { window.open(link, '_blank', 'noopener'); continue; }
+    return r === 'usar';
+  }
+}
+// Supervisão: subpastas lidas × equipe cadastrada (esperada e encontrada, esperada e não encontrada, não cadastrada)
+function conferenciaEquipe() {
+  const pill = (cls, t) => `<span class="state-pill ${cls}" style="margin:0">${t}</span>`;
+  const out = team.members.map(m => { const c = membroDe(m.key); return { m, c, pill:!CONEXAO ? '—' : c ? pill('ok', 'Esperada e encontrada') : pill('warn', 'Encontrada e não cadastrada') }; });
+  if (CONEXAO && Array.isArray(CONEXAO.membros) && team.scannedAt) {
+    const lidas = new Set(team.members.map(m => normName(m.key)));
+    CONEXAO.membros.filter(c => c && c.pasta && c.ativo !== false && !lidas.has(normName(c.pasta))).forEach(c => out.push({ m:null, c, pill:pill('err', 'Esperada e não encontrada') }));
+  }
+  return out;
+}
+// Mapa de conexão: quem conecta qual pasta, de onde vem o link e qual permissão precisa
+function mapaConexaoHTML() {
+  if (!CONEXAO) return '';
+  const c = CONEXAO, area = conexaoArea();
+  const linha = (pessoa, papel, link, pasta, sub, perm) => {
+    const l = interpretarLink(link);
+    const tipo = l.url ? (l.valido ? l.rotulo : `Inválido: ${l.rotulo}`) : 'Link a informar';
+    const origem = [l.tenant && `organização ${l.tenant}`, l.dono && `dono ${l.dono}`, l.site && `site ${l.site}`, l.biblioteca && `biblioteca ${l.biblioteca}`].filter(Boolean).join(' · ') || '—';
+    const aviso = l.pasta && normName(l.pasta) !== normName(pasta) ? `<div class="muted">O link aponta para “${esc(l.pasta)}”.</div>` : '';
+    return `<tr><td>${esc(pessoa)}</td><td>${papel}</td><td>${linkOneDrive(link, 'Abrir', 'sm') || '<span class="muted">—</span>'}</td><td>${esc(tipo)}</td><td>${esc(origem)}</td><td><b>${esc(pasta)}</b>${aviso}</td><td><code>${esc(caminhoProvavel(sub))}</code></td><td>${perm}</td></tr>`;
+  };
+  const rows = [linha(supName ? supName() : 'Supervisão', 'Supervisão', c.area && c.area.linkWeb, area, '', 'Edição na pasta inteira (grava atribuidas.json em cada subpasta)'),
+    ...(Array.isArray(c.membros) ? c.membros.filter(m => m && m.ativo !== false).map(m => linha(m.nome, 'Analista', m.linkWeb, m.pasta, m.pasta, 'Edição na própria subpasta e em _Compartilhadas')) : [])].join('');
+  const avisos = CONEXAO_CHECK.avisos.length ? `<p class="muted">${CONEXAO_CHECK.avisos.map(esc).join('<br>')}</p>` : '';
+  return `<section class="panel span2">
+      <h3>Mapa de conexão</h3>
+      <p>Configurado em <b>conexao.js</b>. Os links só abrem a pasta no navegador; o painel lê e grava a pasta sincronizada no computador. “Provável” porque o caminho exato depende do usuário do Windows${c.organizacao ? '' : ' e do nome da organização, ainda não informado'}.</p>${avisos}
+      <div class="table-wrap" style="margin-top:12px"><table class="table"><thead><tr><th>Pessoa</th><th>Papel</th><th>Link</th><th>Tipo</th><th>Dono / site</th><th>Pasta esperada</th><th>Caminho local provável</th><th>Permissão necessária</th></tr></thead><tbody>${rows}</tbody></table></div>
+    </section>`;
+}
+window.SGPI_CONEXAO = { interpretarLink, validarConexao, caminhoProvavel, explicarErro, CONFLITO_RE, IGNORAR_RE };
+
 /* ================= Pasta compartilhada (_Compartilhadas) ================= */
 // Cada analista grava só o próprio arquivo ali (_Compartilhadas/<subpasta>.json) com as notas e o status das demandas compartilhadas.
 let comp = null, compConn = 'off', compLastSig = null;
@@ -939,10 +1144,9 @@ async function pickFolder() {
     const go = await ask({ title:'Pasta com outro nome', message:`Você escolheu “${h.name}”. As solicitações ficam na pasta “${REQ_DIR}”, dentro da pasta Processos Integrados.`, buttons:[{ label:'Usar mesmo assim', value:true, cls:'ghost' }, { label:'Escolher outra', value:false, cls:'primary' }] });
     if (!go) return pickFolder();
   }
-  const expected = MULTI ? (wsCur() || {}).pasta : PRESET && PRESET.pasta;
+  const expected = minhaPasta();
   if (cfg.mode === 'colaborador' && expected && !normName(h.name).includes(normName(expected))) {
-    const go = await ask({ title:'Pasta com outro nome', message:`Você escolheu “${h.name}”, mas a pasta deste painel é “${expected}”. Gravar numa pasta de outra pessoa mistura as demandas no painel da supervisão.`, buttons:[{ label:'Usar mesmo assim', value:true, cls:'ghost' }, { label:'Escolher outra', value:false, cls:'primary' }] });
-    if (!go) return pickFolder();
+    if (!await confirmarPastaDiferente(h, expected, expected, 'Gravar numa pasta de outra pessoa mistura as demandas no painel da supervisão')) return pickFolder();
   }
   if (cfg.mode === 'colaborador') {
     const n = await countMemberFolders(h, 2).catch(() => 0);
@@ -962,6 +1166,10 @@ async function pickFolder() {
       if (!go) return pickFolder();
     }
   } else if (cfg.mode === 'supervisor') {
+    const areaEsp = conexaoArea();
+    if (areaEsp && !normName(h.name).includes(normName(areaEsp))) {
+      if (!await confirmarPastaDiferente(h, areaEsp, '', 'Ela é a pasta da área, com uma subpasta por analista')) return pickFolder();
+    }
     if (await hasOwnFile(h).catch(() => false)) {
       const go = await ask({ title:'Esta parece ser a pasta de um colaborador', message:`“${h.name}” tem um arquivo de demandas próprio. Como supervisor, escolha a pasta da área, que contém uma subpasta por colaborador.`, buttons:[{ label:'Usar mesmo assim', value:true, cls:'ghost' }, { label:'Escolher outra', value:false, cls:'primary' }] });
       if (!go) return pickFolder();
@@ -1182,9 +1390,13 @@ async function pull(force) {
     }
   } catch (e) { /* sem arquivo da supervisão ainda */ }
   sync.lastModified = r.lastModified;
+  const conf = await listarConflitos(dir);
+  const confMudou = conf.join('|') !== (sync.conflitos || []).join('|');
+  sync.conflitos = conf;
   const changedLocal = sig(data) !== before;
   const needsWrite = !r.data || sig(data) !== sig(remote) || r.data.colaborador !== cfg.name || r.data.version !== FORMAT;
   if (changedLocal || compChanged || procChanged || ctxChanged) { saveLocal(); renderAll(); refreshOpenTaskChat(); }
+  else if (confMudou) renderAll();
   if (novas.length) toast(`${novas[0].assignedBy} atribuiu ${plural(novas.length, 'nova demanda', 'novas demandas')} para você`);
   else if (acts && acts.notas && !acts.editadas && !acts.canceladas) toast(acts.notas === 1 ? `${acts.por} deixou uma nota em “${acts.notaEm}”` : `${acts.por} deixou ${acts.notas} notas nas suas demandas`);
   else if (acts && acts.transferidas) toast(acts.transferidas === 1 ? `${acts.por} transferiu uma demanda sua para ${acts.para}` : `${acts.por} transferiu ${acts.transferidas} demandas suas`);
@@ -1208,7 +1420,7 @@ async function push() {
     const json = filePayload();
     const fh = await writeText(dir, FILE, json);
     sync.lastModified = (await fh.getFile()).lastModified;
-    try { const bk = await dir.getDirectoryHandle('backups', { create:true }); await writeText(bk, `demandas-${todayISO()}.json`, json); }
+    try { const bk = await dir.getDirectoryHandle('backups', { create:true }); await writeText(bk, `demandas-${todayISO()}.json`, json); await limparBackups(bk); }
     catch (e) { /* cópia diária é opcional */ }
     sync.state = 'idle'; sync.error = null; sync.lastSync = Date.now();
     await syncComp(false);
@@ -1219,7 +1431,7 @@ async function push() {
 }
 function setSyncError(e) {
   if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) { conn = 'prompt'; sync.state = 'idle'; }
-  else { sync.state = 'error'; sync.error = e ? `${e.name}: ${e.message}` : 'erro desconhecido'; }
+  else { sync.state = 'error'; sync.error = explicarErro(e); }
   renderSyncBits();
   if (ui.view === 'backup' || ui.view === 'fontes') renderView();
 }
@@ -1250,8 +1462,10 @@ async function scanTeam(manual) {
     const prevMap = new Map(team.members.map(m => [m.key, m]));
     const members = [];
     for await (const h of dir.values()) {
-      if (h.kind !== 'directory' || /^[._~]/.test(h.name) || h.name.toLowerCase() === 'backups') continue;
+      if (h.kind !== 'directory' || /^[._~]/.test(h.name) || IGNORAR_RE.test(h.name) || h.name.toLowerCase() === 'backups') continue;
       const prev = prevMap.get(h.name);
+      // Membro com erro recente: espera crescente (30 s, 60 s, 120 s) antes de reler, sem atrasar os demais
+      const emEspera = !!(prev && prev.status === 'error' && prev.retryAt > Date.now());
       const m = prev ? Object.assign({}, prev) : { key:h.name, name:fixMoji(h.name), tasks:[], excluidas:[], recebidas:[], assigned:[], acoes:[], divergentes:[], updatedAt:null, lastModified:null, assignedLM:null };
       m.status = 'ok'; m.error = null;
       let mc = false;
@@ -1259,7 +1473,8 @@ async function scanTeam(manual) {
         const a = await readAssigned(h);
         if (a.lastModified !== m.assignedLM) { m.assigned = a.tasks; m.acoes = a.acoes; m.assignedLM = a.lastModified; mc = true; }
       } catch (e) { /* em gravação; tenta na próxima leitura */ }
-      try {
+      if (emEspera) { m.status = 'error'; m.error = prev.error; }
+      else try {
         const f = await (await h.getFileHandle(FILE)).getFile();
         if (f.lastModified !== m.lastModified) {
           const d = JSON.parse(await f.text());
@@ -1272,9 +1487,16 @@ async function scanTeam(manual) {
           mc = true;
         }
       } catch (e) {
-        if (e.name === 'NotFoundError') { if (m.status !== 'nofile' || m.tasks.length) mc = true; m.status = 'nofile'; m.tasks = []; m.excluidas = []; }
-        else { m.status = 'error'; m.error = e.name === 'SyntaxError' ? 'Arquivo em gravação ou corrompido. Nova tentativa na próxima leitura.' : `${e.name}: ${e.message}`; }
+        if (e.name === 'NotFoundError') { if (m.status !== 'nofile' || m.tasks.length) mc = true; m.status = 'nofile'; m.tasks = []; m.excluidas = []; m.name = (membroDe(h.name) || {}).nome || fixMoji(h.name); }
+        else {
+          m.retryN = Math.min(((prev && prev.retryN) || 0) + 1, ESPERAS.length);
+          const s = ESPERAS[m.retryN - 1];
+          m.retryAt = Date.now() + s * 1000; m.status = 'error'; m.error = `${explicarErro(e)} Nova tentativa em ${s} s.`; mc = true;
+        }
       }
+      if (m.status !== 'error') { m.retryN = 0; m.retryAt = 0; }
+      const conf = await listarConflitos(h);
+      if (conf.join('|') !== (m.conflitos || []).join('|')) { m.conflitos = conf; mc = true; }
       if (mc) { checkIntegrity(m); changed = true; }
       const ap = ausPublic(), wsig = JSON.stringify([supCtx && supCtx.id, supName(), ap]);
       if (supCtx && !SUBST && ctxWritten.get(h.name) !== wsig) {
@@ -3225,18 +3447,20 @@ function renderBackup() {
   const snaps = getSnaps();
   let pill, body, btns;
   if (!('showDirectoryPicker' in window)) { pill = '<span class="state-pill err">Navegador sem suporte</span>'; body = 'Abra o painel no Microsoft Edge ou no Google Chrome para gravar na pasta do OneDrive.'; btns = ''; }
-  else if (conn === 'off') { pill = '<span class="state-pill off">Nenhuma pasta conectada</span>'; body = 'Suas demandas estão só neste navegador. Conecte a sua subpasta do OneDrive para que o supervisor as veja.'; btns = `<button class="btn primary" data-act="pick">${I.folder} Escolher minha pasta</button>`; }
-  else if (conn === 'prompt') { pill = '<span class="state-pill warn">Aguardando autorização</span>'; body = `O navegador pede uma autorização a cada vez que o painel é aberto: basta clicar em qualquer lugar da tela e confirmar. Enquanto isso, as alterações ficam neste navegador e são enviadas para “${esc(dir.name)}” assim que a pasta for reativada.`; btns = `<button class="btn primary" data-act="reconnect">${I.folder} Reativar pasta</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
+  else if (conn === 'off') { pill = '<span class="state-pill off">Nenhuma pasta conectada</span>'; body = `Suas demandas estão só neste navegador. Conecte a sua subpasta do OneDrive para que a supervisão as veja. Na primeira vez:</p>${assistenteConexao(minhaPasta())}<p>`; btns = `<button class="btn primary" data-act="pick">${I.folder} Escolher minha pasta</button>`; }
+  else if (conn === 'prompt') { pill = '<span class="state-pill warn">Aguardando autorização</span>'; body = `O navegador pede uma autorização a cada vez que o painel é aberto: basta clicar em qualquer lugar da tela e confirmar. Enquanto isso, as alterações ficam neste navegador e são enviadas para “${esc(dir.name)}” assim que a pasta for reativada. ${DICA_PERMISSAO}`; btns = `<button class="btn primary" data-act="reconnect">${I.folder} Reativar pasta</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
   else if (sync.state === 'error') { pill = '<span class="state-pill err">Erro ao gravar</span>'; body = `Último erro: ${esc(sync.error)}. Confira se o OneDrive está em execução e se você tem permissão de edição na pasta.`; btns = `<button class="btn primary" data-act="sync-now">${I.refresh} Tentar de novo</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
-  else { pill = '<span class="state-pill ok">Conectada e sincronizando</span>'; body = `Cada alteração é gravada em <b>${FILE}</b> na pasta “${esc(dir.name)}”, com o histórico de prazos e de status de cada demanda. Uma cópia do dia fica em <b>backups/demandas-AAAA-MM-DD.json</b>. O painel também verifica a pasta a cada ${cfg.pollSec} segundos, para trazer alterações feitas em outro computador e demandas enviadas pela supervisão.`; btns = `<button class="btn" data-act="sync-now">${I.refresh} Sincronizar agora</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
+  else { pill = '<span class="state-pill ok">Conectada: gravando na pasta</span>'; body = `Cada alteração é gravada em <b>${FILE}</b> na pasta “${esc(dir.name)}”, com o histórico de prazos e de status de cada demanda. Uma cópia do dia fica em <b>backups/demandas-AAAA-MM-DD.json</b>${retencaoDias() ? ` (as cópias com mais de ${retencaoDias()} dias são apagadas)` : ''}. O painel também verifica a pasta a cada ${cfg.pollSec} segundos, para trazer alterações feitas em outro computador e demandas enviadas pela supervisão. ${TEXTO_NUVEM}`; btns = `<button class="btn" data-act="sync-now">${I.refresh} Sincronizar agora</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
   $('#bkArea').innerHTML = `
   <div class="bk-grid">
     <section class="panel span2">
       <h3>Pasta no OneDrive</h3>
       ${pill}
       <p>${body}</p>
-      ${conn !== 'off' && dir ? `<dl class="kv"><dt>Pasta</dt><dd>${esc(dir.name)}</dd><dt>Última sincronização</dt><dd>${sync.lastSync ? fmtDateTime(sync.lastSync) : 'Ainda não sincronizou nesta sessão'}</dd><dt>Demandas</dt><dd>${data.tasks.length}</dd><dt>Excluídas guardadas</dt><dd>${data.excluidas.length}</dd></dl>` : ''}
-      <div class="bk-actions">${btns}</div>
+      ${conn !== 'off' && dir ? `<dl class="kv"><dt>Pasta</dt><dd>${esc(dir.name)}</dd><dt>Gravado na pasta</dt><dd>${sync.lastSync ? fmtDateTime(sync.lastSync) : 'Ainda não gravou nesta sessão'}</dd><dt>Demandas</dt><dd>${data.tasks.length}</dd><dt>Excluídas guardadas</dt><dd>${data.excluidas.length}</dd></dl>` : ''}
+      ${(sync.conflitos || []).length ? `<p class="muted">Cópias de conflito do OneDrive nesta pasta: ${sync.conflitos.map(n => `<b>${esc(n)}</b>`).join(', ')}. Use “Mesclar cópia” no aviso do topo e depois apague o arquivo.</p>` : ''}
+      <div class="bk-actions">${btns}${linkOneDrive((membroDe(minhaPasta()) || {}).linkWeb, 'Abrir pasta no OneDrive')}</div>
+      ${AJUDA_VERSOES}
     </section>
     <section class="panel span2">
       <h3>Pasta compartilhada</h3>
@@ -3843,25 +4067,27 @@ function renderSources() {
   if (isReader()) return renderReaderSources();
   let pill, body, btns;
   if (!('showDirectoryPicker' in window)) { pill = '<span class="state-pill err">Navegador sem suporte</span>'; body = 'Abra o painel no Microsoft Edge ou no Google Chrome.'; btns = ''; }
-  else if (conn === 'off') { pill = '<span class="state-pill off">Nenhuma pasta conectada</span>'; body = 'Escolha a pasta da área, que contém uma subpasta por colaborador.'; btns = `<button class="btn primary" data-act="pick">${I.folder} Escolher pasta da área</button>`; }
-  else if (conn === 'prompt') { pill = '<span class="state-pill warn">Aguardando autorização</span>'; body = `O navegador pede autorização a cada vez que o painel é aberto: basta clicar em qualquer lugar da tela e confirmar. Os números mostrados são da última leitura${team.scannedAt ? `, em ${fmtDateTime(team.scannedAt)}` : ''}.`; btns = `<button class="btn primary" data-act="reconnect">${I.folder} Reativar pasta</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
+  else if (conn === 'off') { pill = '<span class="state-pill off">Nenhuma pasta conectada</span>'; body = `Escolha a pasta da área, que contém uma subpasta por colaborador. Na primeira vez:</p>${assistenteConexao('')}<p>`; btns = `<button class="btn primary" data-act="pick">${I.folder} Escolher pasta da área</button>`; }
+  else if (conn === 'prompt') { pill = '<span class="state-pill warn">Aguardando autorização</span>'; body = `O navegador pede autorização a cada vez que o painel é aberto: basta clicar em qualquer lugar da tela e confirmar. Os números mostrados são da última leitura${team.scannedAt ? `, em ${fmtDateTime(team.scannedAt)}` : ''}. ${DICA_PERMISSAO}`; btns = `<button class="btn primary" data-act="reconnect">${I.folder} Reativar pasta</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
   else if (sync.state === 'error') { pill = '<span class="state-pill err">Erro de leitura</span>'; body = esc(sync.error); btns = `<button class="btn primary" data-act="scan-now">${I.refresh} Tentar de novo</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
   else { pill = '<span class="state-pill ok">Conectada</span>'; body = `O painel lê <b>${FILE}</b> de cada subpasta de “${esc(dir.name)}” a cada ${cfg.pollSec} segundos e só recarrega os arquivos que mudaram. As demandas que você atribui, altera ou cancela são gravadas em <b>${ASSIGN_FILE}</b>, na pasta do analista. O arquivo de demandas dele nunca é alterado por este painel.`; btns = `<button class="btn" data-act="scan-now">${I.refresh} Atualizar agora</button><button class="btn" data-act="pick">Trocar pasta</button>`; }
   const statusTxt = m => m.status === 'ok' ? `<span class="state-pill ok" style="margin:0">Lido</span>${m.versao && m.versao < FORMAT ? '<div class="muted" style="margin-top:4px">Painel do analista desatualizado: sem histórico de prazos</div>' : ''}` : m.status === 'nofile' ? '<span class="state-pill off" style="margin:0">Sem arquivo ainda</span>' : `<span class="state-pill err" style="margin:0" title="${esc(m.error)}">Erro</span>`;
-  const rows = team.members.map(m => `<tr><td>${esc(m.key)}</td><td>${m.status === 'ok' ? ownerHTML(m.name, m.key) : '—'}</td><td>${statusTxt(m)}${m.status === 'error' ? `<div class="muted" style="margin-top:4px">${esc(m.error)}</div>` : ''}</td><td>${m.lastModified ? fmtDateTime(m.lastModified) : '—'}</td><td class="num">${m.tasks.length}</td><td class="num">${pendingOf(m).length}</td></tr>`).join('');
+  const rows = conferenciaEquipe().map(x => { const m = x.m; return m ? `<tr><td>${esc(m.key)}</td><td>${m.status === 'ok' ? ownerHTML(m.name, m.key) : esc(m.name)}</td><td>${x.pill}</td><td>${statusTxt(m)}${m.status === 'error' ? `<div class="muted" style="margin-top:4px">${esc(m.error)}</div>` : ''}${(m.conflitos || []).length ? `<div class="muted" style="margin-top:4px">Cópia de conflito do OneDrive: ${esc(m.conflitos.join(', '))}. O painel do analista oferece a mesclagem.</div>` : ''}</td><td>${m.lastModified ? fmtDateTime(m.lastModified) : '—'}</td><td class="num">${m.tasks.length}</td><td class="num">${pendingOf(m).length}</td><td>${linkOneDrive(x.c && x.c.linkWeb, 'Abrir', 'sm')}</td></tr>` : `<tr><td>${esc(x.c.pasta)}</td><td>${esc(x.c.nome)}</td><td>${x.pill}<div class="muted" style="margin-top:4px">A pasta não está sincronizada neste computador ou você não tem permissão nela.</div></td><td>—</td><td>—</td><td class="num">—</td><td class="num">—</td><td>${linkOneDrive(x.c.linkWeb, 'Abrir', 'sm')}</td></tr>`; }).join('');
   const closed = Object.keys(closes).sort().reverse();
   $('#srcArea').innerHTML = `
   <div class="bk-grid">
     <section class="panel span2">
       <h3>Pasta da área</h3>${pill}<p>${body}</p>
       ${dir ? `<dl class="kv"><dt>Pasta</dt><dd>${esc(dir.name)}</dd><dt>Última leitura</dt><dd>${team.scannedAt ? fmtDateTime(team.scannedAt) : '—'}</dd></dl>` : ''}
-      <div class="bk-actions">${btns}</div>
+      <div class="bk-actions">${btns}${linkOneDrive(CONEXAO && CONEXAO.area && CONEXAO.area.linkWeb, 'Abrir pasta no OneDrive')}</div>
+      ${AJUDA_VERSOES}
     </section>
     <section class="panel span2">
-      <h3>Subpastas encontradas</h3>
-      <p>Cada subpasta com um arquivo ${FILE} vira um colaborador no painel. Subpastas que começam com ponto, sublinhado ou til são ignoradas.</p>
-      ${team.members.length ? `<div class="table-wrap" style="margin-top:12px"><table class="table"><thead><tr><th>Subpasta</th><th>Colaborador</th><th>Situação</th><th>Arquivo alterado em</th><th class="num">Demandas</th><th class="num">Aguardando receber</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p class="muted">Nenhuma subpasta lida ainda.</p>'}
+      <h3>Conferência da equipe</h3>
+      <p>Cada subpasta com um arquivo ${FILE} vira um colaborador no painel. Subpastas que começam com ponto, sublinhado ou til, e arquivos temporários (.crswap, ~$), são ignorados. ${CONEXAO ? 'A coluna Cadastro compara as subpastas lidas com a equipe cadastrada em conexao.js.' : ''}</p>
+      ${rows ? `<div class="table-wrap" style="margin-top:12px"><table class="table"><thead><tr><th>Subpasta</th><th>Colaborador</th><th>Cadastro</th><th>Situação</th><th>Arquivo alterado em</th><th class="num">Demandas</th><th class="num">Aguardando receber</th><th>OneDrive</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p class="muted">Nenhuma subpasta lida ainda.</p>'}
     </section>
+    ${mapaConexaoHTML()}
     <section class="panel span2">
       <h3>Pasta compartilhada</h3>
       ${team.compFound ? '<span class="state-pill ok">Encontrada</span>' : '<span class="state-pill warn">Não encontrada</span>'}
@@ -4445,15 +4671,18 @@ function renderSyncBits() {
   else if (conn === 'prompt') { dot = 'warn'; txt = 'Pasta aguardando reativação'; sub = 'Clique em qualquer lugar da tela'; }
   else if (sync.state === 'syncing') { dot = 'busy'; txt = isSup ? 'Lendo a pasta…' : 'Sincronizando…'; }
   else if (sync.state === 'error') { dot = 'err'; txt = isSup ? 'Erro ao ler a pasta' : 'Erro ao gravar na pasta'; }
-  else { txt = sync.lastSync ? `${isSup ? 'Atualizado' : 'Sincronizado'} às ${fmtTime(sync.lastSync)}` : 'Conectado'; sub = dir ? `Pasta “${dir.name}”` : ''; }
+  else { txt = sync.lastSync ? `${isSup ? 'Atualizado' : 'Gravado na pasta'} às ${fmtTime(sync.lastSync)}` : 'Conectado'; sub = dir ? `Pasta “${dir.name}”` : ''; }
   $('#syncState').innerHTML = `<span class="save-dot ${dot}"></span><span>${esc(txt)}${sub ? `<br><small>${esc(sub)}</small>` : ''}</span>`;
   // Banner
   const b = $('#connBanner');
   if (!('showDirectoryPicker' in window)) { b.className = 'banner err'; b.innerHTML = '<span>Este navegador não acessa pastas do computador. Use o Microsoft Edge ou o Google Chrome.</span>'; b.hidden = false; }
-  else if (conn === 'prompt') { b.className = 'banner'; b.innerHTML = `<span>${isSup ? `Clique em qualquer lugar da tela e confirme para reconectar a pasta “${esc(dir.name)}”. Os números abaixo são da última leitura${team.scannedAt ? `, ${ago(team.scannedAt)}` : ''}.` : `Clique em qualquer lugar da tela e confirme para reconectar a pasta “${esc(dir.name)}”. Até lá, as alterações ficam neste navegador e são enviadas ao reconectar.`}</span><button class="btn sm primary" data-act="reconnect">Reativar pasta</button>`; b.hidden = false; armAutoReconnect(); }
+  else if (conn === 'prompt') { b.className = 'banner'; b.innerHTML = `<span>${isSup ? `Clique em qualquer lugar da tela e confirme para reconectar a pasta “${esc(dir.name)}”. Os números abaixo são da última leitura${team.scannedAt ? `, ${ago(team.scannedAt)}` : ''}.` : `Clique em qualquer lugar da tela e confirme para reconectar a pasta “${esc(dir.name)}”. Até lá, as alterações ficam neste navegador e são enviadas ao reconectar.`} ${DICA_PERMISSAO}</span><button class="btn sm primary" data-act="reconnect">Reativar pasta</button>`; b.hidden = false; armAutoReconnect(); }
   else if (conn === 'off' && SGPI_SEM_AVISO_PASTA) { b.hidden = true; }
   else if (conn === 'off') { b.className = 'banner info'; b.innerHTML = `<span>${isSup ? (ROLE_SUBST ? 'Na primeira vez, conecte a pasta “Processos Integrados”, a pasta da equipe. Você precisa ter acesso de edição a ela no OneDrive.' : 'Conecte a pasta da área para ler os dados da equipe.') : isReqM ? `Conecte a pasta ${REQ_DIR}, dentro de Processos Integrados, para enviar solicitações.` : 'Conecte a sua subpasta do OneDrive para que o supervisor veja suas demandas.'}</span><button class="btn sm primary" data-act="pick">Escolher pasta</button>`; b.hidden = false; }
   else if (sync.state === 'error') { b.className = 'banner err'; b.innerHTML = `<span>${isSup ? 'Não foi possível ler a pasta da área' : 'Não foi possível gravar na sua pasta'}: ${esc(sync.error)}</span><button class="btn sm" data-act="${isSup ? 'scan-now' : 'sync-now'}">Tentar de novo</button>`; b.hidden = false; }
+  else if (CONEXAO_CHECK.erros.length) { b.className = 'banner err'; b.innerHTML = `<span>A configuração da conexão (conexao.js) tem ${plural(CONEXAO_CHECK.erros.length, 'problema', 'problemas')}: ${esc(CONEXAO_CHECK.erros.join(' '))} O painel continua funcionando com a pasta escolhida.</span>`; b.hidden = false; }
+  else if (!isSup && !isReqM && conn === 'ok' && (sync.conflitos || []).length) { const nome = sync.conflitos[0], feito = (ls.get(CONFLITO_KEY, {}) || {})[nome]; b.className = 'banner'; b.innerHTML = feito ? `<span>A cópia de conflito “${esc(nome)}” já foi mesclada. Confira as demandas e apague esse arquivo da sua pasta para este aviso sumir.</span><button class="btn sm" data-act="merge-conflict" data-file="${esc(nome)}">Mesclar de novo</button>` : `<span>O OneDrive criou uma cópia de conflito na sua pasta (“${esc(nome)}”): o arquivo foi gravado em dois computadores antes de sincronizar. Mescle para não perder demandas.</span><button class="btn sm primary" data-act="merge-conflict" data-file="${esc(nome)}">Mesclar cópia</button>`; b.hidden = false; }
+  else if (isSup && conn === 'ok' && team.members.some(m => (m.conflitos || []).length)) { const quem = team.members.filter(m => (m.conflitos || []).length).map(m => m.name); b.className = 'banner'; b.innerHTML = `<span>O OneDrive criou cópia de conflito na pasta de ${esc(quem.join(', '))}. Peça para a pessoa abrir o painel: ele oferece a mesclagem.</span><button class="btn sm" data-act="go" data-view="fontes">Ver pastas</button>`; b.hidden = false; }
   else if (!isSup && !isReqM && sharedTasks().length && compConn !== 'ok') { b.className = 'banner info'; b.innerHTML = compConn === 'prompt' ? `<span>Você participa de ${plural(sharedTasks().length, 'demanda compartilhada', 'demandas compartilhadas')}. Clique em qualquer lugar da tela e confirme para reativar a pasta ${COMP_DIR}.</span><button class="btn sm primary" data-act="reconnect-comp">Reativar pasta compartilhada</button>` : `<span>Você participa de ${plural(sharedTasks().length, 'demanda compartilhada', 'demandas compartilhadas')}. Conecte a pasta <b>${COMP_DIR}</b>, dentro da pasta da área, para conversar com os colegas e trocar anexos.</span><button class="btn sm primary" data-act="pick-comp">Conectar pasta compartilhada</button>`; b.hidden = false; if (compConn === 'prompt') armAutoReconnect(); }
   else if (!isSup && !storageOk) { b.className = 'banner err'; b.innerHTML = '<span>O navegador bloqueou o armazenamento local. A pasta continua recebendo as alterações, mas os pontos de restauração não funcionam.</span>'; b.hidden = false; }
   else b.hidden = true;
@@ -5594,6 +5823,7 @@ function bind() {
     const id = b.closest('[data-id]')?.dataset.id;
     switch (act) {
       case 'pick': pickFolder(); break;
+      case 'merge-conflict': mesclarConflito(b.dataset.file); break;
       case 'sair': resetProfile(); break;
       case 'pick-comp': pickComp(); break;
       case 'conv-aceitar': acceptInvite(b.dataset.cid); break;

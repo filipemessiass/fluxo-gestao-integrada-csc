@@ -575,3 +575,10 @@ dialog[open] { animation: fxPop var(--fx-base) var(--fx-ease); }
 .fx-assinatura-sep { width: 28px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(210, 164, 82, 0), #D2A452, rgba(210, 164, 82, 0)); }
 .fx-assinatura-texto { font-style: italic; }
 .fx-assinatura-texto b { font-style: normal; font-weight: 700; color: var(--fx-ink); }
+
+/* Conexão com o OneDrive: assistente da primeira conexão e links que abrem a pasta no navegador */
+.fx-assist { display: grid; gap: 8px; margin: 10px 0 16px; padding-left: 22px; color: var(--fx-ink-2); line-height: 1.55; }
+.fx-assist li::marker { color: var(--fx-accent); font-weight: 700; }
+.fx-assist code, .table code { padding: 1px 6px; border-radius: 6px; background: var(--fx-surface-2); color: var(--fx-ink); font-size: .82em; word-break: break-all; }
+a.btn { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+a.btn svg { width: 16px; height: 16px; }

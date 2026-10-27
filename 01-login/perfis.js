@@ -48,7 +48,7 @@
         if (perfil.papel === 'supervisor') {
             return { id: perfil.id, mode: 'supervisor', nome: perfil.curto, rotulo: 'Supervisora ' + perfil.curto, titulo: AREA + ' - ' + perfil.nome, pastaArea: AREA };
         }
-        return { id: perfil.id, mode: 'colaborador', nome: perfil.nome, titulo: 'Painel de ' + perfil.nome, pasta: perfil.pasta };
+        return { id: perfil.id, mode: 'colaborador', nome: perfil.nome, rotulo: perfil.nome, titulo: 'Painel de ' + perfil.nome, pasta: perfil.pasta, pastaArea: AREA };
     }
 
     window.SGPI_PERFIS = { AREA: AREA, lista: PERFIS, porId: porId, autenticar: autenticar, ler: ler, entrar: entrar, sair: sair, preset: preset };
