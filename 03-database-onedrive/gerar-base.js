@@ -1,8 +1,11 @@
-// FLUXO · base-workflow/gerar-base.js — converte a base de projetos de um analista (Matriz de Evolução)
+// FLUXO · 03-database-onedrive/gerar-base.js — converte a base de projetos de um analista (Matriz de Evolução)
 // em demandas do tipo Projeto, com o campo workflow, dentro do demandas.json da pasta dele.
 //
-// Uso (nesta pasta):  node gerar-base.js                       (todas as bases)
-//                      node gerar-base.js filipe.messias.json   (só uma pasta; o pacote do painel reúne todas)
+// A base segue a estrutura do OneDrive: fica na pasta do próprio analista, ao lado do demandas.json que alimenta.
+//   Processos Integrados/<pasta do analista>/base-workflow/<perfil>.json
+//
+// Uso (nesta pasta):  node gerar-base.js                  (todas as bases)
+//                      node gerar-base.js filipe.messias   (só aquela pasta; o pacote do painel reúne todas)
 //
 // - Os status das etapas não são digitados: o script grava os critérios de cada etapa e confere,
 //   com o próprio motor do sistema (02-usuario/app/workflow.js), que etapa atual, % do fluxo,
@@ -14,8 +17,9 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const RAIZ = path.resolve(__dirname, '..', '..');
-const PASTA_BASE = path.join(__dirname, '..', 'Processos Integrados');
+const RAIZ = path.resolve(__dirname, '..');
+const PASTA_BASE = path.join(__dirname, 'Processos Integrados');
+const SUBPASTA = 'base-workflow';
 const DIA = 86400000;
 
 // Motor oficial do Workflow (o mesmo que o navegador usa)
@@ -100,10 +104,13 @@ function conferir(p, d, ts) {
 
 // Converte e confere uma base; devolve as demandas ou null se algo não bater com o motor
 function prepararBase(arq) {
-  const base = JSON.parse(fs.readFileSync(path.resolve(__dirname, arq), 'utf8'));
+  const base = JSON.parse(fs.readFileSync(path.join(PASTA_BASE, arq), 'utf8'));
   // Data de referência da base, ao meio-dia de Brasília (15h UTC)
   const ts = Date.parse(base.data_base + 'T15:00:00Z');
   if (!base.pasta || !base.perfil || !ts || !Array.isArray(base.projetos)) { console.error(`${arq}: a base precisa de "perfil", "pasta", "data_base" e "projetos".`); return null; }
+  // A base mora na pasta do analista: o campo "pasta" tem de ser essa mesma pasta
+  const dono = arq.split('/')[0];
+  if (base.pasta !== dono) { console.error(`${arq}: "pasta" é "${base.pasta}", mas a base está na pasta "${dono}".`); return null; }
   console.log(`\n${arq} (${base.titular_conjunto})`);
   const novas = base.projetos.map(p => projetoParaDemanda(p, base, ts));
   let falhou = false;
@@ -133,22 +140,28 @@ function gravarPasta({ base, ts, novas }) {
 }
 
 // Pacote lido pelo painel (02-usuario/app/base-workflow.js): os projetos de cada perfil, para aparecerem
-// no navegador mesmo antes de conectar a pasta. Sempre reúne todas as bases desta pasta.
+// no navegador mesmo antes de conectar a pasta. Sempre reúne todas as bases de Processos Integrados.
 function gravarPacote(preparadas) {
   const porPerfil = {};
   preparadas.forEach(({ base, novas }) => { porPerfil[base.perfil] = novas; });
   const destino = path.join(RAIZ, '02-usuario', 'app', 'base-workflow.js');
   const js = '// FLUXO · base de projetos do Workflow por perfil.\n'
-    + '// Gerado por 03-database-onedrive/base-workflow/gerar-base.js. Não edite à mão: ajuste a base (.json) e rode o gerador.\n'
+    + '// Gerado por 03-database-onedrive/gerar-base.js. Não edite à mão: ajuste a base em Processos Integrados/<analista>/base-workflow/ e rode o gerador.\n'
     + 'window.SGPI_BASE_WORKFLOW = ' + JSON.stringify(porPerfil, null, 1) + ';\n';
   fs.writeFileSync(destino, js);
   console.log(`\nPacote do painel: ${path.relative(RAIZ, destino)} (${Object.keys(porPerfil).join(', ') || 'nenhum perfil'}).`);
 }
 
 function main() {
-  // Sem argumento: todas as bases da pasta. Com argumento: só aquela base vai para a pasta do OneDrive.
-  const todas = fs.readdirSync(__dirname).filter(f => f.endsWith('.json')).sort();
-  const pedidas = process.argv.slice(2).length ? process.argv.slice(2) : todas;
+  // Bases: Processos Integrados/<analista>/base-workflow/*.json (pastas iniciadas por _ . ~ não são de analistas).
+  // Sem argumento: todas vão para a pasta do OneDrive. Com argumento (perfil, ex. filipe.messias): só aquela.
+  const todas = fs.readdirSync(PASTA_BASE, { withFileTypes: true })
+    .filter(d => d.isDirectory() && !/^[._~]/.test(d.name) && fs.existsSync(path.join(PASTA_BASE, d.name, SUBPASTA)))
+    .flatMap(d => fs.readdirSync(path.join(PASTA_BASE, d.name, SUBPASTA)).filter(f => f.endsWith('.json')).map(f => d.name + '/' + SUBPASTA + '/' + f))
+    .sort();
+  const args = process.argv.slice(2).map(a => a.replace(/\.json$/i, ''));
+  const pedidas = args.length ? todas.filter(a => args.includes(path.basename(a, '.json'))) : todas;
+  if (args.length && pedidas.length !== args.length) { console.error('Base não encontrada: ' + args.join(', ') + '. Bases disponíveis: ' + (todas.join(', ') || 'nenhuma')); process.exit(1); }
   const preparadas = todas.map(prepararBase);
   if (preparadas.some(p => !p)) { console.error('\nAlguma base não bate com o motor do Workflow. Nada foi gravado.'); process.exit(1); }
   preparadas.filter((p, i) => pedidas.includes(todas[i])).forEach(gravarPasta);

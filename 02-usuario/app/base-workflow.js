@@ -1,5 +1,5 @@
 // FLUXO · base de projetos do Workflow por perfil.
-// Gerado por 03-database-onedrive/base-workflow/gerar-base.js. Não edite à mão: ajuste a base (.json) e rode o gerador.
+// Gerado por 03-database-onedrive/gerar-base.js. Não edite à mão: ajuste a base em Processos Integrados/<analista>/base-workflow/ e rode o gerador.
 window.SGPI_BASE_WORKFLOW = {
  "filipe.messias": [
   {

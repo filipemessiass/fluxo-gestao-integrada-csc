@@ -466,7 +466,7 @@ const sig = d => JSON.stringify([d.tasks.map(t => t.id + ':' + t.updatedAt).sort
 let data = Object.assign(emptyData(), { savedAt:null, lastDownloadAt:null }, (() => { const d = ls.get(DATA_KEY, null); if (!d) return {}; return { ...normalizeData(d), savedAt:d.savedAt || null, lastDownloadAt:d.lastDownloadAt || null }; })());
 let storageOk = true;
 function saveLocal() { data.savedAt = Date.now(); storageOk = ls.set(DATA_KEY, data); }
-// Base de projetos do Workflow (base-workflow.js, gerado a partir de 03-database-onedrive/base-workflow):
+// Base de projetos do Workflow (base-workflow.js, gerado das bases em Processos Integrados/<analista>/base-workflow):
 // os projetos do analista entram no painel mesmo sem a pasta conectada. Só entram os que ainda não existem
 // e não foram excluídos; ao conectar a pasta, seguem a sincronização normal (mesmo id, sem duplicar).
 (function aplicarBaseWorkflow() {

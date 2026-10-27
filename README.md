@@ -95,8 +95,8 @@ Por dentro:
     └── vendor/                     fontawesome/ (ícones) e inter/ (fonte Inter, OFL)
 
 03-database-onedrive/
-├── Processos Integrados/           modelo da pasta a subir no OneDrive (com dados de teste)
-├── base-workflow/                  matriz de projetos por analista + gerador (gerar-base.js)
+├── Processos Integrados/           a pasta que sobe para o OneDrive (o banco), com a base de projetos de cada analista
+├── gerar-base.js                   gerador da base de projetos (lê Processos Integrados/<analista>/base-workflow/)
 └── estrutura.json                  organograma da área financeira (referência do PGD)
 ```
 
@@ -372,7 +372,7 @@ Enquanto o analista não sincroniza, a supervisão vê o projeto já com os pró
 
 ---
 
-**Base de projetos por analista.** A matriz de cada analista fica em [`03-database-onedrive/base-workflow/`](03-database-onedrive/base-workflow/). O gerador `gerar-base.js` converte a matriz em projetos no `demandas.json` da pasta do analista e confere cada projeto contra o motor do Workflow antes de gravar. O gerador também monta o pacote `02-usuario/app/base-workflow.js`. Com ele, os projetos aparecem no painel do analista desde o primeiro acesso, mesmo sem a pasta conectada. O primeiro perfil montado é `filipe.messias` (10 projetos).
+**Base de projetos por analista.** A matriz de cada analista fica na pasta dele no OneDrive, em `Processos Integrados/<analista>/base-workflow/` (ex.: [`Filipe Messias/base-workflow/`](03-database-onedrive/Processos%20Integrados/Filipe%20Messias/base-workflow/)). O gerador `03-database-onedrive/gerar-base.js` converte a matriz em projetos no `demandas.json` da pasta do analista e confere cada projeto contra o motor do Workflow antes de gravar. O gerador também monta o pacote `02-usuario/app/base-workflow.js`. Com ele, os projetos aparecem no painel do analista desde o primeiro acesso, mesmo sem a pasta conectada. O primeiro perfil montado é `filipe.messias` (10 projetos).
 
 ## 7. Banco de dados: a pasta do OneDrive
 
@@ -384,6 +384,7 @@ Processos Integrados/                ← a supervisão conecta esta
 │   ├── demandas.json                gravado SÓ pelo painel do analista
 │   ├── atribuidas.json              gravado SÓ pelo painel da supervisão
 │   ├── supervisao.json              identificação da célula (id, nome, supervisor)
+│   ├── base-workflow/<perfil>.json  matriz de projetos do analista (fonte do gerar-base.js; o painel não grava aqui)
 │   └── backups/demandas-AAAA-MM-DD.json   cópia do dia
 ├── Viviane Cunha/ · Filipe Messias/ · Juliana Santos/
 ├── _Supervisao/                     config.json, leituras.json e fechamentos mensais da supervisão
@@ -391,7 +392,7 @@ Processos Integrados/                ← a supervisão conecta esta
 └── _Compartilhadas/                 demandas compartilhadas entre analistas (criada pelo uso)
 ```
 
-Pastas que começam com `_`, `.` ou `~` não são lidas como analistas. Cada arquivo tem um único autor, então duas pessoas nunca gravam o mesmo JSON.
+Pastas que começam com `_`, `.` ou `~` não são lidas como analistas. Cada arquivo tem um único autor, então duas pessoas nunca gravam o mesmo JSON. A subpasta `base-workflow/` não interfere na sincronização: o painel do analista só lê `demandas.json` e `atribuidas*.json` da própria pasta, e a supervisão só lê o primeiro nível de cada analista.
 
 ### Como usar o modelo e compartilhar
 
@@ -469,14 +470,22 @@ O modelo vem com os dados de teste do PGD. Para produção, apague os `demandas.
 - O analista primeiro importa as demandas novas e depois aplica as ações. Por isso uma ação de E1/E2 enviada logo depois da atribuição também chega.
 - Itens já recebidos e muito antigos são limpos na próxima gravação da supervisão.
 
-### Base de projetos do Workflow (`03-database-onedrive/base-workflow/`)
+### Base de projetos do Workflow (`Processos Integrados/<analista>/base-workflow/`)
 
-Esta pasta guarda a base de projetos de cada analista (Matriz de Evolução por Demanda) e o gerador que transforma essa base em demandas do Workflow dentro do `demandas.json` do analista.
+A base de projetos de cada analista (Matriz de Evolução por Demanda) segue a mesma estrutura do OneDrive: fica dentro da pasta do próprio analista, ao lado do `demandas.json` que ela alimenta. Assim ela sobe junto para o OneDrive e cada analista enxerga só a própria base.
+
+```text
+Processos Integrados/
+└── Filipe Messias/
+    ├── base-workflow/
+    │   └── filipe.messias.json      matriz de projetos (FM-0001 a FM-0010)
+    └── demandas.json                recebe os projetos gerados
+```
 
 | Arquivo | Conteúdo |
 | --- | --- |
-| `filipe.messias.json` | Base de Filipe Messias: 10 projetos (FM-0001 a FM-0010). É o primeiro perfil montado e serve de modelo para os demais. |
-| `gerar-base.js` | Converte as bases em demandas do tipo **Projeto**. Grava em `Processos Integrados/<pasta>/demandas.json` e no pacote do painel, `02-usuario/app/base-workflow.js`. |
+| `Processos Integrados/Filipe Messias/base-workflow/filipe.messias.json` | Base de Filipe Messias: 10 projetos (FM-0001 a FM-0010). É o primeiro perfil montado e serve de modelo para os demais. |
+| `03-database-onedrive/gerar-base.js` | Converte as bases em demandas do tipo **Projeto**. Grava no `demandas.json` da mesma pasta do analista e no pacote do painel, `02-usuario/app/base-workflow.js`. Fica fora de `Processos Integrados` porque é ferramenta, não dado. |
 
 #### Estrutura de uma base
 
@@ -539,12 +548,13 @@ Cada projeto entra com id fixo (`wf-fm-0001`, …). Rodar o gerador de novo atua
 
 #### Como usar
 
-1. Na pasta `base-workflow`, rode `node gerar-base.js`. O gerador:
-   - confere todas as bases;
+1. Na pasta `03-database-onedrive`, rode `node gerar-base.js`. O gerador:
+   - encontra as bases em `Processos Integrados/<analista>/base-workflow/` e confere se o campo `pasta` de cada uma é a pasta onde ela está;
+   - confere todas as bases contra o motor do Workflow;
    - grava cada uma no `demandas.json` da pasta do analista;
    - atualiza o pacote `02-usuario/app/base-workflow.js`.
 
-   Com o nome de um arquivo (`node gerar-base.js filipe.messias.json`), só aquela pasta é gravada, mas o pacote continua reunindo todas as bases.
+   Com o perfil (`node gerar-base.js filipe.messias`), só aquela pasta é gravada, mas o pacote continua reunindo todas as bases.
 2. Ao entrar no FLUXO, o analista já vê os projetos no **Workflow (Projetos)**, mesmo sem a pasta conectada:
    - em **Base de projetos**: ID, Projeto, Atividade, Situação e Fluxo;
    - na **Matriz de Evolução por Demanda**: as 8 etapas, o responsável, a etapa atual, os dias e os gates.
@@ -556,9 +566,10 @@ Cada projeto entra com id fixo (`wf-fm-0001`, …). Rodar o gerador de novo atua
 
 Para cada analista:
 
-1. Copie `filipe.messias.json` com o nome do login (por exemplo, `jose.victor.json`).
-2. Ajuste `titular_conjunto`, `perfil`, `pasta` e os projetos.
-3. Rode o gerador.
+1. Crie a subpasta `base-workflow/` na pasta do analista (ex.: `Processos Integrados/José Victor/base-workflow/`).
+2. Copie para lá o `filipe.messias.json` com o nome do login (ex.: `jose.victor.json`).
+3. Ajuste `titular_conjunto`, `perfil`, `pasta` (o nome exato da pasta, com acento) e os projetos.
+4. Rode o gerador.
 
 ---
 
